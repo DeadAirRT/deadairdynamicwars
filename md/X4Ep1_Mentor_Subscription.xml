@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<diff> 
+
+	<!-- Disable the plot completely only when this game start is launched -->
+	<add sel="//cue[@name='Phase_SignalLeak']/conditions">
+		<check_value value="player.module != 'x4ep1_gamestart_DWS'"/>
+	</add>
+
+	<!-- Move the plot forward and spawn the PHQ in Argon Prime (only when this game start is launched) -->
+	<add sel="//cue[@name='Start']/cues">
+		<cue name="Dynamic_War_Progress_Plot" module="x4ep1_gamestart_DWS">
+			<delay exact="20s" />
+			<actions>
+				<debug_to_file name="'DWS'" directory="'DWS'" text="''" output="false" append="true" />
+				<debug_to_file name="'DWS'" directory="'DWS'" text="'Progressing Plot'" output="false" append="true" />
+				
+				<debug_to_file name="'DWS'" directory="'DWS'" text="'Updating positions for PHQ'" output="false" append="true" />
+				<find_sector name="$HQSector" macro="macro.Cluster_DA1_Sector001_macro"/>
+				<set_value name="$HQPosition" exact="position.[0km, -500m, -5km]"/>
+				
+				<debug_to_file name="'DWS'" directory="'DWS'" text="'Calling Shortcut'" output="false" append="true" />
+				<signal_cue cue="SHORTCUT_Research" />
+				<signal_cue cue="Dynamic_War_Finish_HQ_Setup" />
+
+				<debug_to_file name="'DWS'" directory="'DWS'" text="'Progressing Plot Done'" output="false" append="true" />
+			</actions>
+		</cue>
+
+		<cue name="Dynamic_War_Finish_HQ_Setup" module="x4ep1_gamestart_DWS">
+			<conditions>
+				<event_cue_signalled/>
+			</conditions>
+			<delay exact="5s" />
+			<actions>
+				<debug_to_file name="'DWS'" directory="'DWS'" text="''" output="false" append="true" />
+				<debug_to_file name="'DWS'" directory="'DWS'" text="'Finishing up HQ'" output="false" append="true" />
+				
+				<!-- Set the build storage as owned by the player -->
+				<debug_to_file name="'DWS'" directory="'DWS'" text="'Changing owner of build storage: ' + $HQ.buildstorage" output="false" append="true" />
+				<set_owner object="$HQ.buildstorage" faction="faction.player" overridenpc="true"/>
+				
+				<!-- Enable the Research Menu -->
+				<debug_to_file name="'DWS'" directory="'DWS'" text="'Unlocking Research Menu'" output="false" append="true" />
+				<set_value name="player.entity.$x4ep1_hq_research_unlocked"/>
+				
+				<debug_to_file name="'DWS'" directory="'DWS'" text="'Finishing up HQ Done'" output="false" append="true" />
+			</actions>
+		</cue>
+	</add>
+</diff>

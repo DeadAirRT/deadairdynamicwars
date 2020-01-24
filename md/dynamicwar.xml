@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mdscript name="DynamicWar" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="md.xsd">
+	<cues>
+		<cue name="Init">
+			<actions>
+				<do_if value="(not $ArgonCoalition?) or (not $TeladiCoalition?) or (not $ParanidCoalition?) or (not $HolyOderCoalition?) or (not $PirateCoalition?)">
+					<set_value name="$ArgonCoalition" exact="[faction.antigone, faction.argon, faction.hatikvah]"/>
+					<set_value name="$HolyOderCoalition" exact="[faction.holyorder]"/>
+					<set_value name="$ParanidCoalition" exact="[faction.alliance, faction.paranid]"/>
+					<set_value name="$TeladiCoalition" exact="[faction.ministry, faction.teladi]"/>
+					<set_value name="$PirateCoalition" exact="[faction.scaleplate]"/>
+				</do_if>
+				<set_value name="$InitDebug" exact="'$ArgonCoalition = ' + $ArgonCoalition + ' / $HolyOderCoalition = ' + $HolyOderCoalition + ' / $ParanidCoalition = ' + $ParanidCoalition + ' / $TeladiCoalition = ' + $TeladiCoalition + ' / $PirateCoalition = ' + $PirateCoalition" />
+				<debug_to_file name="'DynamicWarInit'" directory="'DynamicWar'" text="$InitDebug" output="false" append="true" />
+				<remove_value name="$InitDebug" />
+			</actions>
+			<cues>
+				<cue name="DynamicWarTimer" instantiate="true" checkinterval="60min" checktime="player.age + 30min">
+					<actions>
+						<signal_cue_instantly cue="DynamicWarEventSelector" />
+					</actions>
+				</cue>
+				<cue name="DynamicWarEventSelector" instantiate="true">
+					<conditions>
+						<event_cue_signalled/>
+					</conditions>
+					<actions>
+						<do_if value="$DynamicWarEvent?">
+							<remove_value name="$DynamicWarEvent" />
+						</do_if>
+						<!-- Choose event type -->
+						<do_any>
+							<set_value name="$DynamicWarEvent" exact="'BigBoost'" weight="10" />
+							<set_value name="$DynamicWarEvent" exact="'SmallBoost'" weight="30" />
+							<set_value name="$DynamicWarEvent" exact="'SmallBlow'" weight="30" />
+							<set_value name="$DynamicWarEvent" exact="'BigBlow'" weight="10" />
+							<set_value name="$DynamicWarEvent" exact="'Nothing'" weight="5" />
+						</do_any>
+						<!--<set_value name="$DynamicWarLogicDebug" exact="'DynamicWarEvent = ' + $DynamicWarEvent + ' - DynamicWarEventFaction = ' + $DynamicWarEventFaction + ' - DynamicWarEventFactionTwo = ' + $DynamicWarEventFactionTwo" />
+						<debug_to_file name="'DynamicWarLogic'" directory="'DynamicWar'" text="$DynamicWarLogicDebug" output="false" append="true" />-->
+						<!-- If nothing then we don't need to do any more processing -->
+						<do_if value="$DynamicWarEventFaction?">
+							<remove_value name="$DynamicWarEventFaction" />
+						</do_if>
+						<do_if value="$DynamicWarEvent != 'Nothing'">
+							<do_any>
+								<set_value name="$DynamicWarEventFaction" exact="$ArgonCoalition" weight="20" />
+								<set_value name="$DynamicWarEventFaction" exact="$HolyOderCoalition" weight="20" />
+								<set_value name="$DynamicWarEventFaction" exact="$ParanidCoalition" weight="20" />
+								<set_value name="$DynamicWarEventFaction" exact="$TeladiCoalition" weight="20" />
+								<set_value name="$DynamicWarEventFaction" exact="$PirateCoalition" weight="20" />
+							</do_any>
+							<do_if value="$DynamicWarEventFactionTwo?">
+								<remove_value name="$DynamicWarEventFactionTwo" />
+							</do_if>
+							<do_if value="$DynamicWarEventFaction == $ArgonCoalition">
+								<do_any>
+									<set_value name="$DynamicWarEventFactionTwo" exact="$HolyOderCoalition" weight="25" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$ParanidCoalition" weight="25" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$TeladiCoalition" weight="25" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$PirateCoalition" weight="25" />
+								</do_any>
+							</do_if>
+							<do_if value="$DynamicWarEventFaction == $HolyOderCoalition">
+								<do_any>
+									<set_value name="$DynamicWarEventFactionTwo" exact="$ArgonCoalition" weight="25" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$ParanidCoalition" weight="25" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$TeladiCoalition" weight="25" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$PirateCoalition" weight="25" />
+								</do_any>
+							</do_if>
+							<do_if value="$DynamicWarEventFaction == $ParanidCoalition">
+								<do_any>
+									<set_value name="$DynamicWarEventFactionTwo" exact="$ArgonCoalition" weight="25" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$HolyOderCoalition" weight="25" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$TeladiCoalition" weight="25" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$PirateCoalition" weight="25" />
+								</do_any>
+							</do_if>
+							<do_if value="$DynamicWarEventFaction == $TeladiCoalition">
+								<do_any>
+									<set_value name="$DynamicWarEventFactionTwo" exact="$ArgonCoalition" weight="25" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$HolyOderCoalition" weight="25" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$ParanidCoalition" weight="25" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$PirateCoalition" weight="25" />
+								</do_any>
+							</do_if>
+							<do_if value="$DynamicWarEventFaction == $PirateCoalition">
+								<do_any>
+									<set_value name="$DynamicWarEventFactionTwo" exact="$ArgonCoalition" weight="25" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$HolyOderCoalition" weight="25" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$ParanidCoalition" weight="25" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$TeladiCoalition" weight="25" />
+								</do_any>
+							</do_if>
+							<include_actions ref="DynamicWarEventExecute" />
+							<set_value name="$FactionSelectionDebug" exact="player.age + ' - ' + $DynamicWarEvent + ' - ' + $DynamicWarEventFaction + ' and ' + $DynamicWarEventFactionTwo" />
+							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="$FactionSelectionDebug" output="false" append="true" />
+						</do_if>
+						<do_if value="$DynamicWarEvent == 'Nothing'">
+							<set_value name="$NothingDebug" exact="player.age + ' - ' + $DynamicWarEvent" />
+							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="$NothingDebug" output="false" append="true" />
+						</do_if>
+						<remove_value name="$DynamicWarEvent" />
+						<remove_value name="$DynamicWarEventFaction" />
+						<remove_value name="$DynamicWarEventFactionTwo" />
+					</actions>
+				</cue>
+				<library name="DynamicWarEventExecute">
+					<actions>
+						<!--Break time -->
+						<do_if value="$DynamicWarEvent == 'BigBoost'">
+							<do_all exact="$DynamicWarEventFaction.count" counter="$Param2CounterA">
+								<set_value name="$FactionOne" exact="$DynamicWarEventFaction.{$Param2CounterA}" />
+								<do_all exact="$DynamicWarEventFactionTwo.count" counter="$Param3CounterA">
+									<set_value name="$FactionTwo" exact="$DynamicWarEventFactionTwo.{$Param3CounterA}" />
+									<set_value name="$BigBoostDebug" exact="'Big Boost - ' + $FactionOne + ' and ' + $FactionTwo + ' - Before: ' + $FactionOne.relationto.{$FactionTwo}" />
+									<set_value name="$OldRelation" exact="$FactionOne.relationto.{$FactionTwo}" />
+									<set_faction_relation faction="$FactionOne" otherfaction="$FactionTwo" value="$FactionOne.relationto.{$FactionTwo} + 0.0032f" />
+									<set_value name="$NewRelation" exact="$FactionOne.relationto.{$FactionTwo}" />
+									<set_value name="$BigBoostDebug" exact="$BigBoostDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
+									<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$BigBoostDebug" output="false" append="true" />
+									<include_actions ref="DynamicWarEventNotification" />
+								</do_all>
+							</do_all>
+						</do_if>
+						<do_if value="$DynamicWarEvent == 'SmallBoost'">
+							<do_all exact="$DynamicWarEventFaction.count" counter="$Param2CounterB">
+								<set_value name="$FactionOne" exact="$DynamicWarEventFaction.{$Param2CounterB}" />
+								<do_all exact="$DynamicWarEventFactionTwo.count" counter="$Param3CounterB">
+									<set_value name="$FactionTwo" exact="$DynamicWarEventFactionTwo.{$Param3CounterB}" />
+									<set_value name="$SmallBoostDebug" exact="'Small Boost - ' + $FactionOne + ' and ' + $FactionTwo + ' - Before: ' + $FactionOne.relationto.{$FactionTwo}" />
+									<set_value name="$OldRelation" exact="$FactionOne.relationto.{$FactionTwo}" />
+									<set_faction_relation faction="$FactionOne" otherfaction="$FactionTwo" value="$FactionOne.relationto.{$FactionTwo} + 0.00064f" />
+									<set_value name="$NewRelation" exact="$FactionOne.relationto.{$FactionTwo}" />
+									<set_value name="$SmallBoostDebug" exact="$SmallBoostDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
+									<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$SmallBoostDebug" output="false" append="true" />
+									<include_actions ref="DynamicWarEventNotification" />
+								</do_all>
+							</do_all>
+						</do_if>
+						<do_if value="$DynamicWarEvent == 'SmallBlow'">
+							<do_all exact="$DynamicWarEventFaction.count" counter="$Param2CounterC">
+								<set_value name="$FactionOne" exact="$DynamicWarEventFaction.{$Param2CounterC}" />
+								<do_all exact="$DynamicWarEventFactionTwo.count" counter="$Param3CounterC">
+									<set_value name="$FactionTwo" exact="$DynamicWarEventFactionTwo.{$Param3CounterC}" />
+									<set_value name="$SmallBlowDebug" exact="'Small Blow - ' + $FactionOne + ' and ' + $FactionTwo + ' - Before: ' + $FactionOne.relationto.{$FactionTwo}" />
+									<set_value name="$OldRelation" exact="$FactionOne.relationto.{$FactionTwo}" />
+									<set_faction_relation faction="$FactionOne" otherfaction="$FactionTwo" value="$FactionOne.relationto.{$FactionTwo} - 0.00064f" />
+									<set_value name="$NewRelation" exact="$FactionOne.relationto.{$FactionTwo}" />
+									<set_value name="$SmallBlowDebug" exact="$SmallBlowDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
+									<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$SmallBlowDebug" output="false" append="true" />
+									<include_actions ref="DynamicWarEventNotification" />
+								</do_all>
+							</do_all>
+						</do_if>
+						<do_if value="$DynamicWarEvent == 'BigBlow'">
+							<do_all exact="$DynamicWarEventFaction.count" counter="$Param2CounterD">
+								<set_value name="$FactionOne" exact="$DynamicWarEventFaction.{$Param2CounterD}" />
+								<do_all exact="$DynamicWarEventFactionTwo.count" counter="$Param3CounterD">
+									<set_value name="$FactionTwo" exact="$DynamicWarEventFactionTwo.{$Param3CounterD}" />
+									<set_value name="$BigBlowDebug" exact="'Big Blow - ' + $FactionOne + ' and ' + $FactionTwo + ' - Before: ' + $FactionOne.relationto.{$FactionTwo}" />
+									<set_value name="$OldRelation" exact="$FactionOne.relationto.{$FactionTwo}" />
+									<set_faction_relation faction="$FactionOne" otherfaction="$FactionTwo" value="$FactionOne.relationto.{$FactionTwo} - 0.0032f" />
+									<set_value name="$NewRelation" exact="$FactionOne.relationto.{$FactionTwo}" />
+									<set_value name="$BigBlowDebug" exact="$BigBlowDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
+									<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$BigBlowDebug" output="false" append="true" />
+									<include_actions ref="DynamicWarEventNotification" />
+								</do_all>
+							</do_all>
+						</do_if>
+					</actions>
+				</library>
+				<library name="DynamicWarEventNotification">
+					<actions>
+						<!-- Big ups to Jack the Stripper(marksmango) for ideas-->
+						<do_if value="$DynamicWarEvent == 'BigBoost'">
+							<do_if value="($OldRelation lt 0) and ($NewRelation gt 0)">
+								<set_value name="$Message" exact="$FactionOne.name + ' is now at peace with ' + $FactionTwo.name + '.'" />
+								<show_notification priority="8" text="$Message" />
+								<do_any>
+									<set_value name="$FlavorText" exact="'Completion of a major trade deal between ' + $FactionOne.name + ' and ' + $FactionTwo.name + ' has led to peace.'" weight="25"/>
+									<set_value name="$FlavorText" exact="'After wide scale protests crying for peace, ' + $FactionOne.name + ' and ' + $FactionTwo.name + ' have signed a peace treaty.'" weight="25"/>
+									<set_value name="$FlavorText" exact="'After a near disasterous fight with the Xenon. ' + $FactionTwo.name + ' sent ships to save the fleet of ' + $FactionOne.name + '. The two factions decided to settle their differences.'" weight="25"/>
+									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+								</do_any>
+								<write_to_logbook category="news" title="$Message" text="$FlavorText" />
+							</do_if>
+						</do_if>
+						<do_if value="$DynamicWarEvent == 'SmallBoost'">
+							<do_if value="($OldRelation lt 0) and ($NewRelation gt 0)">
+								<set_value name="$Message" exact="$FactionOne.name + ' is now at peace with ' + $FactionTwo.name + '.'" />
+								<show_notification priority="7" text="$Message" />
+								<do_any>
+									<set_value name="$FlavorText" exact="'After a public request by Jack the Stripper, famous highway architect, ' + $FactionOne.name + ' and ' + $FactionTwo.name + ' have ended their war.'" weight="25"/>
+									<set_value name="$FlavorText" exact="'An armistice treaty signed by ' + $FactionOne.name + ' and ' + $FactionTwo.name + '. Prisoners have been exchanged and there is a fragile peace for now.'" weight="25"/>
+									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+								</do_any>
+								<write_to_logbook category="news" title="$Message" text="$FlavorText" />
+							</do_if>
+						</do_if>
+						<do_if value="$DynamicWarEvent == 'SmallBlow'">
+							<do_if value="($OldRelation gt 0) and ($NewRelation lt 0)">
+								<set_value name="$Message" exact="$FactionOne.name + ' is now at war with ' + $FactionTwo.name + '.'" />
+								<show_notification priority="7" text="$Message" />
+								<do_any>
+									<set_value name="$FlavorText" exact="'Citing previous border disputes, ' + $FactionOne.name + ' has declared war on ' + $FactionTwo.name + ' to protect their galactic sovereignty.'" weight="25"/>
+									<set_value name="$FlavorText" exact="'After a failed non-agression pact, the relations between ' + $FactionOne.name + ' and ' + $FactionTwo.name + ' have deteriorated into a minor conflict.'" weight="25"/>
+									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+								</do_any>
+								<write_to_logbook category="news" title="$Message" text="$FlavorText" />
+							</do_if>
+						</do_if>
+						<do_if value="$DynamicWarEvent == 'BigBlow'">
+							<do_if value="($OldRelation gt 0) and ($NewRelation lt 0)">
+								<set_value name="$Message" exact="$FactionOne.name + ' is now at war with ' + $FactionTwo.name + '.'" />
+								<show_notification priority="8" text="$Message" />
+								<do_any>
+									<set_value name="$FlavorText" exact="'A ship carrying water to a station experiencing a critical shortage was destroyed by ' + $FactionTwo.name + ' extremeists. ' + $FactionOne.name + ' has declared war in retaliation.'" weight="25"/>
+									<set_value name="$FlavorText" exact="'An ambassador of ' + $FactionOne.name + ' was assasinated. Evidence points to a deep-cover agent of ' + $FactionTwo.name + '. War has erupted.'" weight="25"/>
+									<set_value name="$FlavorText" exact="'A new captain of ' + $FactionTwo.name + ' fired upon a luxury passenger ship belonging to ' + $FactionOne.name + ' thought to be smuggling criminals. ' + $FactionOne.name + ' swiftly declared war.'" weight="25"/>
+									<set_value name="$FlavorText" exact="'A rogue faction logic AI designed by Mysterial has caused phantom fleet orders to invade ' + $FactionTwo.name + ' space. ' + $FactionOne.name + ' has immediately declared all out war.'" weight="25"/>
+								</do_any>
+								<write_to_logbook category="news" title="$Message" text="$FlavorText" />
+							</do_if>
+						</do_if>
+					</actions>
+				</library>
+			</cues>
+		</cue>
+	</cues>
+</mdscript>
