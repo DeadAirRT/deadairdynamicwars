@@ -15,7 +15,7 @@
 				<remove_value name="$InitDebug" />
 			</actions>
 			<cues>
-				<cue name="DynamicWarTimer" instantiate="true" checkinterval="60min" checktime="player.age + 30min">
+				<cue name="DynamicWarTimer" instantiate="true" checkinterval="30min" checktime="player.age + 5m">
 					<actions>
 						<signal_cue_instantly cue="DynamicWarEventSelector" />
 					</actions>
@@ -116,7 +116,7 @@
 									<set_value name="$FactionTwo" exact="$DynamicWarEventFactionTwo.{$Param3CounterA}" />
 									<set_value name="$BigBoostDebug" exact="'Big Boost - ' + $FactionOne + ' and ' + $FactionTwo + ' - Before: ' + $FactionOne.relationto.{$FactionTwo}" />
 									<set_value name="$OldRelation" exact="$FactionOne.relationto.{$FactionTwo}" />
-									<set_faction_relation faction="$FactionOne" otherfaction="$FactionTwo" value="$FactionOne.relationto.{$FactionTwo} + 0.0032f" />
+									<set_faction_relation faction="$FactionOne" otherfaction="$FactionTwo" value="$FactionOne.relationto.{$FactionTwo} + 0.01f" />
 									<set_value name="$NewRelation" exact="$FactionOne.relationto.{$FactionTwo}" />
 									<set_value name="$BigBoostDebug" exact="$BigBoostDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
 									<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$BigBoostDebug" output="false" append="true" />
@@ -161,7 +161,7 @@
 									<set_value name="$FactionTwo" exact="$DynamicWarEventFactionTwo.{$Param3CounterD}" />
 									<set_value name="$BigBlowDebug" exact="'Big Blow - ' + $FactionOne + ' and ' + $FactionTwo + ' - Before: ' + $FactionOne.relationto.{$FactionTwo}" />
 									<set_value name="$OldRelation" exact="$FactionOne.relationto.{$FactionTwo}" />
-									<set_faction_relation faction="$FactionOne" otherfaction="$FactionTwo" value="$FactionOne.relationto.{$FactionTwo} - 0.0032f" />
+									<set_faction_relation faction="$FactionOne" otherfaction="$FactionTwo" value="$FactionOne.relationto.{$FactionTwo} - 0.1f" />
 									<set_value name="$NewRelation" exact="$FactionOne.relationto.{$FactionTwo}" />
 									<set_value name="$BigBlowDebug" exact="$BigBlowDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
 									<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$BigBlowDebug" output="false" append="true" />
@@ -175,6 +175,17 @@
 					<actions>
 						<!-- Big ups to Jack the Stripper(marksmango) for ideas-->
 						<do_if value="$DynamicWarEvent == 'BigBoost'">
+							<do_if value="($OldRelation gt 0) and ($NewRelation gt 0)">
+								<set_value name="$Message" exact="$FactionOne.name + ' has greatly improved relations with ' + $FactionTwo.name + '.'" />
+								<show_notification priority="6" text="$Message" />
+								<do_any>
+									<set_value name="$FlavorText" exact="'Completion of a non-agression pact has led to improved relations between ' + $FactionOne.name + ' and ' + $FactionTwo.name + '.'" weight="25"/>
+									<set_value name="$FlavorText" exact="'Completion of a joint resources expedition has led to improved relations between ' + $FactionOne.name + ' and ' + $FactionTwo.name + '.'" weight="25"/>
+									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+								</do_any>
+								<write_to_logbook category="news" title="$Message" text="$FlavorText" />
+							</do_if>
 							<do_if value="($OldRelation lt 0) and ($NewRelation gt 0)">
 								<set_value name="$Message" exact="$FactionOne.name + ' is now at peace with ' + $FactionTwo.name + '.'" />
 								<show_notification priority="8" text="$Message" />
@@ -188,6 +199,17 @@
 							</do_if>
 						</do_if>
 						<do_if value="$DynamicWarEvent == 'SmallBoost'">
+							<do_if value="($OldRelation gt 0) and ($NewRelation gt 0)">
+								<set_value name="$Message" exact="$FactionOne.name + ' has slightly improved relations with ' + $FactionTwo.name + '.'" />
+								<show_notification priority="5" text="$Message" />
+								<do_any>
+									<set_value name="$FlavorText" exact="'Increased trade between ' + $FactionOne.name + ' and ' + $FactionTwo.name + ' has improved relations.'" weight="25"/>
+									<set_value name="$FlavorText" exact="'Increased tourism between ' + $FactionOne.name + ' and ' + $FactionTwo.name + ' has improved relations.'" weight="25"/>
+									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+								</do_any>
+								<write_to_logbook category="news" title="$Message" text="$FlavorText" />
+							</do_if>
 							<do_if value="($OldRelation lt 0) and ($NewRelation gt 0)">
 								<set_value name="$Message" exact="$FactionOne.name + ' is now at peace with ' + $FactionTwo.name + '.'" />
 								<show_notification priority="7" text="$Message" />
@@ -201,6 +223,17 @@
 							</do_if>
 						</do_if>
 						<do_if value="$DynamicWarEvent == 'SmallBlow'">
+							<do_if value="($OldRelation lt 0) and ($NewRelation lt 0)">
+								<set_value name="$Message" exact="$FactionOne.name + ' has slightly exacerbated relations with ' + $FactionTwo.name + '.'" />
+								<show_notification priority="5" text="$Message" />
+								<do_any>
+									<set_value name="$FlavorText" exact="'Increased conflict between ' + $FactionOne.name + ' and ' + $FactionTwo.name + ' has worsened relations.'" weight="25"/>
+									<set_value name="$FlavorText" exact="'Increased distrust between ' + $FactionOne.name + ' and ' + $FactionTwo.name + ' has worsened relations.'" weight="25"/>
+									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+								</do_any>
+								<write_to_logbook category="news" title="$Message" text="$FlavorText" />
+							</do_if>
 							<do_if value="($OldRelation gt 0) and ($NewRelation lt 0)">
 								<set_value name="$Message" exact="$FactionOne.name + ' is now at war with ' + $FactionTwo.name + '.'" />
 								<show_notification priority="7" text="$Message" />
@@ -214,6 +247,17 @@
 							</do_if>
 						</do_if>
 						<do_if value="$DynamicWarEvent == 'BigBlow'">
+							<do_if value="($OldRelation lt 0) and ($NewRelation lt 0)">
+								<set_value name="$Message" exact="$FactionOne.name + ' has greatly exacerbated relations with ' + $FactionTwo.name + '.'" />
+								<show_notification priority="6" text="$Message" />
+								<do_any>
+									<set_value name="$FlavorText" exact="'A prominent leader of ' + $FactionOne.name + ' has declared to build a wall blocking ' + $FactionTwo.name + ' and to make them pay for it. Relations have greatly worsened'" weight="25"/>
+									<set_value name="$FlavorText" exact="'A prominent leader of ' + $FactionOne.name + ' has called for the destruction of ' + $FactionTwo.name + ' during a state of the union address. Relations have greatly worsened'" weight="25"/>
+									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+								</do_any>
+								<write_to_logbook category="news" title="$Message" text="$FlavorText" />
+							</do_if>
 							<do_if value="($OldRelation gt 0) and ($NewRelation lt 0)">
 								<set_value name="$Message" exact="$FactionOne.name + ' is now at war with ' + $FactionTwo.name + '.'" />
 								<show_notification priority="8" text="$Message" />
