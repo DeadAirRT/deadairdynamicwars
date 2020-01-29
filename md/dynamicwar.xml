@@ -116,7 +116,7 @@
 									<set_value name="$FactionTwo" exact="$DynamicWarEventFactionTwo.{$Param3CounterA}" />
 									<set_value name="$BigBoostDebug" exact="'Big Boost - ' + $FactionOne + ' and ' + $FactionTwo + ' - Before: ' + $FactionOne.relationto.{$FactionTwo}" />
 									<set_value name="$OldRelation" exact="$FactionOne.relationto.{$FactionTwo}" />
-									<set_faction_relation faction="$FactionOne" otherfaction="$FactionTwo" value="$FactionOne.relationto.{$FactionTwo} + 0.01f" />
+									<set_faction_relation faction="$FactionOne" otherfaction="$FactionTwo" value="$FactionOne.relationto.{$FactionTwo} + 0.1f" />
 									<set_value name="$NewRelation" exact="$FactionOne.relationto.{$FactionTwo}" />
 									<set_value name="$BigBoostDebug" exact="$BigBoostDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
 									<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$BigBoostDebug" output="false" append="true" />
@@ -131,7 +131,7 @@
 									<set_value name="$FactionTwo" exact="$DynamicWarEventFactionTwo.{$Param3CounterB}" />
 									<set_value name="$SmallBoostDebug" exact="'Small Boost - ' + $FactionOne + ' and ' + $FactionTwo + ' - Before: ' + $FactionOne.relationto.{$FactionTwo}" />
 									<set_value name="$OldRelation" exact="$FactionOne.relationto.{$FactionTwo}" />
-									<set_faction_relation faction="$FactionOne" otherfaction="$FactionTwo" value="$FactionOne.relationto.{$FactionTwo} + 0.00064f" />
+									<set_faction_relation faction="$FactionOne" otherfaction="$FactionTwo" value="$FactionOne.relationto.{$FactionTwo} + 0.0032f" />
 									<set_value name="$NewRelation" exact="$FactionOne.relationto.{$FactionTwo}" />
 									<set_value name="$SmallBoostDebug" exact="$SmallBoostDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
 									<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$SmallBoostDebug" output="false" append="true" />
@@ -146,7 +146,7 @@
 									<set_value name="$FactionTwo" exact="$DynamicWarEventFactionTwo.{$Param3CounterC}" />
 									<set_value name="$SmallBlowDebug" exact="'Small Blow - ' + $FactionOne + ' and ' + $FactionTwo + ' - Before: ' + $FactionOne.relationto.{$FactionTwo}" />
 									<set_value name="$OldRelation" exact="$FactionOne.relationto.{$FactionTwo}" />
-									<set_faction_relation faction="$FactionOne" otherfaction="$FactionTwo" value="$FactionOne.relationto.{$FactionTwo} - 0.00064f" />
+									<set_faction_relation faction="$FactionOne" otherfaction="$FactionTwo" value="$FactionOne.relationto.{$FactionTwo} - 0.0032f" />
 									<set_value name="$NewRelation" exact="$FactionOne.relationto.{$FactionTwo}" />
 									<set_value name="$SmallBlowDebug" exact="$SmallBlowDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
 									<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$SmallBlowDebug" output="false" append="true" />
@@ -176,7 +176,12 @@
 						<!-- Big ups to Jack the Stripper(marksmango) for ideas-->
 						<do_if value="$DynamicWarEvent == 'BigBoost'">
 							<do_if value="($OldRelation ge 0) and ($NewRelation gt 0)">
-								<set_value name="$Message" exact="$FactionOne.name + ' has greatly improved relations with ' + $FactionTwo.name + '.'" />
+								<do_if value="($NewRelation gt 0) and ($NewRelation lt 0.1)">
+									<set_value name="$Message" exact="$FactionOne.name + ' has greatly improved their relations with ' + $FactionTwo.name + '. They are considered friends.'" />
+								</do_if>
+								<do_if value="($NewRelation ge 0.1) and ($NewRelation lt 1.0)">
+									<set_value name="$Message" exact="$FactionOne.name + ' has greatly improved their relations with ' + $FactionTwo.name + '. They are considered federation members.'" />
+								</do_if>
 								<show_notification priority="6" text="$Message" />
 								<do_any>
 									<set_value name="$FlavorText" exact="'Completion of a non-agression pact has led to improved relations between ' + $FactionOne.name + ' and ' + $FactionTwo.name + '.'" weight="25"/>
@@ -197,14 +202,38 @@
 								</do_any>
 								<write_to_logbook category="news" title="$Message" text="$FlavorText" />
 							</do_if>
+							<do_if value="($OldRelation lt 0) and ($NewRelation lt 0)">
+								<do_if value="($NewRelation lt 0) and ($NewRelation gt -0.1)">
+									<set_value name="$Message" exact="$FactionOne.name + ' has improved their relations with ' + $FactionTwo.name + '. They are considered enemies.'" />
+								</do_if>
+								<do_if value="($NewRelation le -0.1) and ($NewRelation gt -0.32)">
+									<set_value name="$Message" exact="$FactionOne.name + ' has improved their relations with ' + $FactionTwo.name + '. They are considered at war.'" />
+								</do_if>
+								<do_if value="($NewRelation le -0.32) and ($NewRelation gt -1.0)">
+									<set_value name="$Message" exact="$FactionOne.name + ' has improved their relations with ' + $FactionTwo.name + '. They are at all-out war.'" />
+								</do_if>
+								<show_notification priority="7" text="$Message" />
+								<do_any>
+									<set_value name="$FlavorText" exact="'Reduced conflict between ' + $FactionOne.name + ' and ' + $FactionTwo.name + ' has greatly improved relations.'" weight="25"/>
+									<set_value name="$FlavorText" exact="'Reduced deception between ' + $FactionOne.name + ' and ' + $FactionTwo.name + ' has greatly improved relations.'" weight="25"/>
+									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+								</do_any>
+								<write_to_logbook category="news" title="$Message" text="$FlavorText" />
+							</do_if>
 						</do_if>
 						<do_if value="$DynamicWarEvent == 'SmallBoost'">
 							<do_if value="($OldRelation ge 0) and ($NewRelation gt 0)">
-								<set_value name="$Message" exact="$FactionOne.name + ' has slightly improved relations with ' + $FactionTwo.name + '.'" />
+								<do_if value="($NewRelation gt 0) and ($NewRelation lt 0.1)">
+									<set_value name="$Message" exact="$FactionOne.name + ' has slightly improved their relations with ' + $FactionTwo.name + '. They are considered friends.'" />
+								</do_if>
+								<do_if value="($NewRelation ge 0.1) and ($NewRelation lt 1.0)">
+									<set_value name="$Message" exact="$FactionOne.name + ' has slighty improved their relations with ' + $FactionTwo.name + '. They are considered federation members.'" />
+								</do_if>
 								<show_notification priority="5" text="$Message" />
 								<do_any>
-									<set_value name="$FlavorText" exact="'Increased trade between ' + $FactionOne.name + ' and ' + $FactionTwo.name + ' has improved relations.'" weight="25"/>
-									<set_value name="$FlavorText" exact="'Increased tourism between ' + $FactionOne.name + ' and ' + $FactionTwo.name + ' has improved relations.'" weight="25"/>
+									<set_value name="$FlavorText" exact="'Increased trade between ' + $FactionOne.name + ' and ' + $FactionTwo.name + ' has slightly improved relations.'" weight="25"/>
+									<set_value name="$FlavorText" exact="'Increased tourism between ' + $FactionOne.name + ' and ' + $FactionTwo.name + ' has slightly improved relations.'" weight="25"/>
 									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
 									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
 								</do_any>
@@ -221,21 +250,78 @@
 								</do_any>
 								<write_to_logbook category="news" title="$Message" text="$FlavorText" />
 							</do_if>
+							<do_if value="($OldRelation lt 0) and ($NewRelation lt 0)">
+								<do_if value="($NewRelation lt 0) and ($NewRelation gt -0.1)">
+									<set_value name="$Message" exact="$FactionOne.name + ' has slightly improved their relations with ' + $FactionTwo.name + '. They are considered enemies.'" />
+								</do_if>
+								<do_if value="($NewRelation le -0.1) and ($NewRelation gt -0.32)">
+									<set_value name="$Message" exact="$FactionOne.name + ' has slightly improved their relations with ' + $FactionTwo.name + '. They are considered at war.'" />
+								</do_if>
+								<do_if value="($NewRelation le -0.32) and ($NewRelation gt -1.0)">
+									<set_value name="$Message" exact="$FactionOne.name + ' has slightly improved their relations with ' + $FactionTwo.name + '. They are at all-out war.'" />
+								</do_if>
+								<show_notification priority="7" text="$Message" />
+								<do_any>
+									<set_value name="$FlavorText" exact="'Reduced conflict between ' + $FactionOne.name + ' and ' + $FactionTwo.name + ' has slighty improved relations.'" weight="25"/>
+									<set_value name="$FlavorText" exact="'Reduced deception between ' + $FactionOne.name + ' and ' + $FactionTwo.name + ' has slightly improved relations.'" weight="25"/>
+									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+								</do_any>
+								<write_to_logbook category="news" title="$Message" text="$FlavorText" />
+							</do_if>
 						</do_if>
 						<do_if value="$DynamicWarEvent == 'SmallBlow'">
+							<do_if value="($OldRelation gt 0) and ($NewRelation gt 0)">
+								<do_if value="($NewRelation gt 0) and ($NewRelation lt 0.1)">
+									<set_value name="$Message" exact="$FactionOne.name + ' has greatly worsened their relations with ' + $FactionTwo.name + '. They are considered friends.'" />
+								</do_if>
+								<do_if value="($NewRelation ge 0.1) and ($NewRelation lt 1.0)">
+									<set_value name="$Message" exact="$FactionOne.name + ' has greatly worsened their relations with ' + $FactionTwo.name + '. They are considered federation members.'" />
+								</do_if>
+								<show_notification priority="6" text="$Message" />
+								<do_any>
+									<set_value name="$FlavorText" exact="'Reduced trade between ' + $FactionOne.name + ' and ' + $FactionTwo.name + ' has slightly worsened relations.'" weight="25"/>
+									<set_value name="$FlavorText" exact="'Reduced tourism between ' + $FactionOne.name + ' and ' + $FactionTwo.name + ' has slightly worsened relations.'" weight="25"/>
+									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+								</do_any>
+								<write_to_logbook category="news" title="$Message" text="$FlavorText" />
+							</do_if>
 							<do_if value="($OldRelation lt 0) and ($NewRelation lt 0)">
-								<set_value name="$Message" exact="$FactionOne.name + ' has slightly exacerbated relations with ' + $FactionTwo.name + '.'" />
+								<do_if value="($NewRelation lt 0) and ($NewRelation gt -0.1)">
+									<set_value name="$Message" exact="$FactionOne.name + ' has slightly worsened their relations with ' + $FactionTwo.name + '. They are considered enemies.'" />
+								</do_if>
+								<do_if value="($NewRelation le -0.1) and ($NewRelation gt -0.32)">
+									<set_value name="$Message" exact="$FactionOne.name + ' has slightly worsened their relations with ' + $FactionTwo.name + '. They are considered at war.'" />
+								</do_if>
+								<do_if value="($NewRelation le -0.32) and ($NewRelation gt -1.0)">
+									<set_value name="$Message" exact="$FactionOne.name + ' has slightly worsened their relations with ' + $FactionTwo.name + '. They are at all-out war.'" />
+								</do_if>
+								<do_if value="($NewRelation == -1.0)">
+									<set_value name="$Message" exact="$FactionOne.name + ' has slightly worsened their relations with ' + $FactionTwo.name + '. They are at all-out war with their nemesis.'" />
+								</do_if>
 								<show_notification priority="5" text="$Message" />
 								<do_any>
-									<set_value name="$FlavorText" exact="'Increased conflict between ' + $FactionOne.name + ' and ' + $FactionTwo.name + ' has worsened relations.'" weight="25"/>
-									<set_value name="$FlavorText" exact="'Increased distrust between ' + $FactionOne.name + ' and ' + $FactionTwo.name + ' has worsened relations.'" weight="25"/>
+									<set_value name="$FlavorText" exact="'Increased conflict between ' + $FactionOne.name + ' and ' + $FactionTwo.name + ' has slightly worsened relations.'" weight="25"/>
+									<set_value name="$FlavorText" exact="'Increased distrust between ' + $FactionOne.name + ' and ' + $FactionTwo.name + ' has slightly worsened relations.'" weight="25"/>
 									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
 									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
 								</do_any>
 								<write_to_logbook category="news" title="$Message" text="$FlavorText" />
 							</do_if>
 							<do_if value="($OldRelation ge 0) and ($NewRelation lt 0)">
-								<set_value name="$Message" exact="$FactionOne.name + ' is now at war with ' + $FactionTwo.name + '.'" />
+								<do_if value="($NewRelation lt 0) and ($NewRelation gt -0.1)">
+									<set_value name="$Message" exact="$FactionOne.name + ' is now enemies with ' + $FactionTwo.name + '.'" />
+								</do_if>
+								<do_if value="($NewRelation le -0.1) and ($NewRelation gt -0.32)">
+									<set_value name="$Message" exact="$FactionOne.name + ' is now at war with ' + $FactionTwo.name + '.'" />
+								</do_if>
+								<do_if value="($NewRelation le -0.32) and ($NewRelation gt -1.0)">
+									<set_value name="$Message" exact="$FactionOne.name + ' is now at all-out war with ' + $FactionTwo.name + '.'" />
+								</do_if>
+								<do_if value="($NewRelation == -1.0)">
+									<set_value name="$Message" exact="$FactionOne.name + ' is now at all-out war with their nemesis, ' + $FactionTwo.name + '.'" />
+								</do_if>
 								<show_notification priority="7" text="$Message" />
 								<do_any>
 									<set_value name="$FlavorText" exact="'Citing previous border disputes, ' + $FactionOne.name + ' has declared war on ' + $FactionTwo.name + ' to protect their galactic sovereignty.'" weight="25"/>
@@ -247,8 +333,35 @@
 							</do_if>
 						</do_if>
 						<do_if value="$DynamicWarEvent == 'BigBlow'">
+							<do_if value="($OldRelation gt 0) and ($NewRelation gt 0)">
+								<do_if value="($NewRelation gt 0) and ($NewRelation lt 0.1)">
+									<set_value name="$Message" exact="$FactionOne.name + ' has greatly worsened their relations with ' + $FactionTwo.name + '. They are considered friends.'" />
+								</do_if>
+								<do_if value="($NewRelation ge 0.1) and ($NewRelation lt 1.0)">
+									<set_value name="$Message" exact="$FactionOne.name + ' has greatly worsened their relations with ' + $FactionTwo.name + '. They are considered federation members.'" />
+								</do_if>
+								<show_notification priority="6" text="$Message" />
+								<do_any>
+									<set_value name="$FlavorText" exact="'Reduced trade between ' + $FactionOne.name + ' and ' + $FactionTwo.name + ' has greatly worsened relations.'" weight="25"/>
+									<set_value name="$FlavorText" exact="'Reduced tourism between ' + $FactionOne.name + ' and ' + $FactionTwo.name + ' has greatly worsened relations.'" weight="25"/>
+									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+								</do_any>
+								<write_to_logbook category="news" title="$Message" text="$FlavorText" />
+							</do_if>
 							<do_if value="($OldRelation lt 0) and ($NewRelation lt 0)">
-								<set_value name="$Message" exact="$FactionOne.name + ' has greatly exacerbated relations with ' + $FactionTwo.name + '.'" />
+								<do_if value="($NewRelation lt 0) and ($NewRelation gt -0.1)">
+									<set_value name="$Message" exact="$FactionOne.name + ' has greatly worsened their relations with ' + $FactionTwo.name + '. They are considered enemies.'" />
+								</do_if>
+								<do_if value="($NewRelation le -0.1) and ($NewRelation gt -0.32)">
+									<set_value name="$Message" exact="$FactionOne.name + ' has greatly worsened their relations with ' + $FactionTwo.name + '. They are considered at war.'" />
+								</do_if>
+								<do_if value="($NewRelation le -0.32) and ($NewRelation gt -1.0)">
+									<set_value name="$Message" exact="$FactionOne.name + ' has greatly worsened their relations with ' + $FactionTwo.name + '. They are at all-out war.'" />
+								</do_if>
+								<do_if value="($NewRelation == -1.0)">
+									<set_value name="$Message" exact="$FactionOne.name + ' has greatly worsened their relations with ' + $FactionTwo.name + '. They are at all-out war with their nemesis.'" />
+								</do_if>
 								<show_notification priority="6" text="$Message" />
 								<do_any>
 									<set_value name="$FlavorText" exact="'A prominent leader of ' + $FactionOne.name + ' has declared to build a wall blocking ' + $FactionTwo.name + ' and to make them pay for it. Relations have greatly worsened'" weight="25"/>
@@ -259,7 +372,18 @@
 								<write_to_logbook category="news" title="$Message" text="$FlavorText" />
 							</do_if>
 							<do_if value="($OldRelation ge 0) and ($NewRelation lt 0)">
-								<set_value name="$Message" exact="$FactionOne.name + ' is now at war with ' + $FactionTwo.name + '.'" />
+								<do_if value="($NewRelation lt 0) and ($NewRelation gt -0.1)">
+									<set_value name="$Message" exact="$FactionOne.name + ' is now enemies with ' + $FactionTwo.name + '.'" />
+								</do_if>
+								<do_if value="($NewRelation le -0.1) and ($NewRelation gt -0.32)">
+									<set_value name="$Message" exact="$FactionOne.name + ' is now at war with ' + $FactionTwo.name + '.'" />
+								</do_if>
+								<do_if value="($NewRelation le -0.32) and ($NewRelation gt -1.0)">
+									<set_value name="$Message" exact="$FactionOne.name + ' is now at all-out war with ' + $FactionTwo.name + '.'" />
+								</do_if>
+								<do_if value="($NewRelation == -1.0)">
+									<set_value name="$Message" exact="$FactionOne.name + ' is now at all-out war with their nemesis, ' + $FactionTwo.name + '.'" />
+								</do_if>
 								<show_notification priority="8" text="$Message" />
 								<do_any>
 									<set_value name="$FlavorText" exact="'A ship carrying water to a station experiencing a critical shortage was destroyed by ' + $FactionTwo.name + ' extremeists. ' + $FactionOne.name + ' has declared war in retaliation.'" weight="25"/>
