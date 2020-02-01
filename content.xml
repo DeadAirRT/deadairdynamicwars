@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<content id="DeadAirDWS" name="DeadAir Dynamic Wars" description="Dynamic Faction Relations with gamestart based on Argon Citizen by Boost Hungry" author="DeadAir" version="107" date="2020-01-28" save="0" enabled="1">
+<content id="DeadAirDWS" name="DeadAir Dynamic Wars" description="Dynamic Faction Relations with gamestart based on Argon Citizen by Boost Hungry" author="DeadAir" version="108" date="2020-02-01" save="0" enabled="1">
 	<dependency id="DeadAirGateOverhaul" optional="false" name="DeadAir Gate Overhaul" />
 	<text language="44" name="DeadAir Dynamic Wars" description="Dynamic Faction Relations with gamestart based on Argon Citizen by Boost Hungry" author="DeadAir" />
 </content>
