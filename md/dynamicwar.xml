@@ -121,6 +121,7 @@
 									<set_value name="$OldRelation" exact="$FactionOne.relationto.{$FactionTwo}" />
 									<set_faction_relation faction="$FactionOne" otherfaction="$FactionTwo" value="([$FactionOne.relationto.{$FactionTwo} + 0.1f, 1].min)" />
 									<set_value name="$NewRelation" exact="([$FactionOne.relationto.{$FactionTwo}, 1].min)" />
+									<set_faction_relation faction="$FactionTwo" otherfaction="$FactionOne" value="$NewRelation" />
 									<set_value name="$BigBoostDebug" exact="$BigBoostDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
 									<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$BigBoostDebug" output="false" append="true" />
 									<include_actions ref="DynamicWarEventNotification" />
@@ -136,6 +137,7 @@
 									<set_value name="$OldRelation" exact="$FactionOne.relationto.{$FactionTwo}" />
 									<set_faction_relation faction="$FactionOne" otherfaction="$FactionTwo" value="([$FactionOne.relationto.{$FactionTwo} + 0.0032f, 1].min)" />
 									<set_value name="$NewRelation" exact="([$FactionOne.relationto.{$FactionTwo}, 1].min)" />
+									<set_faction_relation faction="$FactionTwo" otherfaction="$FactionOne" value="$NewRelation" />
 									<set_value name="$SmallBoostDebug" exact="$SmallBoostDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
 									<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$SmallBoostDebug" output="false" append="true" />
 									<include_actions ref="DynamicWarEventNotification" />
@@ -151,6 +153,7 @@
 									<set_value name="$OldRelation" exact="$FactionOne.relationto.{$FactionTwo}" />
 									<set_faction_relation faction="$FactionOne" otherfaction="$FactionTwo" value="([$FactionOne.relationto.{$FactionTwo} - 0.0032f, -1].max)" />
 									<set_value name="$NewRelation" exact="([$FactionOne.relationto.{$FactionTwo}, -1].max)" />
+									<set_faction_relation faction="$FactionTwo" otherfaction="$FactionOne" value="$NewRelation" />
 									<set_value name="$SmallBlowDebug" exact="$SmallBlowDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
 									<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$SmallBlowDebug" output="false" append="true" />
 									<include_actions ref="DynamicWarEventNotification" />
@@ -166,6 +169,7 @@
 									<set_value name="$OldRelation" exact="$FactionOne.relationto.{$FactionTwo}" />
 									<set_faction_relation faction="$FactionOne" otherfaction="$FactionTwo" value="([$FactionOne.relationto.{$FactionTwo} - 0.1f, -1].max)" />
 									<set_value name="$NewRelation" exact="([$FactionOne.relationto.{$FactionTwo}, -1].max)" />
+									<set_faction_relation faction="$FactionTwo" otherfaction="$FactionOne" value="$NewRelation" />
 									<set_value name="$BigBlowDebug" exact="$BigBlowDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
 									<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$BigBlowDebug" output="false" append="true" />
 									<include_actions ref="DynamicWarEventNotification" />
@@ -181,6 +185,7 @@
 									<set_value name="$OldRelation" exact="$FactionOne.relationto.{$FactionTwo}" />
 									<set_faction_relation faction="$FactionOne" otherfaction="$FactionTwo" value="-1.0" />
 									<set_value name="$NewRelation" exact="-1.0" />
+									<set_faction_relation faction="$FactionTwo" otherfaction="$FactionOne" value="$NewRelation" />
 									<set_value name="$NemesisDebug" exact="$NemesisDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
 									<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$NemesisDebug" output="false" append="true" />
 									<include_actions ref="DynamicWarEventNotification" />
