@@ -161,15 +161,20 @@
 				<set_skill entity="$NewPilot" type="skilltype.engineering" exact="5" />
 				
 				<!-- Create 2 Fighters -->
-				<generate_loadout macro="macro.ship_arg_s_heavyfighter_02_a_macro" faction="faction.argon" 
+				<generate_loadout macro="macro.ship_arg_s_scout_01_a_macro" faction="faction.argon" 
 						wares="[ware.software_flightassistmk1, ware.software_dockmk2, ware.software_scannerlongrangemk2, ware.software_scannerobjectmk2, ware.software_targetmk1, ware.software_trademk1, 
-								ware.engine_arg_s_combat_01_mk3, ware.weapon_gen_s_gatling_01_mk2, ware.shield_arg_s_standard_01_mk3, ware.thruster_gen_s_allround_01_mk3]" 
+								ware.engine_arg_s_combat_01_mk3, ware.weapon_gen_s_gatling_01_mk1, ware.shield_arg_s_standard_01_mk3, ware.thruster_gen_s_allround_01_mk3]" 
 						level="1" result="$loadout" />
 				<do_all exact="2" counter="$i">
-					<create_ship name="$NewShip" macro="ship_arg_s_heavyfighter_02_a_macro" zone="player.zone">
+					<create_ship name="$NewShip" macro="ship_arg_s_scout_01_a_macro" zone="player.zone">
 						<owner exact="faction.player" overridenpc="true" />
 						<loadout loadout="$loadout.{1}" />
-						<pilot >
+						<ammo>
+							<macro ref="macro.eq_arg_satellite_02_macro">
+								<fillamount exact="100"/>
+							</macro>
+						</ammo>
+						<pilot>
 							<select faction="faction.argon" tags="tag.aipilot"/>
 						</pilot>
 						<people>

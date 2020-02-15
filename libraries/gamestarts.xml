@@ -8,14 +8,14 @@
 				<item name="Player HQ Status" value="Operational" />
 				<item name="Player HQ Location" value="Shadow's End" />
 			</info>
-			<location galaxy="xu_ep2_universe_macro" zone="zone002_cluster_14_sector001_macro">
+			<!--<location galaxy="xu_ep2_universe_macro" zone="zone002_cluster_14_sector001_macro">
 				<position x="28685" y="-1240" z="10695"/>
 				<rotation yaw="-115" pitch="0" roll="0" />
-			</location>
-			<!--<location galaxy="XU_ep2_universe_macro" zone="ZoneDAGO1_Cluster_01_Sector001_macro">
-				<position x="0" y="5" z="-5"/>
-				<rotation yaw="-180" pitch="0" roll="0" />
 			</location>-->
+			<location galaxy="xu_ep2_universe_macro" zone="zonedago7_cluster_da1_sector001_macro">
+				<position x="0" y="0" z="-10000"/>
+				<rotation yaw="180" pitch="0" roll="0" />
+			</location>
 			<player macro="character_player_tutorial_macro" money="30000000">
 				<ship macro="ship_arg_s_heavyfighter_02_a_macro">
 					<loadout>
