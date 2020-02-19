@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<content id="DeadAirDWS" name="DeadAir Dynamic Wars" description="Dynamic Faction Relations" author="DeadAir" version="112" date="2020-02-16" save="0" enabled="1">
-	<text language="44" name="DeadAir Dynamic Wars" description="Dynamic Faction Relations" author="DeadAir" />
+<content id="DeadAirDWS" name="Dynamic Faction Wars" description="Dynamic Faction Relations" author="DeadAir" version="112" date="2020-02-16" save="0" enabled="1">
+	<text language="44" name="Dynamic Faction Wars" description="Dynamic Faction Relations" author="DeadAir" />
 </content>
