@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mdscript name="DynamicWarConversations" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="md.xsd">
+  <cues>
+    <cue name="DWC_Main_Contact_Handler" instantiate="true">
+      <conditions>
+        <check_any>
+          <event_conversation_started conversation="default"/>
+          <event_conversation_returned_to_section section="default"/>
+        </check_any>
+        <check_value value="(event.object.controlpost == controlpost.manager) or (event.object.type == entitytype.factionrepresentative)"/>
+      </conditions>
+      <actions>
+        <add_player_choice_sub text="'Discuss faction relations'" section="DWC_Main_InContact"/>
+      </actions>
+    </cue>
+
+    <cue name="DWC_Main_InContact_Handler" instantiate="true">
+      <conditions>
+        <check_any>
+          <event_conversation_next_section section="DWC_Main_InContact"/>
+          <event_conversation_returned_to_section section="DWC_Main_InContact"/>
+        </check_any>
+      </conditions>
+      <actions>
+        <add_player_choice_sub text="'Improve relations with cash'" section="DWC_Main_SelectFaction"/>
+		<add_player_choice_sub text="'Inquire about relations'" section="DWC_Main_Askrelations"/>
+        <add_player_choice_return position="bottom_right" text="'Back'"/>
+      </actions>
+    </cue>
+
+    <cue name="DWC_Main_SelectFaction_Handler" instantiate="true">
+      <conditions>
+        <check_any>
+          <event_conversation_next_section section="DWC_Main_SelectFaction"/>
+          <event_conversation_returned_to_section section="DWC_Main_SelectFaction"/>
+        </check_any>
+      </conditions>
+      <actions>
+        <do_if value="event.param2 == 'previous'">
+          <set_value name="$page" operation="subtract"/>
+        </do_if>
+        <do_elseif value="event.param2 == 'next'">
+          <set_value name="$page" operation="add"/>
+        </do_elseif>
+        <do_else>
+          <set_value name="$page" exact="0"/>
+        </do_else>
+        
+        <do_if value="event.param2.{3} != null and event.param2.{4} != null">
+          <reward_player money="(event.param2.{4})Cr * -1"/>
+          <set_faction_relation faction="event.param2.{2}" otherfaction="event.object.owner" value="0"/>
+          <set_faction_relation faction="event.object.owner" otherfaction="event.param2.{2}" value="0"/>
+        </do_if>
+
+        <set_value name="$validFactions" exact="[faction.antigone, faction.argon, faction.hatikvah, faction.holyorder, faction.alliance, faction.paranid, faction.ministry, faction.teladi, faction.scaleplate]"/>
+        <do_all exact="$validFactions.count" counter="$i" reverse="true">
+          <do_if value="($validFactions.{$i}.relationto.{event.object.owner} ge 0) or ($validFactions.{$i} == event.object.owner)">
+            <remove_value name="$validFactions.{$i}"/>
+          </do_if>
+        </do_all>
+        <do_all exact="4" counter="$i">
+          <set_value name="$actuallSiteItemId" exact="$i + (4 * $page)"/>
+          <do_if value="$validFactions.count lt $actuallSiteItemId">
+            <break/>
+          </do_if>
+          <set_value name="$price" exact="0"/>
+          <set_value name="$faction" exact="$validFactions.{$actuallSiteItemId}"/>
+          <set_value name="$relation" exact="$faction.relationto.{event.object.owner}"/>
+          <include_actions ref="DWC_Main_CalculatePrice"/>
+          <do_if value="$faction != null">
+            <do_if value="player.money gt ($price)Cr">
+              <add_player_choice text="'%1 (%2M)'.[$faction.name, ($price / 1000000)i]" position="$i" choiceparam="[$actuallSiteItemId, $faction, $relation, $price]" section="DWC_Main_SelectFaction"/>
+            </do_if>
+            <do_else>
+              <add_player_choice text="'%1 (%2M)'.[$faction.name, ($price / 1000000)i]" position="$i" selectable="false" choiceparam="[$actuallSiteItemId, $faction, $relation, $price]" section="DWC_Main_SelectFaction"/>
+            </do_else>
+          </do_if>
+        </do_all>
+
+        <do_if value="$page == 0">
+          <add_player_choice_return position="bottom_right" text="'Back'"/>
+        </do_if>
+        <do_else>
+          <add_player_choice text="'Previous page'" choiceparam="'previous'" position="bottom_right" section="DWC_Main_SelectFaction"/>
+        </do_else>
+        <do_if value="$validFactions.count gt 4">
+          <add_player_choice text="'Next page'" choiceparam="'next'" position="right" section="DWC_Main_SelectFaction"/>
+        </do_if>
+        <remove_value name="$relation"/>
+        <remove_value name="$faction"/>
+        <remove_value name="$actuallSiteItemId"/>
+      </actions>
+    </cue>
+
+    <library name="DWC_Main_CalculatePrice">
+      <actions>
+        <do_if value="$relation le -0.0032 and $relation gt -0.01">
+          <set_value name="$price" exact="1000000"/>
+        </do_if>
+        <do_elseif value="$relation le -0.01 and $relation gt -0.032">
+          <set_value name="$price" exact="3200000"/>
+        </do_elseif>
+        <do_elseif value="$relation le -0.032 and $relation gt -0.1">
+          <set_value name="$price" exact="10000000"/>
+        </do_elseif>
+        <do_elseif value="$relation le -0.1 and $relation gt -0.32">
+          <set_value name="$price" exact="32000000"/>
+        </do_elseif>
+        <do_elseif value="$relation le -0.32 and $relation gt -0.5">
+          <set_value name="$price" exact="50000000"/>
+        </do_elseif>
+		<do_elseif value="$relation le -0.5 and $relation gt -1">
+          <set_value name="$price" exact="100000000"/>
+        </do_elseif>
+		<do_elseif value="$relation le -1">
+          <set_value name="$price" exact="150000000"/>
+        </do_elseif>
+      </actions>
+    </library>
+	
+	<cue name="DWC_Main_Askrelations_Handler" instantiate="true">
+      <conditions>
+        <check_any>
+          <event_conversation_next_section section="DWC_Main_Askrelations"/>
+          <event_conversation_returned_to_section section="DWC_Main_Askrelations"/>
+        </check_any>
+      </conditions>
+      <actions>
+        <do_if value="event.param2 == 'previous'">
+          <set_value name="$page" operation="subtract"/>
+        </do_if>
+        <do_elseif value="event.param2 == 'next'">
+          <set_value name="$page" operation="add"/>
+        </do_elseif>
+        <do_else>
+          <set_value name="$page" exact="0"/>
+        </do_else>
+
+        <set_value name="$validFactions" exact="[faction.antigone, faction.argon, faction.hatikvah, faction.holyorder, faction.alliance, faction.paranid, faction.ministry, faction.teladi, faction.scaleplate]"/>
+        <do_all exact="$validFactions.count" counter="$j" reverse="true">
+          <do_if value="($validFactions.{$j} == event.object.owner)">
+            <remove_value name="$validFactions.{$j}"/>
+          </do_if>
+        </do_all>
+        <do_all exact="4" counter="$j">
+          <set_value name="$actuallSiteItemId" exact="$j + (4 * $page)"/>
+          <do_if value="$validFactions.count lt $actuallSiteItemId">
+            <break/>
+          </do_if>
+          <set_value name="$faction" exact="$validFactions.{$actuallSiteItemId}"/>
+          <set_value name="$relation" exact="$faction.relationto.{event.object.owner}"/>
+          <do_if value="$faction != null">
+              <add_player_choice text="'%1 (%2)'.[$faction.name, ($faction.relation.{$faction.relationto.{event.object.owner}}.uivalue)]" position="$j" selectable="false" choiceparam="[$actuallSiteItemId, $faction, $relation]" section="DWC_Main_Askrelations"/>
+          </do_if>
+        </do_all>
+
+        <do_if value="$page == 0">
+          <add_player_choice_return position="bottom_right" text="'Back'"/>
+        </do_if>
+        <do_else>
+          <add_player_choice text="'Previous page'" choiceparam="'previous'" position="bottom_right" section="DWC_Main_Askrelations"/>
+        </do_else>
+        <do_if value="$validFactions.count gt 4">
+          <add_player_choice text="'Next page'" choiceparam="'next'" position="right" section="DWC_Main_Askrelations"/>
+        </do_if>
+        <remove_value name="$relation"/>
+        <remove_value name="$faction"/>
+        <remove_value name="$actuallSiteItemId"/>
+      </actions>
+    </cue>
+  </cues>
+</mdscript>
