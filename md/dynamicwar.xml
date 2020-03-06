@@ -3,14 +3,29 @@
 	<cues>
 		<cue name="Init">
 			<actions>
-				<do_if value="(not $ArgonCoalition?) or (not $TeladiCoalition?) or (not $ParanidCoalition?) or (not $HolyOderCoalition?) or (not $PirateCoalition?)">
+				<do_if value="(not $ArgonCoalition?) or (not $TeladiCoalition?) or (not $ParanidCoalition?) or (not $HolyOrderCoalition?) or (not $PirateCoalition?)">
 					<set_value name="$ArgonCoalition" exact="[faction.antigone, faction.argon, faction.hatikvah]"/>
-					<set_value name="$HolyOderCoalition" exact="[faction.holyorder]"/>
+					<set_value name="$HolyOrderCoalition" exact="[faction.holyorder]"/>
 					<set_value name="$ParanidCoalition" exact="[faction.alliance, faction.paranid]"/>
 					<set_value name="$TeladiCoalition" exact="[faction.ministry, faction.teladi]"/>
 					<set_value name="$PirateCoalition" exact="[faction.scaleplate]"/>
 				</do_if>
-				<set_value name="$InitDebug" exact="'$ArgonCoalition = ' + $ArgonCoalition + ' / $HolyOderCoalition = ' + $HolyOderCoalition + ' / $ParanidCoalition = ' + $ParanidCoalition + ' / $TeladiCoalition = ' + $TeladiCoalition + ' / $PirateCoalition = ' + $PirateCoalition" />
+				<!-- Set up dynamic chance values -->
+				<do_if value="(not $DynamicWarEventArgonChance?) or (not $DynamicWarEventHolyOrderChance?) or (not $DynamicWarEventParanidChance?) or (not $DynamicWarEventTeladiChance?) or (not $DynamicWarEventPirateChance?)">
+					<set_value name="$DynamicWarEventArgonChance" exact="20" />
+					<set_value name="$DynamicWarEventHolyOrderChance" exact="20" />
+					<set_value name="$DynamicWarEventParanidChance" exact="20" />
+					<set_value name="$DynamicWarEventTeladiChance" exact="20" />
+					<set_value name="$DynamicWarEventPirateChance" exact="20" />
+				</do_if>
+				<do_if value="(not $ArgonMilStrengthFactor?) or (not $HolyOrderMilStrengthFactor?) or (not $ParanidMilStrengthFactor?) or (not $TeladiMilStrengthFactor?) or (not $PirateMilStrengthFactor?)">
+					<set_value name="$ArgonMilStrengthFactor" exact="1" />
+					<set_value name="$HolyOrderMilStrengthFactor" exact="1" />
+					<set_value name="$ParanidMilStrengthFactor" exact="1" />
+					<set_value name="$TeladiMilStrengthFactor" exact="1" />
+					<set_value name="$PirateMilStrengthFactor" exact="1" />
+				</do_if>
+				<set_value name="$InitDebug" exact="'$ArgonCoalition = ' + $ArgonCoalition + ' / $HolyOrderCoalition = ' + $HolyOrderCoalition + ' / $ParanidCoalition = ' + $ParanidCoalition + ' / $TeladiCoalition = ' + $TeladiCoalition + ' / $PirateCoalition = ' + $PirateCoalition" />
 				<debug_to_file name="'DynamicWarInit'" directory="'DynamicWar'" text="$InitDebug" output="false" append="true" />
 				<remove_value name="$InitDebug" />
 			</actions>
@@ -20,6 +35,16 @@
 						<signal_cue_instantly cue="DynamicWarEventSelector" />
 					</actions>
 				</cue>
+				<!-- This is where debug goes
+				<cue name="DynamicWarDebug" instantiate="true" >
+					<conditions>
+						<event_long_range_scan_sent object="player.entity"/>
+					</conditions>
+					<actions>
+						<signal_cue_instantly cue="DynamicWarEventSelector" />
+					</actions>
+				</cue>
+				This is where it ends -->
 				<cue name="DynamicWarEventSelector" instantiate="true">
 					<conditions>
 						<event_cue_signalled/>
@@ -47,63 +72,108 @@
 						<do_if value="$DynamicWarEvent != 'Nothing'">
 							<!-- Select $FactionOne -->
 							<do_any>
-								<set_value name="$DynamicWarEventFaction" exact="$ArgonCoalition" weight="20" />
-								<set_value name="$DynamicWarEventFaction" exact="$HolyOderCoalition" weight="20" />
-								<set_value name="$DynamicWarEventFaction" exact="$ParanidCoalition" weight="20" />
-								<set_value name="$DynamicWarEventFaction" exact="$TeladiCoalition" weight="20" />
-								<set_value name="$DynamicWarEventFaction" exact="$PirateCoalition" weight="20" />
+								<set_value name="$DynamicWarEventFaction" exact="$ArgonCoalition" weight="$DynamicWarEventArgonChance" />
+								<set_value name="$DynamicWarEventFaction" exact="$HolyOrderCoalition" weight="$DynamicWarEventHolyOrderChance" />
+								<set_value name="$DynamicWarEventFaction" exact="$ParanidCoalition" weight="$DynamicWarEventParanidChance" />
+								<set_value name="$DynamicWarEventFaction" exact="$TeladiCoalition" weight="$DynamicWarEventTeladiChance" />
+								<set_value name="$DynamicWarEventFaction" exact="$PirateCoalition" weight="$DynamicWarEventPirateChance" />
 							</do_any>
 							<do_if value="$DynamicWarEventFactionTwo?">
 								<remove_value name="$DynamicWarEventFactionTwo" />
 							</do_if>
 							<!-- Select $FactionTwo -->
 							<do_if value="$DynamicWarEventFaction == $ArgonCoalition">
+								<include_actions ref="DynamicWarCalculateMilStrengthFactor" />
 								<do_any>
-									<set_value name="$DynamicWarEventFactionTwo" exact="$HolyOderCoalition" weight="25" />
-									<set_value name="$DynamicWarEventFactionTwo" exact="$ParanidCoalition" weight="25" />
-									<set_value name="$DynamicWarEventFactionTwo" exact="$TeladiCoalition" weight="25" />
-									<set_value name="$DynamicWarEventFactionTwo" exact="$PirateCoalition" weight="25" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$HolyOrderCoalition" weight="($DynamicWarEventHolyOrderChance * $HolyOrderMilStrengthFactor)" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$ParanidCoalition" weight="($DynamicWarEventParanidChance * $ParanidMilStrengthFactor)" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$TeladiCoalition" weight="($DynamicWarEventTeladiChance * $TeladiMilStrengthFactor)" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$PirateCoalition" weight="($DynamicWarEventPirateChance * $PirateMilStrengthFactor)" />
 								</do_any>
 							</do_if>
-							<do_if value="$DynamicWarEventFaction == $HolyOderCoalition">
+							<do_if value="$DynamicWarEventFaction == $HolyOrderCoalition">
+								<include_actions ref="DynamicWarCalculateMilStrengthFactor" />
 								<do_any>
-									<set_value name="$DynamicWarEventFactionTwo" exact="$ArgonCoalition" weight="25" />
-									<set_value name="$DynamicWarEventFactionTwo" exact="$ParanidCoalition" weight="25" />
-									<set_value name="$DynamicWarEventFactionTwo" exact="$TeladiCoalition" weight="25" />
-									<set_value name="$DynamicWarEventFactionTwo" exact="$PirateCoalition" weight="25" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$ArgonCoalition" weight="($DynamicWarEventArgonChance * $ArgonMilStrengthFactor)" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$ParanidCoalition" weight="($DynamicWarEventParanidChance * $ParanidMilStrengthFactor)" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$TeladiCoalition" weight="($DynamicWarEventTeladiChance * $TeladiMilStrengthFactor)" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$PirateCoalition" weight="($DynamicWarEventPirateChance * $PirateMilStrengthFactor)" />
 								</do_any>
 							</do_if>
 							<do_if value="$DynamicWarEventFaction == $ParanidCoalition">
+								<include_actions ref="DynamicWarCalculateMilStrengthFactor" />
 								<do_any>
-									<set_value name="$DynamicWarEventFactionTwo" exact="$ArgonCoalition" weight="25" />
-									<set_value name="$DynamicWarEventFactionTwo" exact="$HolyOderCoalition" weight="25" />
-									<set_value name="$DynamicWarEventFactionTwo" exact="$TeladiCoalition" weight="25" />
-									<set_value name="$DynamicWarEventFactionTwo" exact="$PirateCoalition" weight="25" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$ArgonCoalition" weight="($DynamicWarEventArgonChance * $ArgonMilStrengthFactor)" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$HolyOrderCoalition" weight="($DynamicWarEventHolyOrderChance * $HolyOrderMilStrengthFactor)" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$TeladiCoalition" weight="($DynamicWarEventTeladiChance * $TeladiMilStrengthFactor)" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$PirateCoalition" weight="($DynamicWarEventPirateChance * $PirateMilStrengthFactor)" />
 								</do_any>
 							</do_if>
 							<do_if value="$DynamicWarEventFaction == $TeladiCoalition">
+								<include_actions ref="DynamicWarCalculateMilStrengthFactor" />
 								<do_any>
-									<set_value name="$DynamicWarEventFactionTwo" exact="$ArgonCoalition" weight="25" />
-									<set_value name="$DynamicWarEventFactionTwo" exact="$HolyOderCoalition" weight="25" />
-									<set_value name="$DynamicWarEventFactionTwo" exact="$ParanidCoalition" weight="25" />
-									<set_value name="$DynamicWarEventFactionTwo" exact="$PirateCoalition" weight="25" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$ArgonCoalition" weight="($DynamicWarEventArgonChance * $ArgonMilStrengthFactor)" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$HolyOrderCoalition" weight="($DynamicWarEventHolyOrderChance * $HolyOrderMilStrengthFactor)" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$ParanidCoalition" weight="($DynamicWarEventParanidChance * $ParanidMilStrengthFactor)" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$PirateCoalition" weight="($DynamicWarEventPirateChance * $PirateMilStrengthFactor)" />
 								</do_any>
 							</do_if>
 							<do_if value="$DynamicWarEventFaction == $PirateCoalition">
+								<include_actions ref="DynamicWarCalculateMilStrengthFactor" />
 								<do_any>
-									<set_value name="$DynamicWarEventFactionTwo" exact="$ArgonCoalition" weight="25" />
-									<set_value name="$DynamicWarEventFactionTwo" exact="$HolyOderCoalition" weight="25" />
-									<set_value name="$DynamicWarEventFactionTwo" exact="$ParanidCoalition" weight="25" />
-									<set_value name="$DynamicWarEventFactionTwo" exact="$TeladiCoalition" weight="25" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$ArgonCoalition" weight="($DynamicWarEventArgonChance * $ArgonMilStrengthFactor)" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$HolyOrderCoalition" weight="($DynamicWarEventHolyOrderChance * $HolyOrderMilStrengthFactor)" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$ParanidCoalition" weight="($DynamicWarEventParanidChance * $ParanidMilStrengthFactor)" />
+									<set_value name="$DynamicWarEventFactionTwo" exact="$TeladiCoalition" weight="($DynamicWarEventTeladiChance * $TeladiMilStrengthFactor)" />
 								</do_any>
 							</do_if>
-							<include_actions ref="DynamicWarEventExecute" />
+							<!-- Debug info -->
 							<set_value name="$FactionSelectionDebug" exact="player.age + ' - ' + $DynamicWarEvent + ' - ' + $DynamicWarEventFaction + ' and ' + $DynamicWarEventFactionTwo" />
 							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="$FactionSelectionDebug" output="false" append="true" />
+							<set_value name="$FactionSelectionDebug2" exact="player.age + ' - ' + 'DynamicWarEventArgonChance:' + $DynamicWarEventArgonChance + ' - ' + 'DynamicWarEventHolyOrderChance:' + $DynamicWarEventHolyOrderChance + ' - ' + 'DynamicWarEventParanidChance:' + $DynamicWarEventParanidChance + ' - ' + 'DynamicWarEventTeladiChance:' + $DynamicWarEventTeladiChance + ' - ' + 'DynamicWarEventPirateChance:' + $DynamicWarEventPirateChance" />
+							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="$FactionSelectionDebug2" output="false" append="true" />
+							<set_value name="$FactionSelectionDebug3" exact="player.age + ' - ' + 'ArgonMilStrengthFactor:' + $ArgonMilStrengthFactor + ' - ' + 'HolyOrderMilStrengthFactor:' + $HolyOrderMilStrengthFactor + ' - ' + 'ParanidMilStrengthFactor:' + $ParanidMilStrengthFactor + ' - ' + 'TeladiMilStrengthFactor:' + $TeladiMilStrengthFactor + ' - ' + 'PirateMilStrengthFactor:' + $PirateMilStrengthFactor" />
+							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="$FactionSelectionDebug3" output="false" append="true" />
+							<set_value name="$FactionSelectionDebug4" exact="player.age + ' - ' + 'CombinedArgonChance:' + ($DynamicWarEventArgonChance * $ArgonMilStrengthFactor) + ' - ' + 'CombinedHolyOrderChance:' + ($DynamicWarEventHolyOrderChance * $HolyOrderMilStrengthFactor) + ' - ' + 'CombinedParanidChance:' + ($DynamicWarEventParanidChance * $ParanidMilStrengthFactor) + ' - ' + 'CombinedTeladiChance:' + ($DynamicWarEventTeladiChance * $TeladiMilStrengthFactor) + ' - ' + 'CombinedPirateChance:' + ($DynamicWarEventPirateChance * $PirateMilStrengthFactor)" />
+							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="$FactionSelectionDebug4" output="false" append="true" />
+							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="' '" output="false" append="true" />
+							
+							<do_if value="($DynamicWarEventFaction == $ArgonCoalition) or ($DynamicWarEventFactionTwo == $ArgonCoalition)">
+								<set_value name="$DynamicWarEventArgonChance" exact="([$DynamicWarEventArgonChance - 10, 1].max)" />
+							</do_if>
+							<do_if value="($DynamicWarEventFaction == $HolyOrderCoalition) or ($DynamicWarEventFactionTwo == $HolyOrderCoalition)">
+								<set_value name="$DynamicWarEventHolyOrderChance" exact="([$DynamicWarEventHolyOrderChance - 10, 1].max)" />
+							</do_if>
+							<do_if value="($DynamicWarEventFaction == $ParanidCoalition) or ($DynamicWarEventFactionTwo == $ParanidCoalition)">
+								<set_value name="$DynamicWarEventParanidChance" exact="([$DynamicWarEventParanidChance - 10, 1].max)" />
+							</do_if>
+							<do_if value="($DynamicWarEventFaction == $TeladiCoalition) or ($DynamicWarEventFactionTwo == $TeladiCoalition)">
+								<set_value name="$DynamicWarEventTeladiChance" exact="([$DynamicWarEventTeladiChance - 10, 1].max)" />
+							</do_if>
+							<do_if value="($DynamicWarEventFaction == $PirateCoalition) or ($DynamicWarEventFactionTwo == $PirateCoalition)">
+								<set_value name="$DynamicWarEventPirateChance" exact="([$DynamicWarEventPirateChance - 10, 1].max)" />
+							</do_if>
+							<do_if value="($DynamicWarEventFaction != $ArgonCoalition) and ($DynamicWarEventFactionTwo != $ArgonCoalition)">
+								<set_value name="$DynamicWarEventArgonChance" exact="($DynamicWarEventArgonChance + 5)" />
+							</do_if>
+							<do_if value="($DynamicWarEventFaction != $HolyOrderCoalition) and ($DynamicWarEventFactionTwo != $HolyOrderCoalition)">
+								<set_value name="$DynamicWarEventHolyOrderChance" exact="($DynamicWarEventHolyOrderChance + 5)" />
+							</do_if>
+							<do_if value="($DynamicWarEventFaction != $ParanidCoalition) and ($DynamicWarEventFactionTwo != $ParanidCoalition)">
+								<set_value name="$DynamicWarEventParanidChance" exact="($DynamicWarEventParanidChance + 5)" />
+							</do_if>
+							<do_if value="($DynamicWarEventFaction != $TeladiCoalition) and ($DynamicWarEventFactionTwo != $TeladiCoalition)">
+								<set_value name="$DynamicWarEventTeladiChance" exact="($DynamicWarEventTeladiChance + 5)" />
+							</do_if>
+							<do_if value="($DynamicWarEventFaction != $PirateCoalition) and ($DynamicWarEventFactionTwo != $PirateCoalition)">
+								<set_value name="$DynamicWarEventPirateChance" exact="($DynamicWarEventPirateChance + 5)" />
+							</do_if>
+							<include_actions ref="DynamicWarEventExecute" />
 						</do_if>
 						<do_if value="$DynamicWarEvent == 'Nothing'">
 							<set_value name="$NothingDebug" exact="player.age + ' - ' + $DynamicWarEvent" />
 							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="$NothingDebug" output="false" append="true" />
+							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="' '" output="false" append="true" />
 						</do_if>
 						<remove_value name="$DynamicWarEvent" />
 						<remove_value name="$DynamicWarEventFaction" />
@@ -127,6 +197,7 @@
 									<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$BigBoostDebug" output="false" append="true" />
 								</do_all>
 							</do_all>
+							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="' '" output="false" append="true" />
 						</do_if>
 						<do_if value="$DynamicWarEvent == 'SmallBoost'">
 							<do_all exact="$DynamicWarEventFaction.count" counter="$Param2CounterB">
@@ -142,6 +213,7 @@
 									<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$SmallBoostDebug" output="false" append="true" />
 								</do_all>
 							</do_all>
+							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="' '" output="false" append="true" />
 						</do_if>
 						<do_if value="$DynamicWarEvent == 'SmallBlow'">
 							<do_all exact="$DynamicWarEventFaction.count" counter="$Param2CounterC">
@@ -157,6 +229,7 @@
 									<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$SmallBlowDebug" output="false" append="true" />
 								</do_all>
 							</do_all>
+							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="' '" output="false" append="true" />
 						</do_if>
 						<do_if value="$DynamicWarEvent == 'BigBlow'">
 							<do_all exact="$DynamicWarEventFaction.count" counter="$Param2CounterD">
@@ -172,6 +245,7 @@
 									<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$BigBlowDebug" output="false" append="true" />
 								</do_all>
 							</do_all>
+							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="' '" output="false" append="true" />
 						</do_if>
 						<do_if value="$DynamicWarEvent == 'Nemesis'">
 							<do_all exact="$DynamicWarEventFaction.count" counter="$Param2CounterE">
@@ -187,6 +261,7 @@
 									<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$NemesisDebug" output="false" append="true" />
 								</do_all>
 							</do_all>
+							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="' '" output="false" append="true" />
 						</do_if>
 						<do_if value="$DynamicWarEvent == 'Besties'">
 							<do_all exact="$DynamicWarEventFaction.count" counter="$Param2CounterF">
@@ -202,6 +277,7 @@
 									<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$BestiesDebug" output="false" append="true" />
 								</do_all>
 							</do_all>
+							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="' '" output="false" append="true" />
 						</do_if>
 						<include_actions ref="DynamicWarEventNotification" />
 					</actions>
@@ -499,6 +575,180 @@
 									<set_value name="$FlavorText" exact="'A rogue faction logic AI designed by Mysterial has caused phantom fleet orders to invade ' + $FactionTwoNames + ' space. ' + $FactionOneNames + ' has immediately declared all out war.'" weight="25"/>
 								</do_any>
 								<write_to_logbook category="news" title="$Message" text="$FlavorText" />
+							</do_if>
+						</do_if>
+					</actions>
+				</library>
+				<library name="DynamicWarCalculateMilStrengthFactor">
+					<actions>
+						<do_if value="$DynamicWarEventFaction? and $DynamicWarEvent?">
+							<!-- Comparison favors weakness -->
+							<do_if value="($DynamicWarEvent == 'BigBoost') or ($DynamicWarEvent == 'Besties') or ($DynamicWarEvent == 'SmallBoost')">
+								
+								<do_all exact="$DynamicWarEventFaction.count" counter="$DynamicWarEventFactionMilStrengthCounter">
+									<find_ship_by_true_owner groupname="$DynamicWarEventFactionMilShips" space="player.galaxy" multiple="true" faction="$DynamicWarEventFaction.{$DynamicWarEventFactionMilStrengthCounter}" primarypurpose="purpose.fight" append="true" />
+									<find_sector groupname="$DynamicWarEventFactionSectors" space="player.galaxy" multiple="true" owner="$DynamicWarEventFaction.{$DynamicWarEventFactionMilStrengthCounter}" append="true" />
+								</do_all>
+								<!-- Debug line -->
+								<set_value name="$MilStrengthDebug" exact="player.age + ' - ' + $DynamicWarEvent + ' - ' + $DynamicWarEventFaction + ' - Ships: ' + $DynamicWarEventFactionMilShips.count + ' - Sectors: ' + $DynamicWarEventFactionSectors.count" />
+								<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="$MilStrengthDebug" output="false" append="true" />
+								<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="' '" output="false" append="true" />
+								
+								<do_if value="$DynamicWarEventFaction != $ArgonCoalition">
+									<do_all exact="$ArgonCoalition.count" counter="$ArgonMilStrengthCounter">
+										<find_ship_by_true_owner groupname="$ArgonMilShips" space="player.galaxy" multiple="true" faction="$ArgonCoalition.{$ArgonMilStrengthCounter}" primarypurpose="purpose.fight" append="true" />
+										<find_sector groupname="$ArgonSectors" space="player.galaxy" multiple="true" owner="$ArgonCoalition.{$ArgonMilStrengthCounter}" append="true" />
+									</do_all>
+									<set_value name="$ArgonMilStrengthFactor" exact="1 + ((1 - ($DynamicWarEventFactionMilShips.count)f / ($ArgonMilShips.count)f) * (1 - ($DynamicWarEventFactionMilShips.count)f / ($ArgonMilShips.count)f) + (1 - ($DynamicWarEventFactionSectors.count)f / ($ArgonSectors.count)f) * (1 - ($DynamicWarEventFactionSectors.count)f / ($ArgonSectors.count)f))" />
+									<!-- Debug line -->
+									<set_value name="$MilStrengthDebug" exact="player.age + ' - ' + $ArgonCoalition + ' - Ships: ' + $ArgonMilShips.count + ' - Sectors: ' + $ArgonSectors.count + ' - MilStrengthFactor: ' + $ArgonMilStrengthFactor" />
+									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="$MilStrengthDebug" output="false" append="true" />
+									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="' '" output="false" append="true" />
+									<remove_value name="$ArgonMilShips" />
+									<remove_value name="$ArgonSectors" />
+								</do_if>
+								
+								<do_if value="$DynamicWarEventFaction != $HolyOrderCoalition">
+									<do_all exact="$HolyOrderCoalition.count" counter="$HolyOrderMilStrengthCounter">
+										<find_ship_by_true_owner groupname="$HolyOrderMilShips" space="player.galaxy" multiple="true" faction="$HolyOrderCoalition.{$HolyOrderMilStrengthCounter}" primarypurpose="purpose.fight" append="true" />
+										<find_sector groupname="$HolyOrderSectors" space="player.galaxy" multiple="true" owner="$HolyOrderCoalition.{$HolyOrderMilStrengthCounter}" append="true" />
+									</do_all>
+									<set_value name="$HolyOrderMilStrengthFactor" exact="1 + ((1 - ($DynamicWarEventFactionMilShips.count)f / ($HolyOrderMilShips.count)f) * (1 - ($DynamicWarEventFactionMilShips.count)f / ($HolyOrderMilShips.count)f) + (1 - ($DynamicWarEventFactionSectors.count)f / ($HolyOrderSectors.count)f) * (1 - ($DynamicWarEventFactionSectors.count)f / ($HolyOrderSectors.count)f))" />
+									<!-- Debug line -->
+									<set_value name="$MilStrengthDebug" exact="player.age + ' - ' + $HolyOrderCoalition + ' - Ships: ' + $HolyOrderMilShips.count + ' - Sectors: ' + $HolyOrderSectors.count + ' - MilStrengthFactor: ' + $HolyOrderMilStrengthFactor" />
+									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="$MilStrengthDebug" output="false" append="true" />
+									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="' '" output="false" append="true" />
+									<remove_value name="$HolyOrderMilShips" />
+									<remove_value name="$HolyOrderSectors" />
+								</do_if>
+								
+								<do_if value="$DynamicWarEventFaction != $ParanidCoalition">
+									<do_all exact="$ParanidCoalition.count" counter="$ParanidMilStrengthCounter">
+										<find_ship_by_true_owner groupname="$ParanidMilShips" space="player.galaxy" multiple="true" faction="$ParanidCoalition.{$ParanidMilStrengthCounter}" primarypurpose="purpose.fight" append="true" />
+										<find_sector groupname="$ParanidSectors" space="player.galaxy" multiple="true" owner="$ParanidCoalition.{$ParanidMilStrengthCounter}" append="true" />
+									</do_all>
+									<set_value name="$ParanidMilStrengthFactor" exact="1 + ((1 - ($DynamicWarEventFactionMilShips.count)f / ($ParanidMilShips.count)f) * (1 - ($DynamicWarEventFactionMilShips.count)f / ($ParanidMilShips.count)f) + (1 - ($DynamicWarEventFactionSectors.count)f / ($ParanidSectors.count)f) * (1 - ($DynamicWarEventFactionSectors.count)f / ($ParanidSectors.count)f))" />
+									<!-- Debug line -->
+									<set_value name="$MilStrengthDebug" exact="player.age + ' - ' + $ParanidCoalition + ' - Ships: ' + $ParanidMilShips.count + ' - Sectors: ' + $ParanidSectors.count + ' - MilStrengthFactor: ' + $ParanidMilStrengthFactor" />
+									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="$MilStrengthDebug" output="false" append="true" />
+									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="' '" output="false" append="true" />
+									<remove_value name="$ParanidMilShips" />
+									<remove_value name="$ParanidSectors" />
+								</do_if>
+								
+								<do_if value="$DynamicWarEventFaction != $TeladiCoalition">
+									<do_all exact="$TeladiCoalition.count" counter="$TeladiMilStrengthCounter">
+										<find_ship_by_true_owner groupname="$TeladiMilShips" space="player.galaxy" multiple="true" faction="$TeladiCoalition.{$TeladiMilStrengthCounter}" primarypurpose="purpose.fight" append="true" />
+										<find_sector groupname="$TeladiSectors" space="player.galaxy" multiple="true" owner="$TeladiCoalition.{$TeladiMilStrengthCounter}" append="true" />
+									</do_all>
+									<set_value name="$TeladiMilStrengthFactor" exact="1 + ((1 - ($DynamicWarEventFactionMilShips.count)f / ($TeladiMilShips.count)f) * (1 - ($DynamicWarEventFactionMilShips.count)f / ($TeladiMilShips.count)f) + (1 - ($DynamicWarEventFactionSectors.count)f / ($TeladiSectors.count)f) * (1 - ($DynamicWarEventFactionSectors.count)f / ($TeladiSectors.count)f))" />
+									<!-- Debug line -->
+									<set_value name="$MilStrengthDebug" exact="player.age + ' - ' + $TeladiCoalition + ' - Ships: ' + $TeladiMilShips.count + ' - Sectors: ' + $TeladiSectors.count + ' - MilStrengthFactor: ' + $TeladiMilStrengthFactor" />
+									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="$MilStrengthDebug" output="false" append="true" />
+									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="' '" output="false" append="true" />
+									<remove_value name="$TeladiMilShips" />
+									<remove_value name="$TeladiSectors" />
+								</do_if>
+								
+								<do_if value="$DynamicWarEventFaction != $PirateCoalition">
+									<do_all exact="$PirateCoalition.count" counter="$PirateMilStrengthCounter">
+										<find_ship_by_true_owner groupname="$PirateMilShips" space="player.galaxy" multiple="true" faction="$PirateCoalition.{$PirateMilStrengthCounter}" primarypurpose="purpose.fight" append="true" />
+										<find_sector groupname="$PirateSectors" space="player.galaxy" multiple="true" owner="$PirateCoalition.{$PirateMilStrengthCounter}" append="true" />
+									</do_all>
+									<set_value name="$PirateMilStrengthFactor" exact="1 + ((1 - ($DynamicWarEventFactionMilShips.count)f / ($PirateMilShips.count)f) * (1 - ($DynamicWarEventFactionMilShips.count)f / ($PirateMilShips.count)f) + (1 - ($DynamicWarEventFactionSectors.count)f / ($PirateSectors.count)f) * (1 - ($DynamicWarEventFactionSectors.count)f / ($PirateSectors.count)f))" />
+									<!-- Debug line -->
+									<set_value name="$MilStrengthDebug" exact="player.age + ' - ' + $PirateCoalition + ' - Ships: ' + $PirateMilShips.count + ' - Sectors: ' + $PirateSectors.count + ' - MilStrengthFactor: ' + $PirateMilStrengthFactor" />
+									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="$MilStrengthDebug" output="false" append="true" />
+									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="' '" output="false" append="true" />
+									<remove_value name="$PirateMilShips" />
+									<remove_value name="$PirateSectors" />
+								</do_if>
+								<remove_value name="$DynamicWarEventFactionMilShips" />
+								<remove_value name="$DynamicWarEventFactionSectors" />
+							</do_if>
+							<!-- Comparison favors strength -->
+							<do_if value="($DynamicWarEvent == 'SmallBlow') or ($DynamicWarEvent == 'BigBlow') or ($DynamicWarEvent == 'Nemesis')">
+								
+								<do_all exact="$DynamicWarEventFaction.count" counter="$DynamicWarEventFactionMilStrengthCounter">
+									<find_ship_by_true_owner groupname="$DynamicWarEventFactionMilShips" space="player.galaxy" multiple="true" faction="$DynamicWarEventFaction.{$DynamicWarEventFactionMilStrengthCounter}" primarypurpose="purpose.fight" append="true" />
+									<find_sector groupname="$DynamicWarEventFactionSectors" space="player.galaxy" multiple="true" owner="$DynamicWarEventFaction.{$DynamicWarEventFactionMilStrengthCounter}" append="true" />
+								</do_all>
+								<!-- Debug line -->
+								<set_value name="$MilStrengthDebug" exact="player.age + ' - ' + $DynamicWarEvent + ' - ' + $DynamicWarEventFaction + ' - Ships: ' + $DynamicWarEventFactionMilShips.count + ' - Sectors: ' + $DynamicWarEventFactionSectors.count" />
+								<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="$MilStrengthDebug" output="false" append="true" />
+								<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="' '" output="false" append="true" />
+								
+								<do_if value="$DynamicWarEventFaction != $ArgonCoalition">
+									<do_all exact="$ArgonCoalition.count" counter="$ArgonMilStrengthCounter">
+										<find_ship_by_true_owner groupname="$ArgonMilShips" space="player.galaxy" multiple="true" faction="$ArgonCoalition.{$ArgonMilStrengthCounter}" primarypurpose="purpose.fight" append="true" />
+										<find_sector groupname="$ArgonSectors" space="player.galaxy" multiple="true" owner="$ArgonCoalition.{$ArgonMilStrengthCounter}" append="true" />
+									</do_all>
+									<set_value name="$ArgonMilStrengthFactor" exact="1 + ((1 - ($ArgonMilShips.count)f / ($DynamicWarEventFactionMilShips.count)f) * (1 - ($ArgonMilShips.count)f / ($DynamicWarEventFactionMilShips.count)f) + (1 - ($ArgonSectors.count)f / ($DynamicWarEventFactionSectors.count)f) * (1 - ($ArgonSectors.count)f / ($DynamicWarEventFactionSectors.count)f))" />
+									<!-- Debug line -->
+									<set_value name="$MilStrengthDebug" exact="player.age + ' - ' + $ArgonCoalition + ' - Ships: ' + $ArgonMilShips.count + ' - Sectors: ' + $ArgonSectors.count + ' - MilStrengthFactor: ' + $ArgonMilStrengthFactor" />
+									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="$MilStrengthDebug" output="false" append="true" />
+									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="' '" output="false" append="true" />
+									<remove_value name="$ArgonMilShips" />
+									<remove_value name="$ArgonSectors" />
+								</do_if>
+								
+								<do_if value="$DynamicWarEventFaction != $HolyOrderCoalition">
+									<do_all exact="$HolyOrderCoalition.count" counter="$HolyOrderMilStrengthCounter">
+										<find_ship_by_true_owner groupname="$HolyOrderMilShips" space="player.galaxy" multiple="true" faction="$HolyOrderCoalition.{$HolyOrderMilStrengthCounter}" primarypurpose="purpose.fight" append="true" />
+										<find_sector groupname="$HolyOrderSectors" space="player.galaxy" multiple="true" owner="$HolyOrderCoalition.{$HolyOrderMilStrengthCounter}" append="true" />
+									</do_all>
+									<set_value name="$HolyOrderMilStrengthFactor" exact="1 + ((1 - ($HolyOrderMilShips.count)f / ($DynamicWarEventFactionMilShips.count)f) * (1 - ($HolyOrderMilShips.count)f / ($DynamicWarEventFactionMilShips.count)f) + (1 - ($HolyOrderSectors.count)f / ($DynamicWarEventFactionSectors.count)f) * (1 - ($HolyOrderSectors.count)f / ($DynamicWarEventFactionSectors.count)f))" />
+									<!-- Debug line -->
+									<set_value name="$MilStrengthDebug" exact="player.age + ' - ' + $HolyOrderCoalition + ' - Ships: ' + $HolyOrderMilShips.count + ' - Sectors: ' + $HolyOrderSectors.count + ' - MilStrengthFactor: ' + $HolyOrderMilStrengthFactor" />
+									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="$MilStrengthDebug" output="false" append="true" />
+									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="' '" output="false" append="true" />
+									<remove_value name="$HolyOrderMilShips" />
+									<remove_value name="$HolyOrderSectors" />
+								</do_if>
+								
+								<do_if value="$DynamicWarEventFaction != $ParanidCoalition">
+									<do_all exact="$ParanidCoalition.count" counter="$ParanidMilStrengthCounter">
+										<find_ship_by_true_owner groupname="$ParanidMilShips" space="player.galaxy" multiple="true" faction="$ParanidCoalition.{$ParanidMilStrengthCounter}" primarypurpose="purpose.fight" append="true" />
+										<find_sector groupname="$ParanidSectors" space="player.galaxy" multiple="true" owner="$ParanidCoalition.{$ParanidMilStrengthCounter}" append="true" />
+									</do_all>
+									<set_value name="$ParanidMilStrengthFactor" exact="1 + ((1 - ($ParanidMilShips.count)f / ($DynamicWarEventFactionMilShips.count)f) * (1 - ($ParanidMilShips.count)f / ($DynamicWarEventFactionMilShips.count)f) + (1 - ($ParanidSectors.count)f / ($DynamicWarEventFactionSectors.count)f) * (1 - ($ParanidSectors.count)f / ($DynamicWarEventFactionSectors.count)f))" />
+									<!-- Debug line -->
+									<set_value name="$MilStrengthDebug" exact="player.age + ' - ' + $ParanidCoalition + ' - Ships: ' + $ParanidMilShips.count + ' - Sectors: ' + $ParanidSectors.count + ' - MilStrengthFactor: ' + $ParanidMilStrengthFactor" />
+									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="$MilStrengthDebug" output="false" append="true" />
+									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="' '" output="false" append="true" />
+									<remove_value name="$ParanidMilShips" />
+									<remove_value name="$ParanidSectors" />
+								</do_if>
+								
+								<do_if value="$DynamicWarEventFaction != $TeladiCoalition">
+									<do_all exact="$TeladiCoalition.count" counter="$TeladiMilStrengthCounter">
+										<find_ship_by_true_owner groupname="$TeladiMilShips" space="player.galaxy" multiple="true" faction="$TeladiCoalition.{$TeladiMilStrengthCounter}" primarypurpose="purpose.fight" append="true" />
+										<find_sector groupname="$TeladiSectors" space="player.galaxy" multiple="true" owner="$TeladiCoalition.{$TeladiMilStrengthCounter}" append="true" />
+									</do_all>
+									<set_value name="$TeladiMilStrengthFactor" exact="1 + ((1 - ($TeladiMilShips.count)f / ($DynamicWarEventFactionMilShips.count)f) * (1 - ($TeladiMilShips.count)f / ($DynamicWarEventFactionMilShips.count)f) + (1 - ($TeladiSectors.count)f / ($DynamicWarEventFactionSectors.count)f) * (1 - ($TeladiSectors.count)f / ($DynamicWarEventFactionSectors.count)f))" />
+									<!-- Debug line -->
+									<set_value name="$MilStrengthDebug" exact="player.age + ' - ' + $TeladiCoalition + ' - Ships: ' + $TeladiMilShips.count + ' - Sectors: ' + $TeladiSectors.count + ' - MilStrengthFactor: ' + $TeladiMilStrengthFactor" />
+									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="$MilStrengthDebug" output="false" append="true" />
+									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="' '" output="false" append="true" />
+									<remove_value name="$TeladiMilShips" />
+									<remove_value name="$TeladiSectors" />
+								</do_if>
+								
+								<do_if value="$DynamicWarEventFaction != $PirateCoalition">
+									<do_all exact="$PirateCoalition.count" counter="$PirateMilStrengthCounter">
+										<find_ship_by_true_owner groupname="$PirateMilShips" space="player.galaxy" multiple="true" faction="$PirateCoalition.{$PirateMilStrengthCounter}" primarypurpose="purpose.fight" append="true" />
+										<find_sector groupname="$PirateSectors" space="player.galaxy" multiple="true" owner="$PirateCoalition.{$PirateMilStrengthCounter}" append="true" />
+									</do_all>
+									<set_value name="$PirateMilStrengthFactor" exact="1 + ((1 - ($PirateMilShips.count)f / ($DynamicWarEventFactionMilShips.count)f) * (1 - ($PirateMilShips.count)f / ($DynamicWarEventFactionMilShips.count)f) + (1 - ($PirateSectors.count)f / ($DynamicWarEventFactionSectors.count)f) * (1 - ($PirateSectors.count)f / ($DynamicWarEventFactionSectors.count)f))" />
+									<!-- Debug line -->
+									<set_value name="$MilStrengthDebug" exact="player.age + ' - ' + $PirateCoalition + ' - Ships: ' + $PirateMilShips.count + ' - Sectors: ' + $PirateSectors.count + ' - MilStrengthFactor: ' + $PirateMilStrengthFactor" />
+									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="$MilStrengthDebug" output="false" append="true" />
+									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="' '" output="false" append="true" />
+									<remove_value name="$PirateMilShips" />
+									<remove_value name="$PirateSectors" />
+								</do_if>
+								<remove_value name="$DynamicWarEventFactionMilShips" />
+								<remove_value name="$DynamicWarEventFactionSectors" />
 							</do_if>
 						</do_if>
 					</actions>
