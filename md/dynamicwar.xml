@@ -58,6 +58,9 @@
 						<do_if value="$DynamicWarEventFaction?">
 							<remove_value name="$DynamicWarEventFaction" />
 						</do_if>
+						<do_if value="$DynamicWarEventFactionTwo?">
+							<remove_value name="$DynamicWarEventFactionTwo" />
+						</do_if>
 						<!-- If nothing then we don't need to do any more processing -->
 						<do_if value="$DynamicWarEvent != 'Nothing'">
 							<!-- find factions -->
@@ -136,9 +139,6 @@
 							<remove_value name="$ClaimspacelistDebugCounter" />
 							<remove_value name="$PossibleFactionChance" />
 							<remove_value name="$ClaimspaceCounter" />
-							<do_if value="$DynamicWarEventFactionTwo?">
-								<remove_value name="$DynamicWarEventFactionTwo" />
-							</do_if>
 							<!-- Shuffle! -->
 							<shuffle_list list="$Claimspacelist"/>
 							<!-- Reduce to six options and cleanup -->
@@ -534,7 +534,7 @@
 								<do_all exact="$Claimspacelist.count" counter="$ClaimspaceCounter">
 									<find_ship_by_true_owner groupname="$PossibleFactionMilShips" space="player.galaxy" multiple="true" faction="$Claimspacelist.{$ClaimspaceCounter}" primarypurpose="purpose.fight" append="true" />
 									<find_sector groupname="$PossibleFactionSectors" space="player.galaxy" multiple="true" owner="$Claimspacelist.{$ClaimspaceCounter}" append="true" />
-									<append_to_list name="$PossibleFactionMilStrength" exact="((($DynamicWarEventFactionMilShips.count)f / ($PossibleFactionMilShips.count)f) * (($DynamicWarEventFactionMilShips.count)f / ($PossibleFactionMilShips.count)f) * (($DynamicWarEventFactionSectors.count)f / ($PossibleFactionSectors.count)f) * (($DynamicWarEventFactionSectors.count)f / ($PossibleFactionSectors.count)f))" />
+									<append_to_list name="$PossibleFactionMilStrength" exact="[((($DynamicWarEventFactionMilShips.count)f / ($PossibleFactionMilShips.count)f) * (($DynamicWarEventFactionMilShips.count)f / ($PossibleFactionMilShips.count)f) * (($DynamicWarEventFactionSectors.count)f / ($PossibleFactionSectors.count)f) * (($DynamicWarEventFactionSectors.count)f / ($PossibleFactionSectors.count)f)), 5].min" />
 									<set_value name="$MilStrengthDebug" exact="player.age + ' - ' + $Claimspacelist.{$ClaimspaceCounter}.name + ' - Ships: ' + $PossibleFactionMilShips.count + ' - Sectors: ' + $PossibleFactionSectors.count + ' - MilStrengthFactor: ' + $PossibleFactionMilStrength.{$ClaimspaceCounter}" />
 									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="$MilStrengthDebug" output="false" append="true" />
 									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="' '" output="false" append="true" />
@@ -559,7 +559,7 @@
 								<do_all exact="$Claimspacelist.count" counter="$ClaimspaceCounter">
 									<find_ship_by_true_owner groupname="$PossibleFactionMilShips" space="player.galaxy" multiple="true" faction="$Claimspacelist.{$ClaimspaceCounter}" primarypurpose="purpose.fight" append="true" />
 									<find_sector groupname="$PossibleFactionSectors" space="player.galaxy" multiple="true" owner="$Claimspacelist.{$ClaimspaceCounter}" append="true" />
-									<append_to_list name="$PossibleFactionMilStrength" exact="((($PossibleFactionMilShips.count)f / ($DynamicWarEventFactionMilShips.count)f) * (($PossibleFactionMilShips.count)f / ($DynamicWarEventFactionMilShips.count)f) * (($PossibleFactionSectors.count)f / ($DynamicWarEventFactionSectors.count)f) * (($PossibleFactionSectors.count)f / ($DynamicWarEventFactionSectors.count)f))" />
+									<append_to_list name="$PossibleFactionMilStrength" exact="[((($PossibleFactionMilShips.count)f / ($DynamicWarEventFactionMilShips.count)f) * (($PossibleFactionMilShips.count)f / ($DynamicWarEventFactionMilShips.count)f) * (($PossibleFactionSectors.count)f / ($DynamicWarEventFactionSectors.count)f) * (($PossibleFactionSectors.count)f / ($DynamicWarEventFactionSectors.count)f)), 5].min" />
 									<set_value name="$MilStrengthDebug" exact="player.age + ' - ' + $Claimspacelist.{$ClaimspaceCounter}.name + ' - Ships: ' + $PossibleFactionMilShips.count + ' - Sectors: ' + $PossibleFactionSectors.count + ' - MilStrengthFactor: ' + $PossibleFactionMilStrength.{$ClaimspaceCounter}" />
 									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="$MilStrengthDebug" output="false" append="true" />
 									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="' '" output="false" append="true" />
@@ -585,7 +585,7 @@
 						<do_if value="$DynamicWarEventFaction? and $DynamicWarEventFactionTwo?">
 							<do_all exact="$FactionTableList.count" counter="$FactionTableListCounter">
 								<do_if value="($FactionTableList.{$FactionTableListCounter} == $DynamicWarEventFaction) or ($FactionTableList.{$FactionTableListCounter} == $DynamicWarEventFactionTwo)">
-									<set_value name="$FactionTable.{$FactionTableList.{$FactionTableListCounter}}" exact="if $FactionTable.{$FactionTableList.{$FactionTableListCounter}}? then [$FactionTable.{$FactionTableList.{$FactionTableListCounter}} - 10, 1].max else 5" />
+									<set_value name="$FactionTable.{$FactionTableList.{$FactionTableListCounter}}" exact="if $FactionTable.{$FactionTableList.{$FactionTableListCounter}}? then [$FactionTable.{$FactionTableList.{$FactionTableListCounter}} - 15, 1].max else 5" />
 								</do_if>
 								<do_else>
 									<set_value name="$FactionTable.{$FactionTableList.{$FactionTableListCounter}}" exact="if $FactionTable.{$FactionTableList.{$FactionTableListCounter}}? then [$FactionTable.{$FactionTableList.{$FactionTableListCounter}} + 5, 50].min else 20" />
