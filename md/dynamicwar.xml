@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mdscript name="DynamicWar" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="md.xsd">
 	<cues>
-		<cue name="Init" version="2">
+		<cue name="Init" version="3">
 			<actions>
 				<do_if value="(not $ArgonCoalition?) or (not $TeladiCoalition?) or (not $ParanidCoalition?) or (not $HolyOrderCoalition?) or (not $PirateCoalition?)">
 					<set_value name="$ArgonCoalition" exact="[faction.antigone, faction.argon, faction.hatikvah]"/>
@@ -10,14 +10,12 @@
 					<set_value name="$TeladiCoalition" exact="[faction.ministry, faction.teladi]"/>
 					<set_value name="$PirateCoalition" exact="[faction.scaleplate]"/>
 				</do_if>
-				<do_if value="(not $ExcludedFactions?)">
-					<set_value name="$ExcludedFactions" exact="[faction.buccaneers, faction.civilian, faction.criminal, faction.holyorderfanatic, faction.khaak, faction.player, faction.smuggler, faction.trinity, faction.visitor, faction.xenon]"/>
-				</do_if>
+				<set_value name="$ExcludedFactions" exact="[faction.civilian, faction.criminal, faction.holyorderfanatic, faction.khaak, faction.player, faction.smuggler, faction.trinity, faction.visitor, faction.xenon]"/>
 				<do_if value="(not $FactionTable?)">
 					<set_value name="$FactionTable" exact="table[]" />
 				</do_if>
 			</actions>
-			<patch sinceversion="2">
+			<patch sinceversion="3">
 				<reset_cue cue="this"/>
 			</patch>
 			<cues>

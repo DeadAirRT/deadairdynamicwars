@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <diff>
 	<remove sel="//faction[@id='scaleplate']/relations/@locked"/>
+	<remove sel="//faction[@id='buccaneers']/relations/@locked"/>
 </diff>
