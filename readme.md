@@ -12,7 +12,7 @@
 
 ## Provides notification and small fictional event that caused.
 
-## Allows player to speak with faction representative to check relations between AI factions, and even pay for peace between two factions.
+## Allows player to speak with faction representative to check relations between AI factions, and even pay for peace between two factions. Allows player to speak to a station manager of their own to lower relations with an AI faction or pay for peace.
 
 ##### Save game compatible.
 ##### Installation: extract to x4 foundations\extensions
