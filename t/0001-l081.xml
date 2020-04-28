@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<language id="81">
+
+<page id="33232471" title="DeadAir Dynamic War T Files" descr="names used in DeadAir Dynamic War mod" voice="no">
+ <t id="100">(Messages - all factions referred to are singular)</t>
+ <!--$FactionOneNames + ' has greatly improved relations with ' + $FactionTwoNames + '. They are considered friendly. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="101">%1 has greatly improved relations with %2. They are considered friendly.\(%3\)</t>
+ <!--$FactionOneNames + ' has greatly improved relations with ' + $FactionTwoNames + '. They are considered allies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="102">%1 has greatly improved relations with %2. They are considered allies.\(%3\)</t>
+ <!--$FactionOneNames + ' has greatly improved relations with ' + $FactionTwoNames + '. They are considered close allies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="103">%1 has greatly improved relations with %2. They are considered close allies.\(%3\)</t>
+ <!--$FactionOneNames + ' has greatly improved relations with ' + $FactionTwoNames + '. They are now at peace and considered friendly. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="104">%1 has greatly improved relations with %2. They are now at peace and considered friendly.\(%3\)</t>
+ <!--$FactionOneNames + ' has greatly improved relations with ' + $FactionTwoNames + '. They are now at peace and considered allies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="105">%1 has greatly improved relations with %2. They are now at peace and considered allies.\(%3\)</t>
+ <!--$FactionOneNames + ' has greatly improved relations with ' + $FactionTwoNames + '. They are now at peace and considered close allies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="106">%1 has greatly improved relations with %2. They are now at peace and considered close allies.\(%3\)</t>
+ <!--$FactionOneNames + ' has improved relations with ' + $FactionTwoNames + '. They are enemies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="107">%1 has improved relations with %2. They are enemies.\(%3\)</t>
+ <!--$FactionOneNames + ' has improved relations with ' + $FactionTwoNames + '. They are at war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="108">%1 has improved relations with %2. They are at war.\(%3\)</t>
+ <!--$FactionOneNames + ' has improved relations with ' + $FactionTwoNames + '. They are at all-out war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="109">%1 has improved relations with %2. They are at all-out war.\(%3\)</t>
+ <!--$FactionOneNames + ' has slightly improved relations with ' + $FactionTwoNames + '. They are considered friendly. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="110">%1 has slightly improved relations with %2. They are considered friendly.\(%3\)</t>
+ <!--$FactionOneNames + ' has slighty improved relations with ' + $FactionTwoNames + '. They are considered allies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="111">%1 has slighty improved relations with %2. They are considered allies.\(%3\)</t>
+ <!--$FactionOneNames + is + 'now at peace with ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="112">%1 is now at peace with %2.\(%3\)</t>
+ <!--$FactionOneNames + ' has slightly improved relations with ' + $FactionTwoNames + '. They are considered enemies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="113">%1 has slightly improved relations with %2. They are considered enemies.\(%3\)</t>
+ <!--$FactionOneNames + ' has slightly improved relations with ' + $FactionTwoNames + '. They are considered at war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="114">%1 has slightly improved relations with %2. They are considered at war.\(%3\)</t>
+ <!--$FactionOneNames + ' has slightly improved relations with ' + $FactionTwoNames + '. They are at all-out war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="115">%1 has slightly improved relations with %2. They are at all-out war.\(%3\)</t>
+ <!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are considered friendly. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="116">%1 has greatly worsened relations with %2. They are considered friendly.\(%3\)</t>
+ <!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are considered allies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="117">%1 has greatly worsened relations with %2. They are considered allies.\(%3\)</t>
+ <!--$FactionOneNames + ' has slightly worsened relations with ' + $FactionTwoNames + '. They are considered enemies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="118">%1 has slightly worsened relations with %2. They are considered enemies.\(%3\)</t>
+ <!--$FactionOneNames + ' has slightly worsened relations with ' + $FactionTwoNames + '. They are considered at war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="119">%1 has slightly worsened relations with %2. They are considered at war.\(%3\)</t>
+ <!--$FactionOneNames + ' has slightly worsened relations with ' + $FactionTwoNames + '. They are at all-out war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="120">%1 has slightly worsened relations with %2. They are at all-out war.\(%3\)</t>
+ <!--$FactionOneNames + ' has slightly worsened relations with ' + $FactionTwoNames + '. They are at all-out war with their nemesis. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="121">%1 has slightly worsened relations with %2. They are at all-out war with their nemesis.\(%3\)</t>
+ <!--$FactionOneNames + is + 'now enemies with ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="122">%1 is now enemies with %2.\(%3\)</t>
+ <!--$FactionOneNames + is + 'now at war with ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="123">%1 is now at war with %2.\(%3\)</t>
+ <!--$FactionOneNames + is + 'now at all-out war with ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="124">%1 is now at all-out war with %2.\(%3\)</t>
+ <!--$FactionOneNames + is + 'now at all-out war with their nemesis, ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="125">%1 is now at all-out war with their nemesis, %2.\(%3\)</t>
+ <!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are considered friendly. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="126">%1 has greatly worsened relations with %2. They are considered friendly.\(%3\)</t>
+ <!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are considered allies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="127">%1 has greatly worsened relations with %2. They are considered allies.\(%3\)</t>
+ <!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are considered enemies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="128">%1 has greatly worsened relations with %2. They are considered enemies.\(%3\)</t>
+ <!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are considered at war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="129">%1 has greatly worsened relations with %2. They are considered at war.\(%3\)</t>
+ <!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are at all-out war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="130">%1 has greatly worsened relations with %2. They are at all-out war.\(%3\)</t>
+ <!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are at all-out war with their nemesis. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="131">%1 has greatly worsened relations with %2. They are at all-out war with their nemesis.\(%3\)</t>
+ <!--$FactionOneNames + is + 'now enemies with ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="132">%1 is now enemies with %2.\(%3\)</t>
+ <!--$FactionOneNames + is + 'now at war with ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="133">%1 is now at war with %2.\(%3\)</t>
+ <!--$FactionOneNames + is + 'now at all-out war with ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="134">%1 is now at all-out war with %2.\(%3\)</t>
+ <!--$FactionOneNames + is + 'now at all-out war with their nemesis, ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="135">%1 is now at all-out war with their nemesis, %2.\(%3\)</t>
+ 
+ <t id="200">(flavor text - all factions referred to are singular)</t>
+ <!--'Completion of a non-agression pact has led to improved relations between ' + $FactionOneNames + ' and ' + $FactionTwoNames + '.'-->
+ <t id="201">Completion of a non-agression pact has led to improved relations between %1 and %2.</t>
+ <!--'Completion of a joint resources expedition has led to improved relations between ' + $FactionOneNames + ' and ' + $FactionTwoNames + '.'-->
+ <t id="202">Completion of a joint resources expedition has led to improved relations between %1 and %2.</t>
+ <!--'Completion of a major trade deal between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has led to peace.'-->
+ <t id="203">Completion of a major trade deal between %1 and %2 has led to peace.</t>
+ <!--'After wide scale protests crying for peace, ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' have signed a peace treaty.'-->
+ <t id="204">After wide scale protests crying for peace, %1 and %2 have signed a peace treaty.</t>
+ <!--'After a near disasterous fight with the Xenon. ' + $FactionTwoNames + ' sent ships to save the fleet of ' + $FactionOneNames + '. The two factions decided to settle their differences.'-->
+ <t id="205">After a near disasterous fight with the Xenon. %1 sent ships to save the fleet of %2. The two factions decided to settle their differences.</t>
+ <!--'Reduced hostilities between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has greatly improved relations.'-->
+ <t id="206">Reduced hostilities between %1 and %2 has greatly improved relations.</t>
+ <!--'Reduced espionage between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has greatly improved relations.'-->
+ <t id="207">Reduced espionage between %1 and %2 has greatly improved relations.</t>
+ <!--'Increased trade between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slightly improved relations.'-->
+ <t id="208">Increased trade between %1 and %2 has slightly improved relations.</t>
+ <!--'Increased tourism between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slightly improved relations.'-->
+ <t id="209">Increased tourism between %1 and %2 has slightly improved relations.</t>
+ <!--'After a public request by Jack the Stripper, famous highway architect, ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' have ended their war.'-->
+ <t id="210">After a public request by Jack the Stripper, famous highway architect, %1 and %2 have ended their war.</t>
+ <!--'An armistice treaty signed by ' + $FactionOneNames + ' and ' + $FactionTwoNames + '. Prisoners have been exchanged and there is a fragile peace for now.'-->
+ <t id="211">An armistice treaty signed by %1 and %2. Prisoners have been exchanged and there is a fragile peace for now.</t>
+ <!--'Reduced hostilities between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slighty improved relations.'-->
+ <t id="212">Reduced hostilities between %1 and %2 has slighty improved relations.</t>
+ <!--Reduced espionage between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slightly improved relations.-->
+ <t id="213">Reduced espionage between %1 and %2 has slightly improved relations.</t>
+ <!--Reduced trade between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slightly worsened relations.-->
+ <t id="214">Reduced trade between %1 and %2 has slightly worsened relations.</t>
+ <!--Reduced tourism between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slightly worsened relations.-->
+ <t id="215">Reduced tourism between %1 and %2 has slightly worsened relations.</t>
+ <!--Increased hostilities between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slightly worsened relations.-->
+ <t id="216">Increased hostilities between %1 and %2 has slightly worsened relations.</t>
+ <!--Increased espionage between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slightly worsened relations.-->
+ <t id="217">Increased espionage between %1 and %2 has slightly worsened relations.</t>
+ <!--Citing previous border disputes, ' + $FactionOneNames + ' has declared war on ' + $FactionTwoNames + ' to protect their galactic sovereignty.-->
+ <t id="218">Citing previous border disputes, %1 has declared war on %2 to protect their galactic sovereignty.</t>
+ <!--After a failed non-agression pact, the relations between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' have deteriorated into a minor conflict.-->
+ <t id="219">After a failed non-agression pact, the relations between %1 and %2 have deteriorated into a minor conflict.</t>
+ <!--Reduced trade between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has greatly worsened relations.-->
+ <t id="220">Reduced trade between %1 and %2 has greatly worsened relations.</t>
+ <!--Reduced tourism between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has greatly worsened relations.-->
+ <t id="221">Reduced tourism between %1 and %2 has greatly worsened relations.</t>
+ <!--A prominent leader of ' + $FactionOneNames + ' has declared to build a wall blocking ' + $FactionTwoNames + ' and to make them pay for it. Relations have greatly worsened.-->
+ <t id="222">A prominent leader of %1 has declared to build a wall blocking %2 and to make them pay for it. Relations have greatly worsened.</t>
+ <!--A prominent leader of ' + $FactionOneNames + ' has called for the destruction of ' + $FactionTwoNames + ' during a state of the union address. Relations have greatly worsened.-->
+ <t id="223">A prominent leader of %1 has called for the destruction of %2 during a state of the union address. Relations have greatly worsened.</t>
+ <!--A ship carrying water to a station experiencing a critical shortage was destroyed by ' + $FactionTwoNames + ' extremeists. ' + $FactionOneNames + ' has declared war in retaliation.-->
+ <t id="224">A ship carrying water to a station experiencing a critical shortage was destroyed by %2 extremeists. %1 has declared war in retaliation.</t>
+ <!--An ambassador of ' + $FactionOneNames + ' was assasinated. Evidence points to a deep-cover agent of ' + $FactionTwoNames + ' coalition. War has erupted.-->
+ <t id="225">An ambassador of %1 was assasinated. Evidence points to a deep-cover agent of %2 coalition. War has erupted.</t>
+ <!--A new captain of ' + $FactionTwoNames + ' fired upon a luxury passenger ship belonging to ' + $FactionOneNames + ' coalition, thought to be smuggling criminals. ' + $FactionOneNames + ' swiftly declared war.-->
+ <t id="226">A new captain of %2 fired upon a luxury passenger ship belonging to %1 coalition, thought to be smuggling criminals. %1 swiftly declared war.</t>
+ <!--A rogue faction logic AI designed by Mysterial has caused phantom fleet orders to invade ' + $FactionTwoNames + ' space. ' + $FactionOneNames + ' has immediately declared all out war.-->
+ <t id="227">A rogue faction logic AI designed by Mysterial has caused phantom fleet orders to invade %2 space. %1 has immediately declared all out war.</t>
+</page>
+</language>

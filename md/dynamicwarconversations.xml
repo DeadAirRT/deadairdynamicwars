@@ -97,26 +97,44 @@
 
     <library name="DWC_Main_CalculatePrice">
       <actions>
-        <do_if value="$relation le -0.0032 and $relation gt -0.01">
-          <set_value name="$price" exact="1000000"/>
+		<set_value name="$NetWorth" exact="0Cr" />
+		<!-- calculate player net worth -->
+		<!-- On second thought, this punishes people who have high net worth but low liquid assets. Simple is best.
+		<find_object name="$PlayerAssets" owner="faction.player" space="player.galaxy"  multiple="true" />
+		<do_all exact="$PlayerAssets" counter="$a">
+			<do_if value="$PlayerAssets.{$a}.value ge 10Cr">
+				<set_value name="$NetWorth" exact="$NetWorth + ($PlayerAssets.{$a}.value / 1Cr)" />
+			</do_if>
+		</do_all>
+		-->
+		<set_value name="$NetWorth" exact="$NetWorth + (player.money / 1Cr)" />
+		<!-- -1 to > -5 --><!-- 1000000Cr or 1% -->
+		<do_if value="$relation le -0.00064 and $relation gt -0.0032">
+          <set_value name="$price" exact="[1000000Cr, ($NetWorth * 1 / 100) / 1Cr].max"/>
         </do_if>
+		<!-- -5 to > -10 --><!-- 3200000Cr or 5% -->
+        <do_elseif value="$relation le -0.0032 and $relation gt -0.01">
+          <set_value name="$price" exact="[3200000Cr, ($NetWorth * 5 / 100) / 1Cr].max"/>
+        </do_elseif>
+		<!-- -10 to > -15 --><!-- 10000000Cr or 10% -->
         <do_elseif value="$relation le -0.01 and $relation gt -0.032">
-          <set_value name="$price" exact="3200000"/>
+          <set_value name="$price" exact="[10000000Cr, ($NetWorth * 10 / 100) / 1Cr].max"/>
         </do_elseif>
+		<!-- -15 to > -20 --><!-- 32000000Cr or 15% -->
         <do_elseif value="$relation le -0.032 and $relation gt -0.1">
-          <set_value name="$price" exact="10000000"/>
+          <set_value name="$price" exact="[32000000Cr, ($NetWorth * 15 / 100) / 1Cr].max"/>
         </do_elseif>
+		<!-- -20 to > -25 --><!-- 50000000Cr or 20% -->
         <do_elseif value="$relation le -0.1 and $relation gt -0.32">
-          <set_value name="$price" exact="32000000"/>
+          <set_value name="$price" exact="[50000000Cr, ($NetWorth * 20 / 100) / 1Cr].max"/>
         </do_elseif>
-        <do_elseif value="$relation le -0.32 and $relation gt -0.5">
-          <set_value name="$price" exact="50000000"/>
+		<!-- -20 to > -30 --><!-- 100000000Cr or 25% -->
+		<do_elseif value="$relation le -0.32 and $relation gt -1">
+          <set_value name="$price" exact="[100000000Cr, ($NetWorth * 25 / 100) / 1Cr].max"/>
         </do_elseif>
-		<do_elseif value="$relation le -0.5 and $relation gt -1">
-          <set_value name="$price" exact="100000000"/>
-        </do_elseif>
+		<!-- -30 --><!-- 150000000Cr or 30% -->
 		<do_elseif value="$relation le -1">
-          <set_value name="$price" exact="150000000"/>
+          <set_value name="$price" exact="[150000000Cr, ($NetWorth * 30 / 100) / 1 Cr].max"/>
         </do_elseif>
       </actions>
     </library>
