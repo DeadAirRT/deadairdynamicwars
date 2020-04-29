@@ -75,8 +75,8 @@
  <t id="135">%1 is now at all-out war with their nemesis, %2.\(%3\)</t>
  
  <t id="200">(flavor text - all factions referred to are singular)</t>
- <!--'Completion of a non-agression pact has led to improved relations between ' + $FactionOneNames + ' and ' + $FactionTwoNames + '.'-->
- <t id="201">Completion of a non-agression pact has led to improved relations between %1 and %2.</t>
+ <!--'Completion of a non-aggression pact has led to improved relations between ' + $FactionOneNames + ' and ' + $FactionTwoNames + '.'-->
+ <t id="201">Completion of a non-aggression pact has led to improved relations between %1 and %2.</t>
  <!--'Completion of a joint resources expedition has led to improved relations between ' + $FactionOneNames + ' and ' + $FactionTwoNames + '.'-->
  <t id="202">Completion of a joint resources expedition has led to improved relations between %1 and %2.</t>
  <!--'Completion of a major trade deal between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has led to peace.'-->
@@ -111,8 +111,8 @@
  <t id="217">Increased espionage between %1 and %2 has slightly worsened relations.</t>
  <!--Citing previous border disputes, ' + $FactionOneNames + ' has declared war on ' + $FactionTwoNames + ' to protect their galactic sovereignty.-->
  <t id="218">Citing previous border disputes, %1 has declared war on %2 to protect their galactic sovereignty.</t>
- <!--After a failed non-agression pact, the relations between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' have deteriorated into a minor conflict.-->
- <t id="219">After a failed non-agression pact, the relations between %1 and %2 have deteriorated into a minor conflict.</t>
+ <!--After a failed non-aggression pact, the relations between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' have deteriorated into a minor conflict.-->
+ <t id="219">After a failed non-aggression pact, the relations between %1 and %2 have deteriorated into a minor conflict.</t>
  <!--Reduced trade between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has greatly worsened relations.-->
  <t id="220">Reduced trade between %1 and %2 has greatly worsened relations.</t>
  <!--Reduced tourism between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has greatly worsened relations.-->
