@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <content id="DeadAirDWS" name="DeadAir Dynamic Wars" description="Dynamic Faction Relations" author="DeadAir" version="119" date="2020-04-28" save="0" enabled="1">
 	<dependency id="ego_dlc_split" optional="true" name="Split Vendetta" />
+	<text language="7" 	name="DeadAir Dynamic Wars" description="Dynamic Faction Relations" author="DeadAir" />
+	<text language="33" name="DeadAir Dynamic Wars" description="Dynamic Faction Relations" author="DeadAir" />
+	<text language="34" name="DeadAir Dynamic Wars" description="Dynamic Faction Relations" author="DeadAir" />
+	<text language="39" name="DeadAir Dynamic Wars" description="Dynamic Faction Relations" author="DeadAir" />
 	<text language="44" name="DeadAir Dynamic Wars" description="Dynamic Faction Relations" author="DeadAir" />
+	<text language="45" name="DeadAir Dynamic Wars" description="Dynamic Faction Relations" author="DeadAir" />
+	<text language="49" name="DeadAir Dynamic Wars" description="Dynamic Faction Relations" author="DeadAir" />
+	<text language="81" name="DeadAir Dynamic Wars" description="Dynamic Faction Relations" author="DeadAir" />
+	<text language="82" name="DeadAir Dynamic Wars" description="Dynamic Faction Relations" author="DeadAir" />
+	<text language="86" name="DeadAir Dynamic Wars" description="Dynamic Faction Relations" author="DeadAir" />
+	<text language="88" name="DeadAir Dynamic Wars" description="Dynamic Faction Relations" author="DeadAir" />
 </content>
