@@ -10,7 +10,7 @@
         <check_value value="(event.object.controlpost == controlpost.manager) or (event.object.type == entitytype.factionrepresentative)"/>
       </conditions>
       <actions>
-        <add_player_choice_sub text="'Discuss faction relations'" section="DWC_Main_InContact"/>
+        <add_player_choice_sub text="{33232471,301}" section="DWC_Main_InContact"/>
       </actions>
     </cue>
 
@@ -22,12 +22,12 @@
         </check_any>
       </conditions>
       <actions>
-        <add_player_choice_sub text="'Improve relations with cash'" section="DWC_Main_SelectFaction"/>
-		<add_player_choice_sub text="'Inquire about relations'" section="DWC_Main_Askrelations"/>
+        <add_player_choice_sub text="{33232471,302}" section="DWC_Main_SelectFaction"/>
+		<add_player_choice_sub text="{33232471,303}" section="DWC_Main_Askrelations"/>
 		<do_if value="event.object.owner == faction.player">
-			<add_player_choice_sub text="'Set diplomacy stance for faction'" section="DWC_Main_Setplayerrelations"/>
+			<add_player_choice_sub text="{33232471,304}" section="DWC_Main_Setplayerrelations"/>
 		</do_if>
-        <add_player_choice_return position="bottom_right" text="'Back'"/>
+        <add_player_choice_return position="bottom_right" text="{33232471,305}"/>
       </actions>
     </cue>
 
@@ -81,13 +81,13 @@
         </do_all>
 
         <do_if value="$page == 0">
-          <add_player_choice_return position="bottom_right" text="'Back'"/>
+          <add_player_choice_return position="bottom_right" text="{33232471,305}"/>
         </do_if>
         <do_else>
-          <add_player_choice text="'Previous page'" choiceparam="'previous'" position="bottom_right" section="DWC_Main_SelectFaction"/>
+          <add_player_choice text="{33232471,306}" choiceparam="'previous'" position="bottom_right" section="DWC_Main_SelectFaction"/>
         </do_else>
         <do_if value="$validFactions.count gt 4">
-          <add_player_choice text="'Next page'" choiceparam="'next'" position="right" section="DWC_Main_SelectFaction"/>
+          <add_player_choice text="{33232471,307}" choiceparam="'next'" position="right" section="DWC_Main_SelectFaction"/>
         </do_if>
         <remove_value name="$relation"/>
         <remove_value name="$faction"/>
@@ -176,13 +176,13 @@
         </do_all>
 
         <do_if value="$page == 0">
-          <add_player_choice_return position="bottom_right" text="'Back'"/>
+          <add_player_choice_return position="bottom_right" text="{33232471,305}"/>
         </do_if>
         <do_else>
-          <add_player_choice text="'Previous page'" choiceparam="'previous'" position="bottom_right" section="DWC_Main_Askrelations"/>
+          <add_player_choice text="{33232471,306}" choiceparam="'previous'" position="bottom_right" section="DWC_Main_Askrelations"/>
         </do_else>
         <do_if value="$validFactions.count gt 4">
-          <add_player_choice text="'Next page'" choiceparam="'next'" position="right" section="DWC_Main_Askrelations"/>
+          <add_player_choice text="{33232471,307}" choiceparam="'next'" position="right" section="DWC_Main_Askrelations"/>
         </do_if>
         <remove_value name="$relation"/>
         <remove_value name="$faction"/>
@@ -223,13 +223,13 @@
         </do_all>
 
         <do_if value="$page == 0">
-          <add_player_choice_return position="bottom_right" text="'Back'"/>
+          <add_player_choice_return position="bottom_right" text="{33232471,305}"/>
         </do_if>
         <do_else>
-          <add_player_choice text="'Previous page'" choiceparam="'previous'" position="bottom_right" section="DWC_Main_Setplayerrelations"/>
+          <add_player_choice text="{33232471,306}" choiceparam="'previous'" position="bottom_right" section="DWC_Main_Setplayerrelations"/>
         </do_else>
         <do_if value="$validFactions.count gt 4">
-          <add_player_choice text="'Next page'" choiceparam="'next'" position="right" section="DWC_Main_Setplayerrelations"/>
+          <add_player_choice text="{33232471,307}" choiceparam="'next'" position="right" section="DWC_Main_Setplayerrelations"/>
         </do_if>
         <remove_value name="$relation"/>
         <remove_value name="$faction"/>
@@ -308,13 +308,13 @@
 			</do_all>
 
 			<do_if value="$page == 0">
-				<add_player_choice_return position="bottom_right" text="'Back'"/>
+				<add_player_choice_return position="bottom_right" text="{33232471,305}"/>
 			</do_if>
 			<do_else>
-				<add_player_choice text="'Previous page'" choiceparam="'previous'" position="bottom_right" section="DWC_Main_Setplayerrelationschoice"/>
+				<add_player_choice text="{33232471,306}" choiceparam="'previous'" position="bottom_right" section="DWC_Main_Setplayerrelationschoice"/>
 			</do_else>
 			<do_if value="$RelationLevels.count gt 4">
-				<add_player_choice text="'Next page'" choiceparam="'next'" position="right" section="DWC_Main_Setplayerrelationschoice"/>
+				<add_player_choice text="{33232471,307}" choiceparam="'next'" position="right" section="DWC_Main_Setplayerrelationschoice"/>
 			</do_if>
 			<remove_value name="$relation"/>
 			<remove_value name="$actuallSiteItemId"/>
