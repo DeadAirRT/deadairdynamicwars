@@ -128,7 +128,7 @@
  <!--A new captain of ' + $FactionTwoNames + ' fired upon a luxury passenger ship belonging to ' + $FactionOneNames + ' coalition, thought to be smuggling criminals. ' + $FactionOneNames + ' swiftly declared war.-->
  <t id="226">Новый капитан %2 обстрелял роскошное пассажирское судно, принадлежащее коалиции %1, предположительно, контрабандой преступников.  %1 быстро объявил войну.</t>
  <!--A rogue faction logic AI designed by Mysterial has caused phantom fleet orders to invade ' + $FactionTwoNames + ' space. ' + $FactionOneNames + ' has immediately declared all out war.-->
- <t id="227">Логика фракционной фракции, разработанная Mysterial, заставила приказы фантомного флота вторгнуться в пространство %2.  %1 немедленно объявил всю войну.</t>
+ <t id="227">Логика фракции, разработанная Mysterial, заставила приказы фантомного флота вторгнуться в пространство %2. %1 немедленно объявил всю войну.</t>
  <t id="300">(разговорный материал)</t>
  <!--Discuss faction relations-->
  <t id="301">Обсудить отношения фракций</t>
