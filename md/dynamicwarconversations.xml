@@ -289,7 +289,7 @@
 
 			<set_value name="$RelationLevels" exact="['Nemesis', 'Kill', 'KillMilitary', 'Enemy', 'Neutral', 'Friend', 'Member', 'Self']"/>
 			<set_value name="$RelationLevelsText" exact="[{33232471,308},{33232471,309},{33232471,310},{33232471,311},{33232471,312},{33232471,313},{33232471,314},{33232471,315}]"/>
-			<set_value name="$RelationNumber" exact="[-1, -0.325, -0.15, -0.05, 0, 0.05, 0.15, 1]"/>
+			<set_value name="$RelationNumber" exact="[-1, -0.32, -0.1, -0.01, 0, 0.01, 0.1, 1]"/>
 			
 			<do_all exact="$RelationLevels.count" counter="$l" reverse="true">
 				<do_if value="($faction.relationto.{event.object.owner}) le $RelationNumber.{$l}">
@@ -304,7 +304,7 @@
 					<break/>
 				</do_if>
 				<set_value name="$RelationChoice" exact="$RelationLevels.{$actuallSiteItemId}"/>
-				<set_value name="$RelationChoiceText" exact="$RelationLevelsText.{$actualSiteItemId}"/>
+				<set_value name="$RelationChoiceText" exact="$RelationLevelsText.{$actuallSiteItemId}"/>
 				<do_if value="$RelationChoice != null">
 					<add_player_choice text="{33232471,316}.[$RelationChoiceText, ($faction.relation.{$faction.relationto.{event.object.owner}}.uivalue)]" position="$l" choiceparam="[$actuallSiteItemId, $faction, $RelationChoice]" section="DWC_Main_Setplayerrelationschoice"/>
 				</do_if>
