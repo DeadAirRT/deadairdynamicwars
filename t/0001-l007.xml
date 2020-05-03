@@ -2,178 +2,178 @@
 <language id="07">
 
 <page id="33232471" title="DeadAir Dynamic War T Files" descr="names used in DeadAir Dynamic War mod" voice="no">
- <t id="100">(Messages - all factions referred to are singular)</t>
+ <t id="100">(Сообщения - все упомянутые фракции являются одиночными)</t>
  <!--$FactionOneNames + ' has greatly improved relations with ' + $FactionTwoNames + '. They are considered friendly. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="101">%1 has greatly improved relations with %2. They are considered friendly.\(%3\)</t>
+ <t id="101">%1 значительно улучшил отношения с %2. Они теперь считаются дружелюбными. \(%3\)</t>
  <!--$FactionOneNames + ' has greatly improved relations with ' + $FactionTwoNames + '. They are considered allies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="102">%1 has greatly improved relations with %2. They are considered allies.\(%3\)</t>
+ <t id="102">%1 значительно улучшил отношения с %2. Они теперь считаются союзниками. \(%3\)</t>
  <!--$FactionOneNames + ' has greatly improved relations with ' + $FactionTwoNames + '. They are considered close allies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="103">%1 has greatly improved relations with %2. They are considered close allies.\(%3\)</t>
+ <t id="103">%1 значительно улучшил отношения с %2. Они теперь считаются близкими союзниками. \(%3\)</t>
  <!--$FactionOneNames + ' has greatly improved relations with ' + $FactionTwoNames + '. They are now at peace and considered friendly. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="104">%1 has greatly improved relations with %2. They are now at peace and considered friendly.\(%3\)</t>
+ <t id="104">%1 значительно улучшил отношения с %2. Теперь они в мире и считаются дружелюбными. \(%3\)</t>
  <!--$FactionOneNames + ' has greatly improved relations with ' + $FactionTwoNames + '. They are now at peace and considered allies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="105">%1 has greatly improved relations with %2. They are now at peace and considered allies.\(%3\)</t>
+ <t id="105">%1 значительно улучшил отношения с %2. Теперь они в мире и считаются союзниками. \(%3\)</t>
  <!--$FactionOneNames + ' has greatly improved relations with ' + $FactionTwoNames + '. They are now at peace and considered close allies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="106">%1 has greatly improved relations with %2. They are now at peace and considered close allies.\(%3\)</t>
+ <t id="106">%1 значительно улучшил отношения с %2. Теперь они в мире и считаются близкими союзниками. \(%3\)</t>
  <!--$FactionOneNames + ' has improved relations with ' + $FactionTwoNames + '. They are enemies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="107">%1 has improved relations with %2. They are enemies.\(%3\)</t>
+ <t id="107">%1 улучшил отношения с %2.Но они по прежнему враги. \(%3\)</t>
  <!--$FactionOneNames + ' has improved relations with ' + $FactionTwoNames + '. They are at war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="108">%1 has improved relations with %2. They are at war.\(%3\)</t>
+ <t id="108">%1 улучшил отношения с %2.Но они по прежнему в состоянии войны. \(%3\)</t>
  <!--$FactionOneNames + ' has improved relations with ' + $FactionTwoNames + '. They are at all-out war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="109">%1 has improved relations with %2. They are at all-out war.\(%3\)</t>
+ <t id="109">%1 улучшил отношения с %2.Но они по прежнему в состоянии тотальной войны. \(%3\)</t>
  <!--$FactionOneNames + ' has slightly improved relations with ' + $FactionTwoNames + '. They are considered friendly. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="110">%1 has slightly improved relations with %2. They are considered friendly.\(%3\)</t>
+ <t id="110">%1 немного улучшил отношения с %2. Они теперь считаются дружелюбными. \(%3\)</t>
  <!--$FactionOneNames + ' has slighty improved relations with ' + $FactionTwoNames + '. They are considered allies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="111">%1 has slighty improved relations with %2. They are considered allies.\(%3\)</t>
+ <t id="111">%1 немного улучшил отношения с %2. Они теперь считаются союзниками. \(%3\)</t>
  <!--$FactionOneNames + is + 'now at peace with ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="112">%1 is now at peace with %2.\(%3\)</t>
+ <t id="112">%1 теперь в мире с %2. \(%3\)</t>
  <!--$FactionOneNames + ' has slightly improved relations with ' + $FactionTwoNames + '. They are considered enemies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="113">%1 has slightly improved relations with %2. They are considered enemies.\(%3\)</t>
+ <t id="113">%1 немного улучшил отношения с %2. Они теперь считаются врагами. \(%3\)</t>
  <!--$FactionOneNames + ' has slightly improved relations with ' + $FactionTwoNames + '. They are considered at war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="114">%1 has slightly improved relations with %2. They are considered at war.\(%3\)</t>
+ <t id="114">%1 немного улучшил отношения с %2. Они по прежнему в состоянии войны. \(%3\)</t>
  <!--$FactionOneNames + ' has slightly improved relations with ' + $FactionTwoNames + '. They are at all-out war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="115">%1 has slightly improved relations with %2. They are at all-out war.\(%3\)</t>
+ <t id="115">%1 немного улучшил отношения с %2. Они по прежнему в состоянии тотальной войны. \(%3\)</t>
  <!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are considered friendly. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="116">%1 has greatly worsened relations with %2. They are considered friendly.\(%3\)</t>
+ <t id="116">%1 значительно ухудшил отношения с %2. Но они все еще считаются дружелюбными. \(%3\)</t>
  <!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are considered allies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="117">%1 has greatly worsened relations with %2. They are considered allies.\(%3\)</t>
+ <t id="117">%1 значительно ухудшил отношения с %2. Но они все еще считаются союзниками. \(%3\)</t>
  <!--$FactionOneNames + ' has slightly worsened relations with ' + $FactionTwoNames + '. They are considered enemies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="118">%1 has slightly worsened relations with %2. They are considered enemies.\(%3\)</t>
+ <t id="118">%1 немного ухудшил отношения с %2. Они теперь считаются врагами. \(%3\)</t>
  <!--$FactionOneNames + ' has slightly worsened relations with ' + $FactionTwoNames + '. They are considered at war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="119">%1 has slightly worsened relations with %2. They are considered at war.\(%3\)</t>
+ <t id="119">%1 немного ухудшил отношения с %2. Они теперь в состоянии войны. \(%3\)</t>
  <!--$FactionOneNames + ' has slightly worsened relations with ' + $FactionTwoNames + '. They are at all-out war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="120">%1 has slightly worsened relations with %2. They are at all-out war.\(%3\)</t>
+ <t id="120">%1 немного ухудшил отношения с %2. Они теперь в состоянии тотальной войны. \(%3\)</t>
  <!--$FactionOneNames + ' has slightly worsened relations with ' + $FactionTwoNames + '. They are at all-out war with their nemesis. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="121">%1 has slightly worsened relations with %2. They are at all-out war with their nemesis.\(%3\)</t>
+ <t id="121">%1 немного ухудшил отношения с %2. Они теперь ведут тотальную войну со своим заклятым врагом. \(%3\)</t>
  <!--$FactionOneNames + is + 'now enemies with ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="122">%1 is now enemies with %2.\(%3\)</t>
+ <t id="122">%1 теперь враги с %2. \(%3\)</t>
  <!--$FactionOneNames + is + 'now at war with ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="123">%1 is now at war with %2.\(%3\)</t>
+ <t id="123">%1 сейчас воюет с %2. \(%3\)</t>
  <!--$FactionOneNames + is + 'now at all-out war with ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="124">%1 is now at all-out war with %2.\(%3\)</t>
+ <t id="124">%1 теперь в состоянии тотальной войны с %2. \(%3\)</t>
  <!--$FactionOneNames + is + 'now at all-out war with their nemesis, ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="125">%1 is now at all-out war with their nemesis, %2.\(%3\)</t>
+ <t id="125">%1 сейчас в состоянии тотальной войны со своим заклятым врагом, %2. \(%3\)</t>
  <!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are considered friendly. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="126">%1 has greatly worsened relations with %2. They are considered friendly.\(%3\)</t>
+ <t id="126">%1 значительно ухудшил отношения с %2. Но они все еще считаются дружелюбными. \(%3\)</t>
  <!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are considered allies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="127">%1 has greatly worsened relations with %2. They are considered allies.\(%3\)</t>
+ <t id="127">%1 значительно ухудшил отношения с %2. Но они все еще считаются союзниками. \(%3\)</t>
  <!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are considered enemies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="128">%1 has greatly worsened relations with %2. They are considered enemies.\(%3\)</t>
+ <t id="128">%1 значительно ухудшил отношения с %2. Они теперь считаются врагами. \(%3\)</t>
  <!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are considered at war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="129">%1 has greatly worsened relations with %2. They are considered at war.\(%3\)</t>
+ <t id="129">%1 значительно ухудшил отношения с %2. Они теперь считаются на войны. \(%3\)</t>
  <!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are at all-out war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="130">%1 has greatly worsened relations with %2. They are at all-out war.\(%3\)</t>
+ <t id="130">%1 значительно ухудшил отношения с %2. Они теперь в состоянии тотальной войны. \(%3\)</t>
  <!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are at all-out war with their nemesis. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="131">%1 has greatly worsened relations with %2. They are at all-out war with their nemesis.\(%3\)</t>
+ <t id="131">%1 значительно ухудшил отношения с %2. Они теперь в ведут тотальную войну со своим заклятым врагом. \(%3\)</t>
  <!--$FactionOneNames + is + 'now enemies with ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="132">%1 is now enemies with %2.\(%3\)</t>
+ <t id="132">%1 теперь враги с %2. \(%3\)</t>
  <!--$FactionOneNames + is + 'now at war with ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="133">%1 is now at war with %2.\(%3\)</t>
+ <t id="133">%1 сейчас воюет с %2. \(%3\)</t>
  <!--$FactionOneNames + is + 'now at all-out war with ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="134">%1 is now at all-out war with %2.\(%3\)</t>
+ <t id="134">%1 теперь в состоянии войны с %2. \(%3\)</t>
  <!--$FactionOneNames + is + 'now at all-out war with their nemesis, ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
- <t id="135">%1 is now at all-out war with their nemesis, %2.\(%3\)</t>
- 
- <t id="200">(flavor text - all factions referred to are singular)</t>
+ <t id="135">%1 сейчас в состоянии тотальной войны со своим заклятым врагом, %2. \(%3\)</t>
+
+ <t id="200">(цветной текст - все упомянутые фракции одиночныые)</t>
  <!--'Completion of a non-aggression pact has led to improved relations between ' + $FactionOneNames + ' and ' + $FactionTwoNames + '.'-->
- <t id="201">Completion of a non-aggression pact has led to improved relations between %1 and %2.</t>
+ <t id="201">Завершение пакта о ненападении привело к улучшению отношений между %1 и %2.</t>
  <!--'Completion of a joint resources expedition has led to improved relations between ' + $FactionOneNames + ' and ' + $FactionTwoNames + '.'-->
- <t id="202">Completion of a joint resources expedition has led to improved relations between %1 and %2.</t>
+ <t id="202">Завершение совместной ресурсной экспедиции привело к улучшению отношений между %1 и %2.</t>
  <!--'Completion of a major trade deal between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has led to peace.'-->
- <t id="203">Completion of a major trade deal between %1 and %2 has led to peace.</t>
+ <t id="203">Завершение крупной торговой сделки между %1 и %2 привело к миру.</t>
  <!--'After wide scale protests crying for peace, ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' have signed a peace treaty.'-->
- <t id="204">After wide scale protests crying for peace, %1 and %2 have signed a peace treaty.</t>
+ <t id="204">После широкомасштабных акций протеста за мир, %1 и %2 подписали мирный договор.</t>
  <!--'After a near disasterous fight with the Xenon. ' + $FactionTwoNames + ' sent ships to save the fleet of ' + $FactionOneNames + '. The two factions decided to settle their differences.'-->
- <t id="205">After a near disasterous fight with the Xenon. %1 sent ships to save the fleet of %2. The two factions decided to settle their differences.</t>
+ <t id="205">После почти катастрофического боя с ксеноном.  %1 послал корабли, чтобы спасти флот %2. Обе фракции решили урегулировать свои разногласия.</t>
  <!--'Reduced hostilities between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has greatly improved relations.'-->
- <t id="206">Reduced hostilities between %1 and %2 has greatly improved relations.</t>
+ <t id="206">Уменьшение враждебности между %1 и %2 значительно улучшило отношения.</t>
  <!--'Reduced espionage between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has greatly improved relations.'-->
- <t id="207">Reduced espionage between %1 and %2 has greatly improved relations.</t>
+ <t id="207">Снижение шпионажа между %1 и %2 значительно улучшило отношения.</t>
  <!--'Increased trade between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slightly improved relations.'-->
- <t id="208">Increased trade between %1 and %2 has slightly improved relations.</t>
+ <t id="208">Увеличение торговли между %1 и %2 несколько улучшило отношения.</t>
  <!--'Increased tourism between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slightly improved relations.'-->
- <t id="209">Increased tourism between %1 and %2 has slightly improved relations.</t>
+ <t id="209">Увеличение туризма между %1 и %2 несколько улучшило отношения.</t>
  <!--'After a public request by Jack the Stripper, famous highway architect, ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' have ended their war.'-->
- <t id="210">After a public request by Jack the Stripper, famous highway architect, %1 and %2 have ended their war.</t>
+ <t id="210">После публичного запроса Джека Стриппера, известного архитектора шоссе, %1 и %2 закончили свою войну.</t>
  <!--'An armistice treaty signed by ' + $FactionOneNames + ' and ' + $FactionTwoNames + '. Prisoners have been exchanged and there is a fragile peace for now.'-->
- <t id="211">An armistice treaty signed by %1 and %2. Prisoners have been exchanged and there is a fragile peace for now.</t>
+ <t id="211">Договор о перемирии, подписанный %1 и %2. Заключенные были обменены, и сейчас хрупкий мир.</t>
  <!--'Reduced hostilities between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slighty improved relations.'-->
- <t id="212">Reduced hostilities between %1 and %2 has slighty improved relations.</t>
+ <t id="212">Снижение враждебности между %1 и %2 несколько улучшило отношения.</t>
  <!--Reduced espionage between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slightly improved relations.-->
- <t id="213">Reduced espionage between %1 and %2 has slightly improved relations.</t>
+ <t id="213">Снижение шпионажа между %1 и %2 несколько улучшило отношения.</t>
  <!--Reduced trade between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slightly worsened relations.-->
- <t id="214">Reduced trade between %1 and %2 has slightly worsened relations.</t>
+ <t id="214">Сокращение торговли между %1 и %2 несколько ухудшило отношения.</t>
  <!--Reduced tourism between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slightly worsened relations.-->
- <t id="215">Reduced tourism between %1 and %2 has slightly worsened relations.</t>
+ <t id="215">Сокращение туризма между %1 и %2 несколько ухудшило отношения.</t>
  <!--Increased hostilities between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slightly worsened relations.-->
- <t id="216">Increased hostilities between %1 and %2 has slightly worsened relations.</t>
+ <t id="216">Увеличение враждебности между %1 и %2 несколько ухудшило отношения.</t>
  <!--Increased espionage between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slightly worsened relations.-->
- <t id="217">Increased espionage between %1 and %2 has slightly worsened relations.</t>
+ <t id="217">Увеличение шпионажа между %1 и %2 несколько ухудшило отношения.</t>
  <!--Citing previous border disputes, ' + $FactionOneNames + ' has declared war on ' + $FactionTwoNames + ' to protect their galactic sovereignty.-->
- <t id="218">Citing previous border disputes, %1 has declared war on %2 to protect their galactic sovereignty.</t>
+ <t id="218">Ссылаясь на предыдущие пограничные споры, %1 объявил войну %2, чтобы защитить свой галактический суверенитет.</t>
  <!--After a failed non-aggression pact, the relations between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' have deteriorated into a minor conflict.-->
- <t id="219">After a failed non-aggression pact, the relations between %1 and %2 have deteriorated into a minor conflict.</t>
+ <t id="219">После провала пакта о ненападении отношения между %1 и %2 перешли в незначительный конфликт.</t>
  <!--Reduced trade between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has greatly worsened relations.-->
- <t id="220">Reduced trade between %1 and %2 has greatly worsened relations.</t>
+ <t id="220">Сокращение торговли между %1 и %2 значительно ухудшило отношения.</t>
  <!--Reduced tourism between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has greatly worsened relations.-->
- <t id="221">Reduced tourism between %1 and %2 has greatly worsened relations.</t>
+ <t id="221">Сокращение туризма между %1 и %2 значительно ухудшило отношения.</t>
  <!--A prominent leader of ' + $FactionOneNames + ' has declared to build a wall blocking ' + $FactionTwoNames + ' and to make them pay for it. Relations have greatly worsened.-->
- <t id="222">A prominent leader of %1 has declared to build a wall blocking %2 and to make them pay for it. Relations have greatly worsened.</t>
+ <t id="222">Видный лидер %1 объявил, что возводит стену, блокирующую %2, и заставляет их платить за это. Отношения сильно ухудшились.</t>
  <!--A prominent leader of ' + $FactionOneNames + ' has called for the destruction of ' + $FactionTwoNames + ' during a state of the union address. Relations have greatly worsened.-->
- <t id="223">A prominent leader of %1 has called for the destruction of %2 during a state of the union address. Relations have greatly worsened.</t>
+ <t id="223">Видный лидер %1 призвал уничтожить %2 во время обращения к союзу. Отношения сильно ухудшились.</t>
  <!--A ship carrying water to a station experiencing a critical shortage was destroyed by ' + $FactionTwoNames + ' extremeists. ' + $FactionOneNames + ' has declared war in retaliation.-->
- <t id="224">A ship carrying water to a station experiencing a critical shortage was destroyed by %2 extremeists. %1 has declared war in retaliation.</t>
+ <t id="224">Корабль, несущий воду на станцию, испытывающую критическую нехватку, был уничтожен %2 экстремистами.  %1 объявил войну в отместку.</t>
  <!--An ambassador of ' + $FactionOneNames + ' was assasinated. Evidence points to a deep-cover agent of ' + $FactionTwoNames + ' coalition. War has erupted.-->
- <t id="225">An ambassador of %1 was assasinated. Evidence points to a deep-cover agent of %2 coalition. War has erupted.</t>
+ <t id="225">Посол %1 был убит. Свидетельство указывает на глубокого прикрытия коалиции %2. Война разразилась.</t>
  <!--A new captain of ' + $FactionTwoNames + ' fired upon a luxury passenger ship belonging to ' + $FactionOneNames + ' coalition, thought to be smuggling criminals. ' + $FactionOneNames + ' swiftly declared war.-->
- <t id="226">A new captain of %2 fired upon a luxury passenger ship belonging to %1 coalition, thought to be smuggling criminals. %1 swiftly declared war.</t>
+ <t id="226">Новый капитан %2 обстрелял роскошное пассажирское судно, принадлежащее коалиции %1, предположительно, контрабандой преступников.  %1 быстро объявил войну.</t>
  <!--A rogue faction logic AI designed by Mysterial has caused phantom fleet orders to invade ' + $FactionTwoNames + ' space. ' + $FactionOneNames + ' has immediately declared all out war.-->
- <t id="227">A rogue faction logic AI designed by Mysterial has caused phantom fleet orders to invade %2 space. %1 has immediately declared all out war.</t>
- <t id="300">(conversation stuff)</t>
+ <t id="227">Логика фракции, разработанная Mysterial, заставила приказы фантомного флота вторгнуться в пространство %2. %1 немедленно объявил всю войну.</t>
+ <t id="300">(разговорный материал)</t>
  <!--Discuss faction relations-->
- <t id="301">Discuss faction relations</t>
+ <t id="301">Обсудить отношения фракций</t>
  <!--Improve relations with cash-->
- <t id="302">Improve relations with cash</t>
+ <t id="302">Улучшить отношения с помощью денег</t>
  <!--Inquire about relations-->
- <t id="303">Inquire about relations</t>
+ <t id="303">Узнать об отношениях</t>
  <!--Set diplomacy stance for faction-->
- <t id="304">Set diplomacy stance for faction</t>
+ <t id="304">Установить позицию дипломатии для фракции</t>
  <!--Back-->
- <t id="305">Back</t>
+ <t id="305">Назад</t>
  <!--Previous page-->
- <t id="306">Previous page</t>
+ <t id="306">Предыдущая страница</t>
  <!--Next page-->
- <t id="307">Next page</t>
+ <t id="307">Следующая страница</t>
  <!--Nemesis-->
- <t id="308">Nemesis</t>
+ <t id="308">Возмездие</t>
  <!--Kill-->
- <t id="309">Kill All</t>
+ <t id="309">Убить всех</t>
  <!--KillMilitary-->
- <t id="310">Kill Military</t>
+ <t id="310">Убить военных</t>
  <!--Enemy-->
- <t id="311">Enemy</t>
+ <t id="311">Враг</t>
  <!--Neutral-->
- <t id="312">Neutral</t>
+ <t id="312">Нейтрально</t>
  <!--Friend-->
- <t id="313">Friend</t>
+ <t id="313">Друг</t>
  <!--Member-->
- <t id="314">Member</t>
+ <t id="314">Партнер</t>
  <!--Self-->
- <t id="315">Self</t>
+ <t id="315">Собственный</t>
  <!--%1 (Current:%2)-->
- <t id="316">%1 \(Current:%2\)</t>
+ <t id="316">%1 \(Текущий статус:%2\)</t>
  
  <t id="400">(UI STUFF)</t>
  <!--Faction Information-->
- <t id="401">Faction Information</t>
+ <t id="401">Информация фракции</t>
  <!--Relations-->
- <t id="402">Relations</t>
+ <t id="402">Отношения</t>
  <!--Military Strength-->
- <t id="403">Military Strength</t>
+ <t id="403">Военная сила</t>
  <!--Economic Strength-->
- <t id="404">Economic Strength</t>
+ <t id="404">Экономическая сила</t>
  <!--Total: ' + (if $TotalShips gt 0 then $TotalShips else 0)-->
- <t id="405">Total: %1</t>
+ <t id="405">Всего: %1</t>
  <!--XL: ' + (if $XLShips.count gt 0 then $XLShips.count else 0)-->
  <t id="406">XL: %1</t>
  <!--L: ' + (if $LShips.count gt 0 then $LShips.count else 0)-->
@@ -183,8 +183,8 @@
  <!--S: ' + (if $SShips.count gt 0 then $SShips.count else 0)-->
  <t id="409">S: %1</t>
  <!--XL Trading and Building Ships-->
- <t id="410">XL Trading and Building Ships</t>
+ <t id="410">XL Торговые и строительные корабли</t>
  <!--Station: ' + (if $Stations.count gt 0 then $Stations.count else 0)-->
- <t id="411">Station: %1</t>
+ <t id="411">Станции: %1</t>
 </page>
 </language>
