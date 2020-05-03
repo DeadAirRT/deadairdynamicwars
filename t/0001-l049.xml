@@ -144,5 +144,47 @@
  <t id="306">Previous page</t>
  <!--Next page-->
  <t id="307">Next page</t>
+ <!--Nemesis-->
+ <t id="308">Nemesis</t>
+ <!--Kill-->
+ <t id="309">Kill All</t>
+ <!--KillMilitary-->
+ <t id="310">Kill Military</t>
+ <!--Enemy-->
+ <t id="311">Enemy</t>
+ <!--Neutral-->
+ <t id="312">Neutral</t>
+ <!--Friend-->
+ <t id="313">Friend</t>
+ <!--Member-->
+ <t id="314">Member</t>
+ <!--Self-->
+ <t id="315">Self</t>
+ <!--%1 (Current:%2)-->
+ <t id="316">%1 \(Current:%2\)
+ 
+ <t id="400">(UI STUFF)</t>
+ <!--Faction Information-->
+ <t id="401">Faction Information</t>
+ <!--Relations-->
+ <t id="402">Relations</t>
+ <!--Military Strength-->
+ <t id="403">Military Strength</t>
+ <!--Economic Strength-->
+ <t id="404">Economic Strength</t>
+ <!--Total: ' + (if $TotalShips gt 0 then $TotalShips else 0)-->
+ <t id="405">Total: %1</t>
+ <!--XL: ' + (if $XLShips.count gt 0 then $XLShips.count else 0)-->
+ <t id="406">XL: %1</t>
+ <!--L: ' + (if $LShips.count gt 0 then $LShips.count else 0)-->
+ <t id="407">L: %1</t>
+ <!--M: ' + (if $MShips.count gt 0 then $MShips.count else 0)-->
+ <t id="408">M: %1</t>
+ <!--S: ' + (if $SShips.count gt 0 then $SShips.count else 0)-->
+ <t id="409">S: %1</t>
+ <!--XL Trading and Building Ships-->
+ <t id="410">XL Trading and Building Ships</t>
+ <!--Station: ' + (if $Stations.count gt 0 then $Stations.count else 0)-->
+ <t id="411">Station: %1</t>
 </page>
 </language>

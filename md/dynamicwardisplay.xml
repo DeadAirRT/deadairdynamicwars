@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mdscript name="DynamicWarDisplay" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="md.xsd">
+	<cues>
+		<cue name="Init" instantiate="false">
+			<actions>
+				<get_factions_by_tag tag="tag.claimspace" result="$FactionList" />
+			</actions>
+			<cues>
+				<cue name="Register_Options_Menu" instantiate="true">
+					<conditions>
+						<event_cue_signalled cue="md.Simple_Menu_API.Reloaded"/>
+					</conditions>
+					<actions>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Register_Options_Menu" param = "table[$id = 'faction_relations_menu', $columns = 7, $title   = {33232471,401}, $onOpen  = Main_Menu ]"/>
+							
+						<signal_cue_instantly cue="md.Simple_Menu_API.Register_Options_Menu"
+							param = "table[
+								$id      = 'relationsmenu',
+								$columns = 8, 
+								$title   = {33232471,402},
+								$onOpen  = Relations_Menu,
+								$private = 1,
+							]" />
+						<signal_cue_instantly cue="md.Simple_Menu_API.Register_Options_Menu"
+							param = "table[
+								$id      = 'milstrengthmenu',
+								$columns = 7, 
+								$title   = {33232471,403},
+								$onOpen  = MilStrength_Menu,
+								$private = 1,
+							]" />
+						<signal_cue_instantly cue="md.Simple_Menu_API.Register_Options_Menu"
+							param = "table[
+								$id      = 'econstrengthmenu',
+								$columns = 8, 
+								$title   = {33232471,404},
+								$onOpen  = EconStrength_Menu,
+								$private = 1,
+							]" />
+					</actions>
+				</cue>
+
+				<cue name="Main_Menu" instantiate="true">
+					<conditions>
+						<event_cue_signalled/>
+					</conditions>
+					<actions>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Submenu_Link" param="table[$text={33232471,402}, $id='relationsmenu']" />
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Submenu_Link" param="table[$text={33232471,403}, $id='milstrengthmenu']" />
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Submenu_Link" param="table[$text={33232471,404}, $id='econstrengthmenu']" />
+					</actions>
+				</cue>
+				
+				<cue name="Relations_Menu" instantiate="true" >
+					<conditions>
+						<event_cue_signalled/>
+					</conditions>
+					<actions>
+						<do_all exact="$FactionList.count" counter="$FactionOneCounter">
+							<set_value name="$FactionOne" exact="$FactionList.{$FactionOneCounter}" />
+							<do_all exact="$FactionList.count" counter="$FactionTwoCounter">
+								<set_value name="$FactionTwo" exact="$FactionList.{$FactionTwoCounter}" />
+								<do_if value="$FactionOne != $FactionTwo">
+									<include_actions ref="AddFactionRelationRows" />
+								</do_if>
+							</do_all>
+						</do_all>
+					</actions>
+				</cue>
+				
+				<cue name="MilStrength_Menu" instantiate="true" >
+					<conditions>
+						<event_cue_signalled/>
+					</conditions>
+					<actions>
+						<do_all exact="$FactionList.count" counter="$FactionOneCounter">
+							<set_value name="$FactionOne" exact="$FactionList.{$FactionOneCounter}" />
+							<include_actions ref="AddFactionMilStrengthRows" />
+						</do_all>
+					</actions>
+				</cue>
+				
+				<cue name="EconStrength_Menu" instantiate="true" >
+					<conditions>
+						<event_cue_signalled/>
+					</conditions>
+					<actions>
+						<do_all exact="$FactionList.count" counter="$FactionOneCounter">
+							<set_value name="$FactionOne" exact="$FactionList.{$FactionOneCounter}" />
+							<include_actions ref="AddFactionEconStrengthRows" />
+						</do_all>
+					</actions>
+				</cue>
+				
+				<library name="AddFactionRelationRows">
+					<actions>
+						<do_if value="$FactionOne and $FactionTwo" >
+							<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" />
+							<set_value name="$Text" exact="$FactionOne.knownname" />
+							<set_value name="$MouseOverText" exact="$FactionOne.knownname" />
+							<set_value name="$Text2" exact="$FactionTwo.knownname" />
+							<set_value name="$MouseOverText2" exact="$FactionTwo.knownname" />
+							<set_value name="$Current" exact="$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue + 30" />
+							<set_value name="$Relation" exact="$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue" /> 
+							<do_if value="$Relation le (-20)">
+								<set_value name="$RelationColor" exact="'Helper.color.transparent'" />
+								<set_value name="$PositiveColor" exact="'Helper.color.transparent'" />
+								<set_value name="$NegativeColor" exact="'Helper.color.red'" />
+							</do_if>
+							<do_elseif value="$Relation le (-10) and $Relation gt (-20)">
+								<set_value name="$RelationColor" exact="'Helper.color.transparent'" />
+								<set_value name="$PositiveColor" exact="'Helper.color.transparent'" />
+								<set_value name="$NegativeColor" exact="'Helper.color.orange'" />
+							</do_elseif>
+							<do_elseif value="$Relation le (-1) and $Relation gt (-10)">
+								<set_value name="$RelationColor" exact="'Helper.color.transparent'" />
+								<set_value name="$PositiveColor" exact="'Helper.color.transparent'" />
+								<set_value name="$NegativeColor" exact="'Helper.color.yellow'" />
+							</do_elseif>
+							<do_elseif value="$Relation le (1) and $Relation gt (-1)">
+								<set_value name="$RelationColor" exact="'Helper.color.transparent'" />
+								<set_value name="$PositiveColor" exact="'Helper.color.yellow'" />
+								<set_value name="$NegativeColor" exact="'Helper.color.transparent'" />
+							</do_elseif>
+							<do_elseif value="$Relation le (10) and $Relation gt (1)">
+								<set_value name="$RelationColor" exact="'Helper.color.transparent'" />
+								<set_value name="$PositiveColor" exact="'Helper.color.playergreen'" />
+								<set_value name="$NegativeColor" exact="'Helper.color.transparent'" />
+							</do_elseif>
+							<do_elseif value="$Relation lt (20) and $Relation gt (10)">
+								<set_value name="$RelationColor" exact="'Helper.color.transparent'" />
+								<set_value name="$PositiveColor" exact="'Helper.color.lightgreen'" />
+								<set_value name="$NegativeColor" exact="'Helper.color.transparent'" />
+							</do_elseif>
+							<do_elseif value="$Relation ge (20)">
+								<set_value name="$RelationColor" exact="'Helper.color.transparent'" />
+								<set_value name="$PositiveColor" exact="'Helper.color.green'" />
+								<set_value name="$NegativeColor" exact="'Helper.color.transparent'" />
+							</do_elseif>
+
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=1,
+								$colSpan=2,
+								$mouseOverText=$MouseOverText,
+								$text = $Text,
+								]" />
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=3,
+								$colSpan=2,
+								$mouseOverText=$MouseOverText2,
+								$text = $Text2,
+								]" />
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=5,
+								$colSpan=1,
+								$halign='center',
+								$text = $Relation,
+								 $color=table[ $r = 200, $g = 200, $b = 200, $a = 100 ],
+								]" />
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_StatusBar" param="table[
+								$col			= 6,
+								$colSpan		= 2,
+								$scaling		= true,
+								$type			= 'statusbar',
+								$start			= 30,
+								$current		= $Current,
+								$max			= 60,
+								$valueColor		= $RelationColor,
+								$posChangeColor	= $PositiveColor,
+								$negChangeColor	= $NegativeColor,
+								]" />	
+						</do_if>
+					</actions>				
+				</library>
+				
+				<library name="AddFactionMilStrengthRows">
+					<actions>
+						<do_if value="$FactionOne" >
+							<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" />
+							<find_ship name="$XLShips" multiple="true" operational="true" primarypurpose="purpose.fight" class="class.ship_xl" space="player.galaxy" owner="$FactionOne" />
+							<find_ship name="$LShips" multiple="true" operational="true" primarypurpose="purpose.fight" class="class.ship_l" space="player.galaxy" owner="$FactionOne" />
+							<find_ship name="$MShips" multiple="true" operational="true" primarypurpose="purpose.fight" class="class.ship_m" space="player.galaxy" owner="$FactionOne" />
+							<find_ship name="$SShips" multiple="true" operational="true" primarypurpose="purpose.fight" class="class.ship_m" space="player.galaxy" owner="$FactionOne" />
+							<set_value name="$TotalShips" exact="$XLShips.count + $LShips.count + $MShips.count + $SShips.count" />
+							
+							<set_value name="$Text" exact="$FactionOne.knownname" />
+							<set_value name="$Text2" exact="{33232471,405}.[(if $TotalShips gt 0 then $TotalShips else 0)]" comment="Total mil Ships" />
+							<set_value name="$Text3" exact="{33232471,406}.[(if $XLShips.count gt 0 then $XLShips.count else 0)]" comment="Total XL mil Ships" />
+							<set_value name="$Text4" exact="{33232471,407}.[(if $LShips.count gt 0 then $LShips.count else 0)]" comment="Total L mil Ships" />
+							<set_value name="$Text5" exact="{33232471,408}.[(if $MShips.count gt 0 then $MShips.count else 0)]" comment="Total M mil Ships" />
+							<set_value name="$Text6" exact="{33232471,409}.[(if $SShips.count gt 0 then $SShips.count else 0)]" comment="Total S mil Ships" />
+
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=1,
+								$colSpan=2,
+								$text = $Text,
+								]" />
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=3,
+								$colSpan=1,
+								$text = $Text2,
+								]" />
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=4,
+								$colSpan=1,
+								$text = $Text3,
+								]" />
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=5,
+								$colSpan=1,
+								$text = $Text4,
+								]" />
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=6,
+								$colSpan=1,
+								$text = $Text5,
+								]" />
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=7,
+								$colSpan=1,
+								$text = $Text6,
+								]" />
+						</do_if>
+					</actions>				
+				</library>
+				
+				<library name="AddFactionEconStrengthRows">
+					<actions>
+						<do_if value="$FactionOne" >
+							<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" />
+							<find_ship name="$XLShips" multiple="true" operational="true" primarypurpose="purpose.trade" class="class.ship_xl" space="player.galaxy" owner="$FactionOne" />
+							<find_ship name="$XLShips" multiple="true" operational="true" primarypurpose="purpose.build" class="class.ship_xl" space="player.galaxy" owner="$FactionOne" append="true" />
+							<find_ship name="$LShips" multiple="true" operational="true" primarypurpose="purpose.trade" class="class.ship_l" space="player.galaxy" owner="$FactionOne" />
+							<find_ship name="$MShips" multiple="true" operational="true" primarypurpose="purpose.trade" class="class.ship_m" space="player.galaxy" owner="$FactionOne" />
+							<find_ship name="$SShips" multiple="true" operational="true" primarypurpose="purpose.trade" class="class.ship_m" space="player.galaxy" owner="$FactionOne" />
+							<find_station name="$Stations" multiple="true" operational="true" space="player.galaxy" owner="$FactionOne" />
+							<set_value name="$TotalShips" exact="$XLShips.count + $LShips.count + $MShips.count + $SShips.count" />
+							
+							<set_value name="$Text" exact="$FactionOne.knownname" />
+							<set_value name="$MouseOverText" exact="$FactionOne.knownname" />
+							<set_value name="$Text2" exact="{33232471,405}.[(if $TotalShips gt 0 then $TotalShips else 0)]" comment="Total econ Ships" />
+							<set_value name="$Text3" exact="{33232471,406}.[(if $XLShips.count gt 0 then $XLShips.count else 0)]" comment="Total XL econ Ships" />
+							<set_value name="$MouseOverText3" exact="{33232471,410}" />
+							<set_value name="$Text4" exact="{33232471,407}.[(if $LShips.count gt 0 then $LShips.count else 0)]" comment="Total L econ Ships" />
+							<set_value name="$Text5" exact="{33232471,408}.[(if $MShips.count gt 0 then $MShips.count else 0)]" comment="Total M econ Ships" />
+							<set_value name="$Text6" exact="{33232471,409}.[(if $SShips.count gt 0 then $SShips.count else 0)]" comment="Total S econ Ships" />
+							<set_value name="$Text7" exact="{33232471,411}.[(if $Stations.count gt 0 then $Stations.count else 0)]" comment="Total Stations" />
+
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=1,
+								$colSpan=2,
+								$mouseOverText=$MouseOverText,
+								$text = $Text,
+								]" />
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=3,
+								$colSpan=1,
+								$text = $Text2,
+								]" />
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=4,
+								$colSpan=1,
+								$mouseOverText=$MouseOverText3,
+								$text = $Text3,
+								]" />
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=5,
+								$colSpan=1,
+								$text = $Text4,
+								]" />
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=6,
+								$colSpan=1,
+								$text = $Text5,
+								]" />
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=7,
+								$colSpan=1,
+								$text = $Text6,
+								]" />
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=8,
+								$colSpan=1,
+								$text = $Text7,
+								]" />
+						</do_if>
+					</actions>				
+				</library>
+			</cues>
+		</cue>
+	</cues>
+</mdscript>
