@@ -16,3 +16,4 @@
 
 ##### Save game compatible.
 ##### Installation: extract to x4 foundations\extensions
+##### Requires SirNukes Mod support API found at https://github.com/bvbohnen/x4-projects/releases
