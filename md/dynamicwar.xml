@@ -39,6 +39,7 @@
 						<event_cue_signalled/>
 					</conditions>
 					<actions>
+						<set_value name="$DynamicWarDebugChance" exact="false" />
 						<do_if value="$DynamicWarEvent?">
 							<remove_value name="$DynamicWarEvent" />
 						</do_if>
@@ -70,7 +71,7 @@
 							<do_all exact="$Claimspacelist.count" counter="$ClaimspacelistDebugCounter">
 								<set_value name="$ClaimspacelistDebug" exact="$ClaimspacelistDebug + ' #' + $ClaimspacelistDebugCounter + ' ' + $Claimspacelist.{$ClaimspacelistDebugCounter}" />
 							</do_all>
-							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="$ClaimspacelistDebug" output="false" append="true" />
+							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="$ClaimspacelistDebug" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 							<remove_value name="$ClaimspacelistDebug" />
 							<remove_value name="$ClaimspacelistDebugCounter" />
 							<append_list_elements name="$Peacefullist" other="$ExcludedFactions" />
@@ -92,8 +93,8 @@
 							<do_all exact="$Claimspacelist.count" counter="$ClaimspacelistDebugCounter">
 								<set_value name="$ClaimspacelistDebug" exact="$ClaimspacelistDebug + ' #' + $ClaimspacelistDebugCounter + ' ' + $Claimspacelist.{$ClaimspacelistDebugCounter}" />
 							</do_all>
-							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="$ClaimspacelistDebug" output="false" append="true" />
-							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="' '" output="false" append="true" />
+							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="$ClaimspacelistDebug" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
+							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="' '" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 							<remove_value name="$ClaimspacelistDebug" />
 							<remove_value name="$ClaimspacelistDebugCounter" />
 							<!-- Shuffle! -->
@@ -157,19 +158,19 @@
 							</do_any>
 							<!-- print out the results for debug -->
 							<set_value name="$FactionSelectionDebug" exact="player.age + ' - ' + $DynamicWarEvent + ' - ' + $DynamicWarEventFaction + ' and ' + $DynamicWarEventFactionTwo" />
-							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="$FactionSelectionDebug" output="false" append="true" />
+							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="$FactionSelectionDebug" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 							<set_value name="$FactionSelectionDebug" exact="player.age + ' DynamicWarEventFactionTwo possibilities: '" />
 							<do_all exact="$Claimspacelist.count" counter="$ClaimspacelistDebugCounter">
 								<set_value name="$FactionSelectionDebug" exact="$FactionSelectionDebug + ' #' + $ClaimspacelistDebugCounter + ' ' + $Claimspacelist.{$ClaimspacelistDebugCounter} + ' MilStrengthFactor: ' + $PossibleFactionMilStrength.{$ClaimspacelistDebugCounter} + ' MiscFactor: ' + $PossibleFactionMiscModifierList.{$ClaimspacelistDebugCounter}" />
 							</do_all>
-							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="$FactionSelectionDebug" output="false" append="true" />
+							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="$FactionSelectionDebug" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 							<set_value name="$FactionSelectionDebug" exact="player.age + ' DynamicWarEventFactionTwo chance: '" />
 							<remove_value name="$ClaimspacelistDebugCounter" />
 							<do_all exact="$Claimspacelist.count" counter="$ClaimspacelistDebugCounter">
 								<set_value name="$FactionSelectionDebug" exact="$FactionSelectionDebug + ' #' + $ClaimspacelistDebugCounter + ' ' + $Claimspacelist.{$ClaimspacelistDebugCounter} + ' Chance: ' + $PossibleFactionChance.{$ClaimspacelistDebugCounter}" />
 							</do_all>
-							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="$FactionSelectionDebug" output="false" append="true" />
-							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="' '" output="false" append="true" />
+							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="$FactionSelectionDebug" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
+							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="' '" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 							<remove_value name="$FactionSelectionDebug" />
 							<remove_value name="$ClaimspacelistDebugCounter" />
 							<!-- Update chance factor -->
@@ -179,8 +180,8 @@
 						</do_if>
 						<do_if value="$DynamicWarEvent == 'Nothing'">
 							<set_value name="$NothingDebug" exact="player.age + ' - ' + $DynamicWarEvent" />
-							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="$NothingDebug" output="false" append="true" />
-							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="' '" output="false" append="true" />
+							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="$NothingDebug" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
+							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="' '" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 						</do_if>
 						<!-- Clean up since this round is done -->
 						<remove_value name="$DynamicWarEvent" />
@@ -203,8 +204,8 @@
 							<set_value name="$NewRelation" exact="([$FactionOne.relationto.{$FactionTwo}, 1].min)" />
 							<set_faction_relation faction="$FactionTwo" otherfaction="$FactionOne" value="$NewRelation" />
 							<set_value name="$BigBoostDebug" exact="$BigBoostDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
-							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$BigBoostDebug" output="false" append="true" />
-							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="' '" output="false" append="true" />
+							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$BigBoostDebug" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
+							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="' '" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 						</do_if>
 						<do_if value="$DynamicWarEvent == 'SmallBoost'">
 							<set_value name="$FactionOne" exact="$DynamicWarEventFaction" />
@@ -215,8 +216,8 @@
 							<set_value name="$NewRelation" exact="([$FactionOne.relationto.{$FactionTwo}, 1].min)" />
 							<set_faction_relation faction="$FactionTwo" otherfaction="$FactionOne" value="$NewRelation" />
 							<set_value name="$SmallBoostDebug" exact="$SmallBoostDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
-							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$SmallBoostDebug" output="false" append="true" />
-							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="' '" output="false" append="true" />
+							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$SmallBoostDebug" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
+							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="' '" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 						</do_if>
 						<do_if value="$DynamicWarEvent == 'SmallBlow'">
 							<set_value name="$FactionOne" exact="$DynamicWarEventFaction" />
@@ -227,8 +228,8 @@
 							<set_value name="$NewRelation" exact="([$FactionOne.relationto.{$FactionTwo}, -1].max)" />
 							<set_faction_relation faction="$FactionTwo" otherfaction="$FactionOne" value="$NewRelation" />
 							<set_value name="$SmallBlowDebug" exact="$SmallBlowDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
-							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$SmallBlowDebug" output="false" append="true" />
-							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="' '" output="false" append="true" />
+							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$SmallBlowDebug" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
+							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="' '" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 						</do_if>
 						<do_if value="$DynamicWarEvent == 'BigBlow'">
 							<set_value name="$FactionOne" exact="$DynamicWarEventFaction" />
@@ -239,8 +240,8 @@
 							<set_value name="$NewRelation" exact="([$FactionOne.relationto.{$FactionTwo}, -1].max)" />
 							<set_faction_relation faction="$FactionTwo" otherfaction="$FactionOne" value="$NewRelation" />
 							<set_value name="$BigBlowDebug" exact="$BigBlowDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
-							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$BigBlowDebug" output="false" append="true" />
-							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="' '" output="false" append="true" />
+							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$BigBlowDebug" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
+							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="' '" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 						</do_if>
 						<do_if value="$DynamicWarEvent == 'Nemesis'">
 							<set_value name="$FactionOne" exact="$DynamicWarEventFaction" />
@@ -251,8 +252,8 @@
 							<set_value name="$NewRelation" exact="-1.0" />
 							<set_faction_relation faction="$FactionTwo" otherfaction="$FactionOne" value="$NewRelation" />
 							<set_value name="$NemesisDebug" exact="$NemesisDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
-							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$NemesisDebug" output="false" append="true" />
-							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="' '" output="false" append="true" />
+							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$NemesisDebug" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
+							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="' '" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 						</do_if>
 						<do_if value="$DynamicWarEvent == 'Besties'">
 							<set_value name="$FactionOne" exact="$DynamicWarEventFaction" />
@@ -263,8 +264,8 @@
 							<set_value name="$NewRelation" exact="0.99" />
 							<set_faction_relation faction="$FactionTwo" otherfaction="$FactionOne" value="$NewRelation" />
 							<set_value name="$BestiesDebug" exact="$BestiesDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
-							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$BestiesDebug" output="false" append="true" />
-							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="' '" output="false" append="true" />
+							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$BestiesDebug" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
+							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="' '" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 						</do_if>
 						<include_actions ref="DynamicWarEventNotification" />
 					</actions>
@@ -521,16 +522,16 @@
 								<find_sector groupname="$DynamicWarEventFactionSectors" space="player.galaxy" multiple="true" owner="$DynamicWarEventFaction" append="true" />
 								<!-- print out results for debug -->
 								<set_value name="$MilStrengthDebug" exact="player.age + ' - ' + $DynamicWarEvent + ' - ' + $DynamicWarEventFaction + ' - Ships: ' + $DynamicWarEventFactionMilShips.count + ' - Sectors: ' + $DynamicWarEventFactionSectors.count" />
-								<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="$MilStrengthDebug" output="false" append="true" />
-								<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="' '" output="false" append="true" />
+								<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="$MilStrengthDebug" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
+								<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="' '" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 								<!-- Now calculate the possible factions in Claimspacelist -->
 								<do_all exact="$Claimspacelist.count" counter="$ClaimspaceCounter">
 									<find_ship_by_true_owner groupname="$PossibleFactionMilShips" space="player.galaxy" multiple="true" faction="$Claimspacelist.{$ClaimspaceCounter}" primarypurpose="purpose.fight" append="true" />
 									<find_sector groupname="$PossibleFactionSectors" space="player.galaxy" multiple="true" owner="$Claimspacelist.{$ClaimspaceCounter}" append="true" />
 									<append_to_list name="$PossibleFactionMilStrength" exact="[((($DynamicWarEventFactionMilShips.count)f / ($PossibleFactionMilShips.count)f) * (($DynamicWarEventFactionSectors.count)f / ($PossibleFactionSectors.count)f)), 3].min" />
 									<set_value name="$MilStrengthDebug" exact="player.age + ' - ' + $Claimspacelist.{$ClaimspaceCounter}.name + ' - Ships: ' + $PossibleFactionMilShips.count + ' - Sectors: ' + $PossibleFactionSectors.count + ' - MilStrengthFactor: ' + $PossibleFactionMilStrength.{$ClaimspaceCounter}" />
-									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="$MilStrengthDebug" output="false" append="true" />
-									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="' '" output="false" append="true" />
+									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="$MilStrengthDebug" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
+									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="' '" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 									<remove_value name="$PossibleFactionMilShips" />
 									<remove_value name="$PossibleFactionSectors" />
 									<remove_value name="$MilStrengthDebug" />
@@ -546,16 +547,16 @@
 								<find_sector groupname="$DynamicWarEventFactionSectors" space="player.galaxy" multiple="true" owner="$DynamicWarEventFaction" append="true" />
 								<!-- print out results for debug -->
 								<set_value name="$MilStrengthDebug" exact="player.age + ' - ' + $DynamicWarEvent + ' - ' + $DynamicWarEventFaction + ' - Ships: ' + $DynamicWarEventFactionMilShips.count + ' - Sectors: ' + $DynamicWarEventFactionSectors.count" />
-								<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="$MilStrengthDebug" output="false" append="true" />
-								<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="' '" output="false" append="true" />
+								<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="$MilStrengthDebug" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
+								<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="' '" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 								<!-- Now calculate the possible factions in Claimspacelist -->
 								<do_all exact="$Claimspacelist.count" counter="$ClaimspaceCounter">
 									<find_ship_by_true_owner groupname="$PossibleFactionMilShips" space="player.galaxy" multiple="true" faction="$Claimspacelist.{$ClaimspaceCounter}" primarypurpose="purpose.fight" append="true" />
 									<find_sector groupname="$PossibleFactionSectors" space="player.galaxy" multiple="true" owner="$Claimspacelist.{$ClaimspaceCounter}" append="true" />
 									<append_to_list name="$PossibleFactionMilStrength" exact="[((($PossibleFactionMilShips.count)f / ($DynamicWarEventFactionMilShips.count)f) * (($PossibleFactionSectors.count)f / ($DynamicWarEventFactionSectors.count)f)), 3].min" />
 									<set_value name="$MilStrengthDebug" exact="player.age + ' - ' + $Claimspacelist.{$ClaimspaceCounter}.name + ' - Ships: ' + $PossibleFactionMilShips.count + ' - Sectors: ' + $PossibleFactionSectors.count + ' - MilStrengthFactor: ' + $PossibleFactionMilStrength.{$ClaimspaceCounter}" />
-									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="$MilStrengthDebug" output="false" append="true" />
-									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="' '" output="false" append="true" />
+									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="$MilStrengthDebug" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
+									<debug_to_file name="'DynamicWarCalculateMilStrengthFactor'" directory="'DynamicWar'" text="' '" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 									<remove_value name="$PossibleFactionMilShips" />
 									<remove_value name="$PossibleFactionSectors" />
 									<remove_value name="$MilStrengthDebug" />
@@ -673,8 +674,8 @@
 									<set_value name="$MiscDebug" exact="$MiscDebug + ' - $PossibleFactionMiscModifier: ' + $PossibleFactionMiscModifier" />
 									<!-- After we calculate, add it to the list and print -->
 									<set_value name="$MiscDebug" exact="$MiscDebug + ' - Common Friends/Enemies: ' + $CommonFriends + ' / ' + $CommonEnemies" />
-									<debug_to_file name="'DynamicWarCalculateMisc'" directory="'DynamicWar'" text="$MiscDebug" output="false" append="true" />
-									<debug_to_file name="'DynamicWarCalculateMisc'" directory="'DynamicWar'" text="' '" output="false" append="true" />
+									<debug_to_file name="'DynamicWarCalculateMisc'" directory="'DynamicWar'" text="$MiscDebug" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
+									<debug_to_file name="'DynamicWarCalculateMisc'" directory="'DynamicWar'" text="' '" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 									<append_to_list name="$PossibleFactionMiscModifierList" exact="$PossibleFactionMiscModifier" />
 									<remove_value name="$PossibleFactionMiscModifier" />
 									<remove_value name="$EnemiesCounter" />
@@ -729,8 +730,8 @@
 									<set_value name="$MiscDebug" exact="$MiscDebug + ' - $PossibleFactionMiscModifier: ' + $PossibleFactionMiscModifier" />
 									<!-- After we calculate, add it to the list and print -->
 									<set_value name="$MiscDebug" exact="$MiscDebug + ' - Common Friends/Enemies: ' + $CommonFriends + ' / ' + $CommonEnemies" />
-									<debug_to_file name="'DynamicWarCalculateMisc'" directory="'DynamicWar'" text="$MiscDebug" output="false" append="true" />
-									<debug_to_file name="'DynamicWarCalculateMisc'" directory="'DynamicWar'" text="' '" output="false" append="true" />
+									<debug_to_file name="'DynamicWarCalculateMisc'" directory="'DynamicWar'" text="$MiscDebug" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
+									<debug_to_file name="'DynamicWarCalculateMisc'" directory="'DynamicWar'" text="' '" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 									<append_to_list name="$PossibleFactionMiscModifierList" exact="$PossibleFactionMiscModifier" />
 									<remove_value name="$PossibleFactionMiscModifier" />
 									<remove_value name="$EnemiesCounter" />
