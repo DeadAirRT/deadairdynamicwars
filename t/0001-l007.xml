@@ -165,7 +165,7 @@
  
  <t id="400">(UI STUFF)</t>
  <!--Faction Information-->
- <t id="401">Информация фракции</t>
+ <t id="401">Информация фракций</t>
  <!--Relations-->
  <t id="402">Отношения</t>
  <!--Military Strength-->
@@ -185,6 +185,6 @@
  <!--XL Trading and Building Ships-->
  <t id="410">XL Торговые и строительные корабли</t>
  <!--Station: ' + (if $Stations.count gt 0 then $Stations.count else 0)-->
- <t id="411">Станции: %1</t>
+ <t id="411">Станц.: %1</t>
 </page>
 </language>
