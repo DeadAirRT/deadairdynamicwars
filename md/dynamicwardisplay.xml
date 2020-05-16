@@ -180,7 +180,7 @@
 							<find_ship name="$XLShips" multiple="true" operational="true" primarypurpose="purpose.fight" class="class.ship_xl" space="player.galaxy" owner="$FactionOne" />
 							<find_ship name="$LShips" multiple="true" operational="true" primarypurpose="purpose.fight" class="class.ship_l" space="player.galaxy" owner="$FactionOne" />
 							<find_ship name="$MShips" multiple="true" operational="true" primarypurpose="purpose.fight" class="class.ship_m" space="player.galaxy" owner="$FactionOne" />
-							<find_ship name="$SShips" multiple="true" operational="true" primarypurpose="purpose.fight" class="class.ship_m" space="player.galaxy" owner="$FactionOne" />
+							<find_ship name="$SShips" multiple="true" operational="true" primarypurpose="purpose.fight" class="class.ship_s" space="player.galaxy" owner="$FactionOne" />
 							<set_value name="$TotalShips" exact="$XLShips.count + $LShips.count + $MShips.count + $SShips.count" />
 							
 							<set_value name="$Text" exact="$FactionOne.knownname" />
@@ -228,22 +228,46 @@
 					<actions>
 						<do_if value="$FactionOne" >
 							<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" />
-							<find_ship name="$XLShips" multiple="true" operational="true" primarypurpose="purpose.trade" class="class.ship_xl" space="player.galaxy" owner="$FactionOne" />
-							<find_ship name="$XLShips" multiple="true" operational="true" primarypurpose="purpose.build" class="class.ship_xl" space="player.galaxy" owner="$FactionOne" append="true" />
-							<find_ship name="$LShips" multiple="true" operational="true" primarypurpose="purpose.trade" class="class.ship_l" space="player.galaxy" owner="$FactionOne" />
-							<find_ship name="$MShips" multiple="true" operational="true" primarypurpose="purpose.trade" class="class.ship_m" space="player.galaxy" owner="$FactionOne" />
-							<find_ship name="$SShips" multiple="true" operational="true" primarypurpose="purpose.trade" class="class.ship_m" space="player.galaxy" owner="$FactionOne" />
+							<!-- XL -->
+							<find_ship name="$XLTradeShips" multiple="true" operational="true" primarypurpose="purpose.trade" class="class.ship_xl" space="player.galaxy" owner="$FactionOne" />
+							<set_value name="$MouseOverText3a" exact="{1001,9010} + ':' + (if $XLTradeShips.count then $XLTradeShips.count else 0)" />
+							<find_ship name="$XLBuildShips" multiple="true" operational="true" primarypurpose="purpose.build" class="class.ship_xl" space="player.galaxy" owner="$FactionOne"/>
+							<set_value name="$MouseOverText3b" exact="{1001,9012} + ':' + (if $XLBuildShips.count then $XLBuildShips.count else 0)" />
+							<set_value name="$XLShips" exact="(if $XLTradeShips.count then $XLTradeShips.count else 0) + (if $XLBuildShips.count then $XLBuildShips.count else 0)" />
+							<set_value name="$MouseOverText3" exact="$FactionOne.knownname + ' ' + {1001,48} + ': ' + $MouseOverText3a + ' ' + $MouseOverText3b" />
+							<!-- L -->
+							<find_ship name="$LTradeShips" multiple="true" operational="true" primarypurpose="purpose.trade" class="class.ship_l" space="player.galaxy" owner="$FactionOne" />
+							<set_value name="$MouseOverText4a" exact="{1001,9010} + ':' + (if $LTradeShips.count then $LTradeShips.count else 0)" />
+							<find_ship name="$LMineShips" multiple="true" operational="true" primarypurpose="purpose.mine" class="class.ship_l" space="player.galaxy" owner="$FactionOne" />
+							<set_value name="$MouseOverText4b" exact="{1001,9013} + ':' + (if $LMineShips.count then $LMineShips.count else 0)" />
+							<set_value name="$LShips" exact="(if $LTradeShips.count then $LTradeShips.count else 0) + (if $LMineShips.count then $LMineShips.count else 0)" />
+							<set_value name="$MouseOverText4" exact="$FactionOne.knownname + ' ' + {1001,49} + ': ' + $MouseOverText4a + ' ' + $MouseOverText4b" />
+							<!-- M -->
+							<find_ship name="$MTradeShips" multiple="true" operational="true" primarypurpose="purpose.trade" class="class.ship_m" space="player.galaxy" owner="$FactionOne" />
+							<set_value name="$MouseOverText5a" exact="{1001,9010} + ':' + (if $MTradeShips.count then $MTradeShips.count else 0)" />
+							<find_ship name="$MMineShips" multiple="true" operational="true" primarypurpose="purpose.mine" class="class.ship_m" space="player.galaxy" owner="$FactionOne" />
+							<set_value name="$MouseOverText5b" exact="{1001,9013} + ':' + (if $MMineShips.count then $MMineShips.count else 0)" />
+							<set_value name="$MShips" exact="(if $MTradeShips.count then $MTradeShips.count else 0) + (if $MMineShips.count then $MMineShips.count else 0)" />
+							<set_value name="$MouseOverText5" exact="$FactionOne.knownname + ' ' + {1001,50} + ': ' + $MouseOverText5a + ' ' + $MouseOverText5b" />
+							<!-- S -->
+							<find_ship name="$STradeShips" multiple="true" operational="true" primarypurpose="purpose.trade" class="class.ship_s" space="player.galaxy" owner="$FactionOne" />
+							<set_value name="$MouseOverText6a" exact="{1001,9010} + ':' + (if $STradeShips.count then $STradeShips.count else 0)" />
+							<find_ship name="$SMineShips" multiple="true" operational="true" primarypurpose="purpose.mine" class="class.ship_s" space="player.galaxy" owner="$FactionOne" />
+							<set_value name="$MouseOverText6b" exact="{1001,9013} + ':' + (if $SMineShips.count then $SMineShips.count else 0)" />
+							<set_value name="$SShips" exact="(if $STradeShips.count then $STradeShips.count else 0) + (if $SMineShips.count then $SMineShips.count else 0)" />
+							<set_value name="$MouseOverText6" exact="$FactionOne.knownname + ' ' + {1001,51} + ': ' + $MouseOverText6a + ' ' + $MouseOverText6b" />
+							<!-- Stations -->
 							<find_station name="$Stations" multiple="true" operational="true" space="player.galaxy" owner="$FactionOne" />
-							<set_value name="$TotalShips" exact="$XLShips.count + $LShips.count + $MShips.count + $SShips.count" />
+							<!-- Total -->
+							<set_value name="$TotalShips" exact="$XLShips + $LShips + $MShips + $SShips" />
 							
 							<set_value name="$Text" exact="$FactionOne.knownname" />
 							<set_value name="$MouseOverText" exact="$FactionOne.knownname" />
 							<set_value name="$Text2" exact="{33232471,405}.[(if $TotalShips gt 0 then $TotalShips else 0)]" comment="Total econ Ships" />
-							<set_value name="$Text3" exact="{33232471,406}.[(if $XLShips.count gt 0 then $XLShips.count else 0)]" comment="Total XL econ Ships" />
-							<set_value name="$MouseOverText3" exact="{33232471,410}" />
-							<set_value name="$Text4" exact="{33232471,407}.[(if $LShips.count gt 0 then $LShips.count else 0)]" comment="Total L econ Ships" />
-							<set_value name="$Text5" exact="{33232471,408}.[(if $MShips.count gt 0 then $MShips.count else 0)]" comment="Total M econ Ships" />
-							<set_value name="$Text6" exact="{33232471,409}.[(if $SShips.count gt 0 then $SShips.count else 0)]" comment="Total S econ Ships" />
+							<set_value name="$Text3" exact="{33232471,406}.[(if $XLShips gt 0 then $XLShips else 0)]" comment="Total XL econ Ships" />
+							<set_value name="$Text4" exact="{33232471,407}.[(if $LShips gt 0 then $LShips else 0)]" comment="Total L econ Ships" />
+							<set_value name="$Text5" exact="{33232471,408}.[(if $MShips gt 0 then $MShips else 0)]" comment="Total M econ Ships" />
+							<set_value name="$Text6" exact="{33232471,409}.[(if $SShips gt 0 then $SShips else 0)]" comment="Total S econ Ships" />
 							<set_value name="$Text7" exact="{33232471,411}.[(if $Stations.count gt 0 then $Stations.count else 0)]" comment="Total Stations" />
 
 							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
@@ -266,16 +290,19 @@
 							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
 								$col=5,
 								$colSpan=1,
+								$mouseOverText=$MouseOverText4,
 								$text = $Text4,
 								]" />
 							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
 								$col=6,
 								$colSpan=1,
+								$mouseOverText=$MouseOverText5,
 								$text = $Text5,
 								]" />
 							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
 								$col=7,
 								$colSpan=1,
+								$mouseOverText=$MouseOverText6,
 								$text = $Text6,
 								]" />
 							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[

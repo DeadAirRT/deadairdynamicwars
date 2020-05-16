@@ -5,7 +5,6 @@
       <conditions>
         <check_any>
           <event_conversation_started conversation="default"/>
-          <event_conversation_returned_to_section section="default"/>
         </check_any>
         <check_value value="(event.object.controlpost == controlpost.manager) or (event.object.type == entitytype.factionrepresentative)"/>
       </conditions>
@@ -24,7 +23,10 @@
       <actions>
         <add_player_choice_sub text="{33232471,302}" section="DWC_Main_SelectFaction"/>
 		<add_player_choice_sub text="{33232471,303}" section="DWC_Main_Askrelations"/>
-		<do_if value="event.object.owner == faction.player">
+		<do_if value="event.object.type == entitytype.factionrepresentative and event.object.trueowner.relationto.{faction.player} ge 0.1">
+			<add_player_choice_sub text="{33232471,304}" section="DWC_Main_SetAIrelations"/>
+		</do_if>
+		<do_if value="event.object.trueowner == faction.player">
 			<add_player_choice_sub text="{33232471,304}" section="DWC_Main_Setplayerrelations"/>
 		</do_if>
         <add_player_choice_return position="bottom_right" text="{33232471,305}"/>
@@ -50,14 +52,14 @@
         </do_else>
         
         <do_if value="event.param2.{3} != null and event.param2.{4} != null">
-          <reward_player money="(event.param2.{4})Cr * -1"/>
-          <set_faction_relation faction="event.param2.{2}" otherfaction="event.object.owner" value="0"/>
-          <set_faction_relation faction="event.object.owner" otherfaction="event.param2.{2}" value="0"/>
+          <reward_player money="event.param2.{4} * -1"/>
+          <set_faction_relation faction="event.param2.{2}" otherfaction="event.object.trueowner" value="0"/>
+          <set_faction_relation faction="event.object.trueowner" otherfaction="event.param2.{2}" value="0"/>
         </do_if>
 
         <set_value name="$validFactions" exact="[faction.alliance, faction.antigone, faction.argon, faction.buccaneers, faction.court, faction.fallensplit, faction.freesplit, faction.hatikvah, faction.holyorder, faction.ministry, faction.paranid, faction.scaleplate, faction.split, faction.teladi, faction.trinity]"/>
         <do_all exact="$validFactions.count" counter="$i" reverse="true">
-          <do_if value="($validFactions.{$i}.relationto.{event.object.owner} ge 0) or ($validFactions.{$i} == event.object.owner)">
+          <do_if value="($validFactions.{$i}.relationto.{event.object.trueowner} ge 0) or ($validFactions.{$i} == event.object.trueowner)">
             <remove_value name="$validFactions.{$i}"/>
           </do_if>
         </do_all>
@@ -68,14 +70,14 @@
           </do_if>
           <set_value name="$price" exact="0"/>
           <set_value name="$faction" exact="$validFactions.{$actuallSiteItemId}"/>
-          <set_value name="$relation" exact="$faction.relationto.{event.object.owner}"/>
+          <set_value name="$relation" exact="$faction.relationto.{event.object.trueowner}"/>
           <include_actions ref="DWC_Main_CalculatePrice"/>
           <do_if value="$faction != null">
-            <do_if value="player.money gt ($price)Cr">
-              <add_player_choice text="'%1 (%2M)'.[$faction.name, ($price / 1000000)i]" position="$i" choiceparam="[$actuallSiteItemId, $faction, $relation, $price]" section="DWC_Main_SelectFaction"/>
+            <do_if value="player.money gt ($price)">
+              <add_player_choice text="'%1 (%2 %3)'.[$faction.name,($price/100),{1001,101}]" position="$i" choiceparam="[$actuallSiteItemId, $faction, $relation, $price]" section="DWC_Main_SelectFaction"/>
             </do_if>
             <do_else>
-              <add_player_choice text="'%1 (%2M)'.[$faction.name, ($price / 1000000)i]" position="$i" selectable="false" choiceparam="[$actuallSiteItemId, $faction, $relation, $price]" section="DWC_Main_SelectFaction"/>
+              <add_player_choice text="'%1 (%2 %3)'.[$faction.name,($price/100),{1001,101}]" position="$i" selectable="false" choiceparam="[$actuallSiteItemId, $faction, $relation, $price]" section="DWC_Main_SelectFaction"/>
             </do_else>
           </do_if>
         </do_all>
@@ -107,34 +109,34 @@
 			</do_if>
 		</do_all>
 		-->
-		<set_value name="$NetWorth" exact="$NetWorth + (player.money / 1Cr)" />
+		<set_value name="$NetWorth" exact="player.money" />
 		<!-- -1 to > -5 --><!-- 1000000Cr or 1% -->
 		<do_if value="$relation le -0.00064 and $relation gt -0.0032">
-          <set_value name="$price" exact="[1000000Cr, ($NetWorth * 1 / 100) / 1Cr].max"/>
+          <set_value name="$price" exact="[1000000Cr, ($NetWorth * 1 / 100)].max"/>
         </do_if>
 		<!-- -5 to > -10 --><!-- 3200000Cr or 5% -->
         <do_elseif value="$relation le -0.0032 and $relation gt -0.01">
-          <set_value name="$price" exact="[3200000Cr, ($NetWorth * 5 / 100) / 1Cr].max"/>
+          <set_value name="$price" exact="[3200000Cr, ($NetWorth * 5 / 100)].max"/>
         </do_elseif>
 		<!-- -10 to > -15 --><!-- 10000000Cr or 10% -->
         <do_elseif value="$relation le -0.01 and $relation gt -0.032">
-          <set_value name="$price" exact="[10000000Cr, ($NetWorth * 10 / 100) / 1Cr].max"/>
+          <set_value name="$price" exact="[10000000Cr, ($NetWorth * 10 / 100)].max"/>
         </do_elseif>
 		<!-- -15 to > -20 --><!-- 32000000Cr or 15% -->
         <do_elseif value="$relation le -0.032 and $relation gt -0.1">
-          <set_value name="$price" exact="[32000000Cr, ($NetWorth * 15 / 100) / 1Cr].max"/>
+          <set_value name="$price" exact="[32000000Cr, ($NetWorth * 15 / 100)].max"/>
         </do_elseif>
 		<!-- -20 to > -25 --><!-- 50000000Cr or 20% -->
         <do_elseif value="$relation le -0.1 and $relation gt -0.32">
-          <set_value name="$price" exact="[50000000Cr, ($NetWorth * 20 / 100) / 1Cr].max"/>
+          <set_value name="$price" exact="[50000000Cr, ($NetWorth * 20 / 100)].max"/>
         </do_elseif>
 		<!-- -20 to > -30 --><!-- 100000000Cr or 25% -->
 		<do_elseif value="$relation le -0.32 and $relation gt -1">
-          <set_value name="$price" exact="[100000000Cr, ($NetWorth * 25 / 100) / 1Cr].max"/>
+          <set_value name="$price" exact="[100000000Cr, ($NetWorth * 25 / 100)].max"/>
         </do_elseif>
 		<!-- -30 --><!-- 150000000Cr or 30% -->
 		<do_elseif value="$relation le -1">
-          <set_value name="$price" exact="[150000000Cr, ($NetWorth * 30 / 100) / 1 Cr].max"/>
+          <set_value name="$price" exact="[150000000Cr, ($NetWorth * 30 / 100)].max"/>
         </do_elseif>
       </actions>
     </library>
@@ -159,7 +161,7 @@
 
 		<set_value name="$validFactions" exact="[faction.alliance, faction.antigone, faction.argon, faction.buccaneers, faction.court, faction.fallensplit, faction.freesplit, faction.hatikvah, faction.holyorder, faction.ministry, faction.paranid, faction.scaleplate, faction.split, faction.teladi, faction.trinity]"/>
         <do_all exact="$validFactions.count" counter="$j" reverse="true">
-          <do_if value="($validFactions.{$j} == event.object.owner)">
+          <do_if value="($validFactions.{$j} == event.object.trueowner)">
             <remove_value name="$validFactions.{$j}"/>
           </do_if>
         </do_all>
@@ -169,9 +171,9 @@
             <break/>
           </do_if>
           <set_value name="$faction" exact="$validFactions.{$actuallSiteItemId}"/>
-          <set_value name="$relation" exact="$faction.relationto.{event.object.owner}"/>
+          <set_value name="$relation" exact="$faction.relationto.{event.object.trueowner}"/>
           <do_if value="$faction != null">
-              <add_player_choice text="{33232471,316}.[$faction.name, ($faction.relation.{$faction.relationto.{event.object.owner}}.uivalue)]" position="$j" selectable="false" choiceparam="[$actuallSiteItemId, $faction, $relation]" section="DWC_Main_Askrelations"/>
+              <add_player_choice text="{33232471,316}.[$faction.name, ($faction.relation.{$faction.relationto.{event.object.trueowner}}.uivalue)]" position="$j" selectable="false" choiceparam="[$actuallSiteItemId, $faction, $relation]" section="DWC_Main_Askrelations"/>
           </do_if>
         </do_all>
 
@@ -216,9 +218,9 @@
             <break/>
           </do_if>
           <set_value name="$faction" exact="$validFactions.{$actuallSiteItemId}"/>
-          <set_value name="$relation" exact="$faction.relationto.{event.object.owner}"/>
+          <set_value name="$relation" exact="$faction.relationto.{event.object.trueowner}"/>
           <do_if value="$faction != null">
-              <add_player_choice text="{33232471,316}.[$faction.name, ($faction.relation.{$faction.relationto.{event.object.owner}}.uivalue)]" position="$k" selectable="true" choiceparam="[$actuallSiteItemId, $faction]" section="DWC_Main_Setplayerrelationschoice"/>
+              <add_player_choice text="{33232471,316}.[$faction.name, ($faction.relation.{$faction.relationto.{event.object.trueowner}}.uivalue)]" position="$k" selectable="true" choiceparam="[$actuallSiteItemId, $faction]" section="DWC_Main_Setplayerrelationschoice"/>
           </do_if>
         </do_all>
 
@@ -284,7 +286,7 @@
 				<do_if value="event.param2.{3} == 'Self'">
 					<set_value name="$relation" exact="1" />
 				</do_if>
-				<set_faction_relation faction="event.object.owner" otherfaction="$faction" value="$relation"/>
+				<set_faction_relation faction="event.object.trueowner" otherfaction="$faction" value="$relation"/>
 			</do_if>
 
 			<set_value name="$RelationLevels" exact="['Nemesis', 'Kill', 'KillMilitary', 'Enemy', 'Neutral', 'Friend', 'Member', 'Self']"/>
@@ -292,7 +294,7 @@
 			<set_value name="$RelationNumber" exact="[-1, -0.32, -0.1, -0.01, 0, 0.01, 0.1, 1]"/>
 			
 			<do_all exact="$RelationLevels.count" counter="$l" reverse="true">
-				<do_if value="($faction.relationto.{event.object.owner}) le $RelationNumber.{$l}">
+				<do_if value="($faction.relationto.{event.object.trueowner}) le $RelationNumber.{$l}">
 					<remove_value name="$RelationLevels.{$l}"/>
 					<remove_value name="$RelationLevelsText.{$l}"/>
 				</do_if>
@@ -306,7 +308,7 @@
 				<set_value name="$RelationChoice" exact="$RelationLevels.{$actuallSiteItemId}"/>
 				<set_value name="$RelationChoiceText" exact="$RelationLevelsText.{$actuallSiteItemId}"/>
 				<do_if value="$RelationChoice != null">
-					<add_player_choice text="{33232471,316}.[$RelationChoiceText, ($faction.relation.{$faction.relationto.{event.object.owner}}.uivalue)]" position="$l" choiceparam="[$actuallSiteItemId, $faction, $RelationChoice]" section="DWC_Main_Setplayerrelationschoice"/>
+					<add_player_choice text="{33232471,316}.[$RelationChoiceText, ($faction.relation.{$faction.relationto.{event.object.trueowner}}.uivalue)]" position="$l" choiceparam="[$actuallSiteItemId, $faction, $RelationChoice]" section="DWC_Main_Setplayerrelationschoice"/>
 				</do_if>
 			</do_all>
 
@@ -318,6 +320,141 @@
 			</do_else>
 			<do_if value="$RelationLevels.count gt 4">
 				<add_player_choice text="{33232471,307}" choiceparam="'next'" position="right" section="DWC_Main_Setplayerrelationschoice"/>
+			</do_if>
+			<remove_value name="$relation"/>
+			<remove_value name="$actuallSiteItemId"/>
+		</actions>
+	</cue>
+	
+	<cue name="DWC_Main_SetAIrelations_Handler" instantiate="true">
+      <conditions>
+        <check_any>
+          <event_conversation_next_section section="DWC_Main_SetAIrelations"/>
+          <event_conversation_returned_to_section section="DWC_Main_SetAIrelations"/>
+        </check_any>
+      </conditions>
+      <actions>
+        <do_if value="event.param2 == 'previous'">
+          <set_value name="$page" operation="subtract"/>
+        </do_if>
+        <do_elseif value="event.param2 == 'next'">
+          <set_value name="$page" operation="add"/>
+        </do_elseif>
+        <do_else>
+          <set_value name="$page" exact="0"/>
+        </do_else>
+
+        <set_value name="$validFactions" exact="[faction.alliance, faction.antigone, faction.argon, faction.buccaneers, faction.court, faction.fallensplit, faction.freesplit, faction.hatikvah, faction.holyorder, faction.ministry, faction.paranid, faction.scaleplate, faction.split, faction.teladi, faction.trinity]"/>
+		<remove_from_list name="$validFactions" exact="event.object.trueowner" multiple="true"/>
+		
+        <do_all exact="4" counter="$k">
+          <set_value name="$actuallSiteItemId" exact="$k + (4 * $page)"/>
+          <do_if value="$validFactions.count lt $actuallSiteItemId">
+            <break/>
+          </do_if>
+          <set_value name="$faction" exact="$validFactions.{$actuallSiteItemId}"/>
+          <set_value name="$relation" exact="$faction.relationto.{event.object.trueowner}"/>
+          <do_if value="$faction != null">
+              <add_player_choice text="{33232471,316}.[$faction.name, ($faction.relation.{$faction.relationto.{event.object.trueowner}}.uivalue)]" position="$k" selectable="true" choiceparam="[$actuallSiteItemId, $faction]" section="DWC_Main_SetAIrelationschoice"/>
+          </do_if>
+        </do_all>
+
+        <do_if value="$page == 0">
+          <add_player_choice_return position="bottom_right" text="{33232471,305}"/>
+        </do_if>
+        <do_else>
+          <add_player_choice text="{33232471,306}" choiceparam="'previous'" position="bottom_right" section="DWC_Main_SetAIrelations"/>
+        </do_else>
+        <do_if value="$validFactions.count gt 4">
+          <add_player_choice text="{33232471,307}" choiceparam="'next'" position="right" section="DWC_Main_SetAIrelations"/>
+        </do_if>
+        <remove_value name="$relation"/>
+        <remove_value name="$faction"/>
+        <remove_value name="$actuallSiteItemId"/>
+      </actions>
+    </cue>
+	
+	<cue name="DWC_Main_SetAIrelationschoice_Handler" instantiate="true">
+		<conditions>
+			<check_any>
+				<event_conversation_next_section section="DWC_Main_SetAIrelationschoice"/>
+				<event_conversation_returned_to_section section="DWC_Main_SetAIrelationschoice"/>
+			</check_any>
+		</conditions>
+		<actions>
+			<do_if value="event.param2 == 'previous'">
+				<set_value name="$page" operation="subtract"/>
+			</do_if>
+			<do_elseif value="event.param2 == 'next'">
+				<set_value name="$page" operation="add"/>
+			</do_elseif>
+			<do_else>
+				<set_value name="$page" exact="0"/>
+			</do_else>
+			
+			<do_if value="@event.param2.{2} != null">
+				<set_value name="$faction" exact="event.param2.{2}" />
+			</do_if>
+        
+			<do_if value="@event.param2.{2} != null and @event.param2.{3} != null">
+				<do_if value="event.param2.{3} == 'Nemesis'">
+					<set_value name="$relation" exact="-1" />
+				</do_if>
+				<do_if value="event.param2.{3} == 'Kill'">
+					<set_value name="$relation" exact="-0.32" />
+				</do_if>
+				<do_if value="event.param2.{3} == 'KillMilitary'">
+					<set_value name="$relation" exact="-0.1" />
+				</do_if>
+				<do_if value="event.param2.{3} == 'Enemy'">
+					<set_value name="$relation" exact="-0.01" />
+				</do_if>
+				<do_if value="event.param2.{3} == 'Neutral'">
+					<set_value name="$relation" exact="0" />
+				</do_if>
+				<do_if value="event.param2.{3} == 'Friend'">
+					<set_value name="$relation" exact="0.01" />
+				</do_if>
+				<do_if value="event.param2.{3} == 'Member'">
+					<set_value name="$relation" exact="0.1" />
+				</do_if>
+				<do_if value="event.param2.{3} == 'Self'">
+					<set_value name="$relation" exact="1" />
+				</do_if>
+				<set_faction_relation faction="event.object.trueowner" otherfaction="$faction" value="$relation"/>
+			</do_if>
+
+			<set_value name="$RelationLevels" exact="['Nemesis', 'Kill', 'KillMilitary', 'Enemy', 'Neutral', 'Friend', 'Member', 'Self']"/>
+			<set_value name="$RelationLevelsText" exact="[{33232471,308},{33232471,309},{33232471,310},{33232471,311},{33232471,312},{33232471,313},{33232471,314},{33232471,315}]"/>
+			<set_value name="$RelationNumber" exact="[-1, -0.32, -0.1, -0.01, 0, 0.01, 0.1, 1]"/>
+			
+			<do_all exact="$RelationLevels.count" counter="$l" reverse="true">
+				<do_if value="($faction.relationto.{event.object.trueowner}) le $RelationNumber.{$l}">
+					<remove_value name="$RelationLevels.{$l}"/>
+					<remove_value name="$RelationLevelsText.{$l}"/>
+				</do_if>
+			</do_all>
+			
+			<do_all exact="4" counter="$l">
+				<set_value name="$actuallSiteItemId" exact="$l + (4 * $page)"/>
+				<do_if value="$RelationLevels.count lt $actuallSiteItemId">
+					<break/>
+				</do_if>
+				<set_value name="$RelationChoice" exact="$RelationLevels.{$actuallSiteItemId}"/>
+				<set_value name="$RelationChoiceText" exact="$RelationLevelsText.{$actuallSiteItemId}"/>
+				<do_if value="$RelationChoice != null">
+					<add_player_choice text="{33232471,316}.[$RelationChoiceText, ($faction.relation.{$faction.relationto.{event.object.trueowner}}.uivalue)]" position="$l" choiceparam="[$actuallSiteItemId, $faction, $RelationChoice]" section="DWC_Main_SetAIrelationschoice"/>
+				</do_if>
+			</do_all>
+
+			<do_if value="$page == 0">
+				<add_player_choice_return position="bottom_right" text="{33232471,305}"/>
+			</do_if>
+			<do_else>
+				<add_player_choice text="{33232471,306}" choiceparam="'previous'" position="bottom_right" section="DWC_Main_SetAIrelationschoice"/>
+			</do_else>
+			<do_if value="$RelationLevels.count gt 4">
+				<add_player_choice text="{33232471,307}" choiceparam="'next'" position="right" section="DWC_Main_SetAIrelationschoice"/>
 			</do_if>
 			<remove_value name="$relation"/>
 			<remove_value name="$actuallSiteItemId"/>
