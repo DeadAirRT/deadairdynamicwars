@@ -53,6 +53,8 @@
 							<set_value name="$DynamicWarEvent" exact="'Nemesis'" weight="5" />
 							<set_value name="$DynamicWarEvent" exact="'Nothing'" weight="1" />
 						</do_any>
+						<debug_text text="'MOD: DeadAirDynamicWar -- %1 -- Event Chosen: %2'.[player.age,$DynamicWarEvent]" 
+							context="false" filter="scripts" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 						<!-- Clean up old faction one -->
 						<do_if value="$DynamicWarEventFaction?">
 							<remove_value name="$DynamicWarEventFaction" />
@@ -119,8 +121,12 @@
 								<set_value name="$DynamicWarEventFaction" exact="if $Claimspacelist.{6}? then $Claimspacelist.{6} else null" weight="if ($Claimspacelist.{6}? and $PossibleFactionChance.{6}?) then $PossibleFactionChance.{6} else 0" />
 								<set_value name="$DynamicWarEventFaction" exact="if $Claimspacelist.{7}? then $Claimspacelist.{7} else null" weight="if ($Claimspacelist.{7}? and $PossibleFactionChance.{7}?) then $PossibleFactionChance.{7} else 0" />
 							</do_any>
+							<debug_text text="'MOD: DeadAirDynamicWar -- %1 -- Faction selected: %2 -- Chance: %3'.[player.age,$DynamicWarEventFaction,@$FactionTable.{$DynamicWarEventFaction}]" 
+								context="false" filter="scripts" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 							<!-- Remove selected faction from possible factions since it will be used again -->
 							<do_all exact="$Claimspacelist.count" counter="$ClaimspaceCounter" reverse="true">
+								<debug_text text="'MOD: DeadAirDynamicWar -- %1 -- Faction possibilities: %2 -- Chance: %3'.[player.age,$Claimspacelist.{$ClaimspaceCounter},@$FactionTable.{$Claimspacelist.{$ClaimspaceCounter}}]" 
+									context="false" filter="scripts" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 								<do_if value="$Claimspacelist.{$ClaimspaceCounter} == $DynamicWarEventFaction">
 									<remove_value name="$Claimspacelist.{$ClaimspaceCounter}" />
 								</do_if>
@@ -156,11 +162,16 @@
 								<set_value name="$DynamicWarEventFactionTwo" exact="if $Claimspacelist.{5}? then $Claimspacelist.{5} else null" weight="if ($Claimspacelist.{5}? and $PossibleFactionMilStrength.{5}? and $PossibleFactionMiscModifierList.{5} and $PossibleFactionChance.{5}?) then ($PossibleFactionChance.{5} * $PossibleFactionMilStrength.{5} * $PossibleFactionMiscModifierList.{5}) else 0" />
 								<set_value name="$DynamicWarEventFactionTwo" exact="if $Claimspacelist.{6}? then $Claimspacelist.{6} else null" weight="if ($Claimspacelist.{6}? and $PossibleFactionMilStrength.{6}? and $PossibleFactionMiscModifierList.{6} and $PossibleFactionChance.{6}?) then ($PossibleFactionChance.{6} * $PossibleFactionMilStrength.{6} * $PossibleFactionMiscModifierList.{6}) else 0" />
 							</do_any>
+							<debug_text text="'MOD: DeadAirDynamicWar -- %1 -- Factiontwo selected: %2 -- Chance: %3'.[player.age,$DynamicWarEventFactionTwo,@$FactionTable.{$DynamicWarEventFactionTwo}]" 
+								context="false" filter="scripts" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 							<!-- print out the results for debug -->
 							<set_value name="$FactionSelectionDebug" exact="player.age + ' - ' + $DynamicWarEvent + ' - ' + $DynamicWarEventFaction + ' and ' + $DynamicWarEventFactionTwo" />
 							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="$FactionSelectionDebug" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 							<set_value name="$FactionSelectionDebug" exact="player.age + ' DynamicWarEventFactionTwo possibilities: '" />
 							<do_all exact="$Claimspacelist.count" counter="$ClaimspacelistDebugCounter">
+								<debug_text text="'MOD: DeadAirDynamicWar -- %1 -- Factiontwo possibilities: %2 -- Chance: %3 -- MilStrengthFactor: %4 -- MiscFactor: %5'.[player.age,$Claimspacelist.{$ClaimspacelistDebugCounter},
+									@$FactionTable.{$Claimspacelist.{$ClaimspacelistDebugCounter}},$PossibleFactionMilStrength.{$ClaimspacelistDebugCounter},$PossibleFactionMiscModifierList.{$ClaimspacelistDebugCounter}]" 
+									context="false" filter="scripts" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 								<set_value name="$FactionSelectionDebug" exact="$FactionSelectionDebug + ' #' + $ClaimspacelistDebugCounter + ' ' + $Claimspacelist.{$ClaimspacelistDebugCounter} + ' MilStrengthFactor: ' + $PossibleFactionMilStrength.{$ClaimspacelistDebugCounter} + ' MiscFactor: ' + $PossibleFactionMiscModifierList.{$ClaimspacelistDebugCounter}" />
 							</do_all>
 							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="$FactionSelectionDebug" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
@@ -194,6 +205,9 @@
 				</cue>
 				<library name="DynamicWarEventExecute">
 					<actions>
+						<!-- Let's set the mood -->
+						<set_value name="$Mood" exact="$DynamicWarEventFaction.mood.aggression"/>
+						<set_value name="$Mood2" exact="$DynamicWarEventFactionTwo.mood.aggression"/>
 						<!--Break time -->
 						<do_if value="$DynamicWarEvent == 'BigBoost'">
 							<set_value name="$FactionOne" exact="$DynamicWarEventFaction" />
@@ -206,6 +220,16 @@
 							<set_value name="$BigBoostDebug" exact="$BigBoostDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
 							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$BigBoostDebug" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="' '" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
+							<do_any>
+								<set_faction_mood faction="$DynamicWarEventFaction" type="aggression" level="moodlevel.verylow" weight="25"/>
+								<set_faction_mood faction="$DynamicWarEventFaction" type="aggression" level="moodlevel.low" weight="25"/>
+								<set_faction_mood faction="$DynamicWarEventFaction" type="aggression" level="$Mood" weight="50"/>
+							</do_any>
+							<do_any>
+								<set_faction_mood faction="$DynamicWarEventFactionTwo" type="aggression" level="moodlevel.verylow" weight="25"/>
+								<set_faction_mood faction="$DynamicWarEventFactionTwo" type="aggression" level="moodlevel.low" weight="25"/>
+								<set_faction_mood faction="$DynamicWarEventFactionTwo" type="aggression" level="$Mood2" weight="50"/>
+							</do_any>
 						</do_if>
 						<do_if value="$DynamicWarEvent == 'SmallBoost'">
 							<set_value name="$FactionOne" exact="$DynamicWarEventFaction" />
@@ -218,6 +242,16 @@
 							<set_value name="$SmallBoostDebug" exact="$SmallBoostDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
 							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$SmallBoostDebug" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="' '" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
+							<do_any>
+								<set_faction_mood faction="$DynamicWarEventFaction" type="aggression" level="moodlevel.low" weight="25"/>
+								<set_faction_mood faction="$DynamicWarEventFaction" type="aggression" level="moodlevel.normal" weight="25"/>
+								<set_faction_mood faction="$DynamicWarEventFaction" type="aggression" level="$Mood" weight="50"/>
+							</do_any>
+							<do_any>
+								<set_faction_mood faction="$DynamicWarEventFactionTwo" type="aggression" level="moodlevel.low" weight="25"/>
+								<set_faction_mood faction="$DynamicWarEventFactionTwo" type="aggression" level="moodlevel.normal" weight="25"/>
+								<set_faction_mood faction="$DynamicWarEventFactionTwo" type="aggression" level="$Mood2" weight="50"/>
+							</do_any>
 						</do_if>
 						<do_if value="$DynamicWarEvent == 'SmallBlow'">
 							<set_value name="$FactionOne" exact="$DynamicWarEventFaction" />
@@ -230,6 +264,16 @@
 							<set_value name="$SmallBlowDebug" exact="$SmallBlowDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
 							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$SmallBlowDebug" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="' '" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
+							<do_any>
+								<set_faction_mood faction="$DynamicWarEventFaction" type="aggression" level="$Mood" weight="50"/>
+								<set_faction_mood faction="$DynamicWarEventFaction" type="aggression" level="moodlevel.normal" weight="25"/>
+								<set_faction_mood faction="$DynamicWarEventFaction" type="aggression" level="moodlevel.high" weight="25"/>
+							</do_any>
+							<do_any>
+								<set_faction_mood faction="$DynamicWarEventFactionTwo" type="aggression" level="$Mood2" weight="50"/>
+								<set_faction_mood faction="$DynamicWarEventFactionTwo" type="aggression" level="moodlevel.normal" weight="25"/>
+								<set_faction_mood faction="$DynamicWarEventFactionTwo" type="aggression" level="moodlevel.high" weight="25"/>
+							</do_any>
 						</do_if>
 						<do_if value="$DynamicWarEvent == 'BigBlow'">
 							<set_value name="$FactionOne" exact="$DynamicWarEventFaction" />
@@ -242,6 +286,16 @@
 							<set_value name="$BigBlowDebug" exact="$BigBlowDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
 							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$BigBlowDebug" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="' '" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
+							<do_any>
+								<set_faction_mood faction="$DynamicWarEventFaction" type="aggression" level="$Mood" weight="50"/>
+								<set_faction_mood faction="$DynamicWarEventFaction" type="aggression" level="moodlevel.normal" weight="25"/>
+								<set_faction_mood faction="$DynamicWarEventFaction" type="aggression" level="moodlevel.high" weight="25"/>
+							</do_any>
+							<do_any>
+								<set_faction_mood faction="$DynamicWarEventFactionTwo" type="aggression" level="$Mood2" weight="50"/>
+								<set_faction_mood faction="$DynamicWarEventFactionTwo" type="aggression" level="moodlevel.normal" weight="25"/>
+								<set_faction_mood faction="$DynamicWarEventFactionTwo" type="aggression" level="moodlevel.high" weight="25"/>
+							</do_any>
 						</do_if>
 						<do_if value="$DynamicWarEvent == 'Nemesis'">
 							<set_value name="$FactionOne" exact="$DynamicWarEventFaction" />
@@ -254,6 +308,16 @@
 							<set_value name="$NemesisDebug" exact="$NemesisDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
 							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$NemesisDebug" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="' '" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
+							<do_any>
+								<set_faction_mood faction="$DynamicWarEventFaction" type="aggression" level="$Mood" weight="50"/>
+								<set_faction_mood faction="$DynamicWarEventFaction" type="aggression" level="moodlevel.high" weight="25"/>
+								<set_faction_mood faction="$DynamicWarEventFaction" type="aggression" level="moodlevel.veryhigh" weight="25"/>
+							</do_any>
+							<do_any>
+								<set_faction_mood faction="$DynamicWarEventFactionTwo" type="aggression" level="$Mood2" weight="50"/>
+								<set_faction_mood faction="$DynamicWarEventFactionTwo" type="aggression" level="moodlevel.high" weight="25"/>
+								<set_faction_mood faction="$DynamicWarEventFactionTwo" type="aggression" level="moodlevel.veryhigh" weight="25"/>
+							</do_any>
 						</do_if>
 						<do_if value="$DynamicWarEvent == 'Besties'">
 							<set_value name="$FactionOne" exact="$DynamicWarEventFaction" />
@@ -266,7 +330,19 @@
 							<set_value name="$BestiesDebug" exact="$BestiesDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
 							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="$BestiesDebug" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 							<debug_to_file name="'DynamicWarEventExecute'" directory="'DynamicWar'" text="' '" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
+							<do_any>
+								<set_faction_mood faction="$DynamicWarEventFaction" type="aggression" level="moodlevel.verylow" weight="25"/>
+								<set_faction_mood faction="$DynamicWarEventFaction" type="aggression" level="moodlevel.low" weight="25"/>
+								<set_faction_mood faction="$DynamicWarEventFaction" type="aggression" level="$Mood" weight="50"/>
+							</do_any>
+							<do_any>
+								<set_faction_mood faction="$DynamicWarEventFactionTwo" type="aggression" level="moodlevel.verylow" weight="25"/>
+								<set_faction_mood faction="$DynamicWarEventFactionTwo" type="aggression" level="moodlevel.low" weight="25"/>
+								<set_faction_mood faction="$DynamicWarEventFactionTwo" type="aggression" level="$Mood2" weight="50"/>
+							</do_any>
 						</do_if>
+						<remove_value name="$Mood" />
+						<remove_value name="$Mood2" />
 						<include_actions ref="DynamicWarEventNotification" />
 					</actions>
 				</library>
@@ -579,7 +655,7 @@
 						<do_if value="$DynamicWarEventFaction? and $DynamicWarEventFactionTwo?">
 							<do_all exact="$FactionTableList.count" counter="$FactionTableListCounter">
 								<do_if value="($FactionTableList.{$FactionTableListCounter} == $DynamicWarEventFaction) or ($FactionTableList.{$FactionTableListCounter} == $DynamicWarEventFactionTwo)">
-									<set_value name="$FactionTable.{$FactionTableList.{$FactionTableListCounter}}" exact="if $FactionTable.{$FactionTableList.{$FactionTableListCounter}}? then [$FactionTable.{$FactionTableList.{$FactionTableListCounter}} - 15, 1].max else 5" />
+									<set_value name="$FactionTable.{$FactionTableList.{$FactionTableListCounter}}" exact="if $FactionTable.{$FactionTableList.{$FactionTableListCounter}}? then [$FactionTable.{$FactionTableList.{$FactionTableListCounter}} - 20, 1].max else 5" />
 								</do_if>
 								<do_else>
 									<set_value name="$FactionTable.{$FactionTableList.{$FactionTableListCounter}}" exact="if $FactionTable.{$FactionTableList.{$FactionTableListCounter}}? then [$FactionTable.{$FactionTableList.{$FactionTableListCounter}} + 5, 50].min else 20" />
