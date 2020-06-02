@@ -67,7 +67,9 @@
 							<!-- find factions -->
 							<get_factions_by_tag tag="tag.claimspace" result="$Claimspacelist" />
 							<create_list name="$Peacefullist" />
+							<create_list name="$VisitorList" />
 							<get_factions_by_tag tag="tag.peaceful" result="$Peacefullist" />
+							<get_factions_by_tag tag="tag.visitor" result="$VisitorList" />
 							<!-- print out the results for debug -->
 							<set_value name="$ClaimspacelistDebug" exact="player.age + ' Claimspace list unprocessed: '" />
 							<do_all exact="$Claimspacelist.count" counter="$ClaimspacelistDebugCounter">
@@ -76,6 +78,7 @@
 							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="$ClaimspacelistDebug" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 							<remove_value name="$ClaimspacelistDebug" />
 							<remove_value name="$ClaimspacelistDebugCounter" />
+							<append_list_elements name="$ExcludedFactions" other="$VisitorList" />
 							<append_list_elements name="$Peacefullist" other="$ExcludedFactions" />
 							<!-- Remove peaceful factions and excluded factions -->
 							<remove_from_list name="$Claimspacelist" list="$Peacefullist" multiple="true"/>
@@ -90,6 +93,7 @@
 							<set_value name="$FactionTableList" exact="$Claimspacelist" />
 							<remove_value name="$ClaimspaceCounter" />
 							<remove_value name="$Peacefullist" />
+							<remove_value name="$VisitorList" />
 							<!-- print out the results for debug -->
 							<set_value name="$ClaimspacelistDebug" exact="player.age + ' Claimspace list processed: '" />
 							<do_all exact="$Claimspacelist.count" counter="$ClaimspacelistDebugCounter">
@@ -189,11 +193,11 @@
 							<!-- Execute the relation changes -->
 							<include_actions ref="DynamicWarEventExecute" />
 						</do_if>
-						<do_if value="$DynamicWarEvent == 'Nothing'">
+						<do_elseif value="$DynamicWarEvent == 'Nothing'">
 							<set_value name="$NothingDebug" exact="player.age + ' - ' + $DynamicWarEvent" />
 							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="$NothingDebug" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
 							<debug_to_file name="'DynamicWarEventSelector'" directory="'DynamicWar'" text="' '" output="false" append="true" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
-						</do_if>
+						</do_elseif>
 						<!-- Clean up since this round is done -->
 						<remove_value name="$DynamicWarEvent" />
 						<remove_value name="$DynamicWarEventFaction" />
@@ -212,9 +216,14 @@
 						<do_if value="$DynamicWarEvent == 'BigBoost'">
 							<set_value name="$FactionOne" exact="$DynamicWarEventFaction" />
 							<set_value name="$FactionTwo" exact="$DynamicWarEventFactionTwo" />
+							<set_value name="$UIRelationChange" exact="10" />
+							<!-- Requires $FactionOne, $FactionTwo, and $UIRelationChange -->
+							<!-- Returns $NewAbsoluteRepValue and $AbsoluteRepValueChange -->
+							<include_actions ref="CalculateUiValueRepChange" />
+							<!-- Using $AbsoluteRepValueChange -->
 							<set_value name="$BigBoostDebug" exact="'Big Boost - ' + $FactionOne + ' and ' + $FactionTwo + ' - Before: ' + $FactionOne.relationto.{$FactionTwo}" />
 							<set_value name="$OldRelation" exact="$FactionOne.relationto.{$FactionTwo}" />
-							<set_faction_relation faction="$FactionOne" otherfaction="$FactionTwo" value="([$FactionOne.relationto.{$FactionTwo} + 0.1f, 1].min)" />
+							<set_faction_relation faction="$FactionOne" otherfaction="$FactionTwo" value="([$FactionOne.relationto.{$FactionTwo} + $AbsoluteRepValueChange, 1].min)" />
 							<set_value name="$NewRelation" exact="([$FactionOne.relationto.{$FactionTwo}, 1].min)" />
 							<set_faction_relation faction="$FactionTwo" otherfaction="$FactionOne" value="$NewRelation" />
 							<set_value name="$BigBoostDebug" exact="$BigBoostDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
@@ -231,12 +240,17 @@
 								<set_faction_mood faction="$DynamicWarEventFactionTwo" type="aggression" level="$Mood2" weight="50"/>
 							</do_any>
 						</do_if>
-						<do_if value="$DynamicWarEvent == 'SmallBoost'">
+						<do_elseif value="$DynamicWarEvent == 'SmallBoost'">
 							<set_value name="$FactionOne" exact="$DynamicWarEventFaction" />
 							<set_value name="$FactionTwo" exact="$DynamicWarEventFactionTwo" />
+							<set_value name="$UIRelationChange" exact="5" />
+							<!-- Requires $FactionOne, $FactionTwo, and $UIRelationChange -->
+							<!-- Returns $NewAbsoluteRepValue and $AbsoluteRepValueChange -->
+							<include_actions ref="CalculateUiValueRepChange" />
+							<!-- Using $AbsoluteRepValueChange -->
 							<set_value name="$SmallBoostDebug" exact="'Small Boost - ' + $FactionOne + ' and ' + $FactionTwo + ' - Before: ' + $FactionOne.relationto.{$FactionTwo}" />
 							<set_value name="$OldRelation" exact="$FactionOne.relationto.{$FactionTwo}" />
-							<set_faction_relation faction="$FactionOne" otherfaction="$FactionTwo" value="([$FactionOne.relationto.{$FactionTwo} + 0.0032f, 1].min)" />
+							<set_faction_relation faction="$FactionOne" otherfaction="$FactionTwo" value="([$FactionOne.relationto.{$FactionTwo} + $AbsoluteRepValueChange, 1].min)" />
 							<set_value name="$NewRelation" exact="([$FactionOne.relationto.{$FactionTwo}, 1].min)" />
 							<set_faction_relation faction="$FactionTwo" otherfaction="$FactionOne" value="$NewRelation" />
 							<set_value name="$SmallBoostDebug" exact="$SmallBoostDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
@@ -252,13 +266,18 @@
 								<set_faction_mood faction="$DynamicWarEventFactionTwo" type="aggression" level="moodlevel.normal" weight="25"/>
 								<set_faction_mood faction="$DynamicWarEventFactionTwo" type="aggression" level="$Mood2" weight="50"/>
 							</do_any>
-						</do_if>
-						<do_if value="$DynamicWarEvent == 'SmallBlow'">
+						</do_elseif>
+						<do_elseif value="$DynamicWarEvent == 'SmallBlow'">
 							<set_value name="$FactionOne" exact="$DynamicWarEventFaction" />
 							<set_value name="$FactionTwo" exact="$DynamicWarEventFactionTwo" />
+							<set_value name="$UIRelationChange" exact="-5" />
+							<!-- Requires $FactionOne, $FactionTwo, and $UIRelationChange -->
+							<!-- Returns $NewAbsoluteRepValue and $AbsoluteRepValueChange -->
+							<include_actions ref="CalculateUiValueRepChange" />
+							<!-- Using $AbsoluteRepValueChange -->
 							<set_value name="$SmallBlowDebug" exact="'Small Blow - ' + $FactionOne + ' and ' + $FactionTwo + ' - Before: ' + $FactionOne.relationto.{$FactionTwo}" />
 							<set_value name="$OldRelation" exact="$FactionOne.relationto.{$FactionTwo}" />
-							<set_faction_relation faction="$FactionOne" otherfaction="$FactionTwo" value="([$FactionOne.relationto.{$FactionTwo} - 0.0032f, -1].max)" />
+							<set_faction_relation faction="$FactionOne" otherfaction="$FactionTwo" value="([$FactionOne.relationto.{$FactionTwo} + $AbsoluteRepValueChange, -1].max)" />
 							<set_value name="$NewRelation" exact="([$FactionOne.relationto.{$FactionTwo}, -1].max)" />
 							<set_faction_relation faction="$FactionTwo" otherfaction="$FactionOne" value="$NewRelation" />
 							<set_value name="$SmallBlowDebug" exact="$SmallBlowDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
@@ -274,13 +293,18 @@
 								<set_faction_mood faction="$DynamicWarEventFactionTwo" type="aggression" level="moodlevel.normal" weight="25"/>
 								<set_faction_mood faction="$DynamicWarEventFactionTwo" type="aggression" level="moodlevel.high" weight="25"/>
 							</do_any>
-						</do_if>
-						<do_if value="$DynamicWarEvent == 'BigBlow'">
+						</do_elseif>
+						<do_elseif value="$DynamicWarEvent == 'BigBlow'">
 							<set_value name="$FactionOne" exact="$DynamicWarEventFaction" />
 							<set_value name="$FactionTwo" exact="$DynamicWarEventFactionTwo" />
+							<set_value name="$UIRelationChange" exact="5" />
+							<!-- Requires $FactionOne, $FactionTwo, and $UIRelationChange -->
+							<!-- Returns $NewAbsoluteRepValue and $AbsoluteRepValueChange -->
+							<include_actions ref="CalculateUiValueRepChange" />
+							<!-- Using $AbsoluteRepValueChange -->
 							<set_value name="$BigBlowDebug" exact="'Big Blow - ' + $FactionOne + ' and ' + $FactionTwo + ' - Before: ' + $FactionOne.relationto.{$FactionTwo}" />
 							<set_value name="$OldRelation" exact="$FactionOne.relationto.{$FactionTwo}" />
-							<set_faction_relation faction="$FactionOne" otherfaction="$FactionTwo" value="([$FactionOne.relationto.{$FactionTwo} - 0.1f, -1].max)" />
+							<set_faction_relation faction="$FactionOne" otherfaction="$FactionTwo" value="([$FactionOne.relationto.{$FactionTwo} + $AbsoluteRepValueChange, -1].max)" />
 							<set_value name="$NewRelation" exact="([$FactionOne.relationto.{$FactionTwo}, -1].max)" />
 							<set_faction_relation faction="$FactionTwo" otherfaction="$FactionOne" value="$NewRelation" />
 							<set_value name="$BigBlowDebug" exact="$BigBlowDebug + ' - After: ' + $FactionOne.relationto.{$FactionTwo}" />
@@ -296,8 +320,8 @@
 								<set_faction_mood faction="$DynamicWarEventFactionTwo" type="aggression" level="moodlevel.normal" weight="25"/>
 								<set_faction_mood faction="$DynamicWarEventFactionTwo" type="aggression" level="moodlevel.high" weight="25"/>
 							</do_any>
-						</do_if>
-						<do_if value="$DynamicWarEvent == 'Nemesis'">
+						</do_elseif>
+						<do_elseif value="$DynamicWarEvent == 'Nemesis'">
 							<set_value name="$FactionOne" exact="$DynamicWarEventFaction" />
 							<set_value name="$FactionTwo" exact="$DynamicWarEventFactionTwo" />
 							<set_value name="$NemesisDebug" exact="'Nemesis - ' + $FactionOne + ' and ' + $FactionTwo + ' - Before: ' + $FactionOne.relationto.{$FactionTwo}" />
@@ -318,8 +342,8 @@
 								<set_faction_mood faction="$DynamicWarEventFactionTwo" type="aggression" level="moodlevel.high" weight="25"/>
 								<set_faction_mood faction="$DynamicWarEventFactionTwo" type="aggression" level="moodlevel.veryhigh" weight="25"/>
 							</do_any>
-						</do_if>
-						<do_if value="$DynamicWarEvent == 'Besties'">
+						</do_elseif>
+						<do_elseif value="$DynamicWarEvent == 'Besties'">
 							<set_value name="$FactionOne" exact="$DynamicWarEventFaction" />
 							<set_value name="$FactionTwo" exact="$DynamicWarEventFactionTwo" />
 							<set_value name="$BestiesDebug" exact="'Besties - ' + $FactionOne + ' and ' + $FactionTwo + ' - Before: ' + $FactionOne.relationto.{$FactionTwo}" />
@@ -340,252 +364,238 @@
 								<set_faction_mood faction="$DynamicWarEventFactionTwo" type="aggression" level="moodlevel.low" weight="25"/>
 								<set_faction_mood faction="$DynamicWarEventFactionTwo" type="aggression" level="$Mood2" weight="50"/>
 							</do_any>
-						</do_if>
+						</do_elseif>
 						<remove_value name="$Mood" />
 						<remove_value name="$Mood2" />
+						<remove_value name="$UIRelationChange" />
+						<remove_value name="$NewAbsoluteRepValue" />
+						<remove_value name="$AbsoluteRepValueChange" />
 						<include_actions ref="DynamicWarEventNotification" />
 					</actions>
 				</library>
 				<library name="DynamicWarEventNotification">
 					<actions>
 						<!-- Big ups to Jack the Stripper(marksmango) for ideas-->
-						<set_value name="$FactionOneNames" exact="$DynamicWarEventFaction.name" />
+						<set_value name="$FactionOneName" exact="$FactionOne.name" />
 						<!-- Grammar is kind of important -->
 						<set_value name="$IsAre" exact="' is '" />
-						<!-- Repeat for DynamicWarEventFactionTwo -->
-						<set_value name="$FactionTwoNames" exact="$DynamicWarEventFactionTwo.name" />
+						<!-- Repeat for FactionTwo -->
+						<set_value name="$FactionTwoName" exact="$FactionTwo.name" />
 						
 						<do_if value="$DynamicWarEvent == 'BigBoost' or ($DynamicWarEvent == 'Besties')">
 							<do_if value="($OldRelation ge 0) and ($NewRelation gt 0)">
 								<do_if value="($NewRelation gt 0) and ($NewRelation lt 0.1)">
-									<set_value name="$Message" exact="{33232471,101}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+									<set_value name="$Message" exact="{33232471,101}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
 								</do_if>
-								<do_if value="($NewRelation ge 0.1) and ($NewRelation lt 1.0)">
-									<set_value name="$Message" exact="{33232471,102}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_if>
-								<do_if value="($NewRelation == 1.0)">
-									<set_value name="$Message" exact="{33232471,103}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_if>
-								<show_notification priority="6" text="$Message" />
+								<do_elseif value="($NewRelation ge 0.1) and ($NewRelation lt 0.9)">
+									<set_value name="$Message" exact="{33232471,102}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_elseif>
+								<do_elseif value="($NewRelation ge 0.9)">
+									<set_value name="$Message" exact="{33232471,103}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_elseif>
+								<show_notification priority="2" text="[[$Message,43,206,72]]" />
 								<do_any>
-									<set_value name="$FlavorText" exact="{33232471,201}.[$FactionOneNames,$FactionTwoNames]" weight="25"/>
-									<set_value name="$FlavorText" exact="{33232471,202}.[$FactionOneNames,$FactionTwoNames]" weight="25"/>
-									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
-									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+									<set_value name="$FlavorText" exact="{33232471,201}.[$FactionOneName,$FactionTwoName]" weight="25"/>
+									<set_value name="$FlavorText" exact="{33232471,202}.[$FactionOneName,$FactionTwoName]" weight="25"/>
 								</do_any>
-								<write_to_logbook category="news" title="$Message" text="$FlavorText" />
+								<write_to_logbook category="news" title="$Message" text="$FlavorText" highlighted="true" />
 							</do_if>
-							<do_if value="($OldRelation lt 0) and ($NewRelation ge 0)">
+							<do_elseif value="($OldRelation lt 0) and ($NewRelation ge 0)">
 								<do_if value="($NewRelation gt 0) and ($NewRelation lt 0.1)">
-									<set_value name="$Message" exact="{33232471,104}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+									<set_value name="$Message" exact="{33232471,104}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
 								</do_if>
-								<do_if value="($NewRelation ge 0.1) and ($NewRelation lt 1.0)">
-									<set_value name="$Message" exact="{33232471,105}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_if>
-								<do_if value="($NewRelation == 1.0)">
-									<set_value name="$Message" exact="{33232471,106}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_if>
-								<show_notification priority="8" text="$Message" />
+								<do_elseif value="($NewRelation ge 0.1) and ($NewRelation lt 0.9)">
+									<set_value name="$Message" exact="{33232471,105}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_elseif>
+								<do_elseif value="($NewRelation ge 0.9)">
+									<set_value name="$Message" exact="{33232471,106}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_elseif>
+								<show_notification priority="2" text="[[$Message,43,206,72]]" />
 								<do_any>
-									<set_value name="$FlavorText" exact="{33232471,203}.[$FactionOneNames,$FactionTwoNames]" weight="25"/>
-									<set_value name="$FlavorText" exact="{33232471,204}.[$FactionOneNames,$FactionTwoNames]" weight="25"/>
-									<set_value name="$FlavorText" exact="{33232471,205}.[$FactionTwoNames,$FactionOneNames]" weight="25"/>
-									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+									<set_value name="$FlavorText" exact="{33232471,203}.[$FactionOneName,$FactionTwoName]" weight="25"/>
+									<set_value name="$FlavorText" exact="{33232471,204}.[$FactionOneName,$FactionTwoName]" weight="25"/>
+									<set_value name="$FlavorText" exact="{33232471,205}.[$FactionTwoName,$FactionOneName]" weight="25"/>
 								</do_any>
-								<write_to_logbook category="news" title="$Message" text="$FlavorText" />
-							</do_if>
-							<do_if value="($OldRelation lt 0) and ($NewRelation lt 0)">
+								<write_to_logbook category="news" title="$Message" text="$FlavorText" highlighted="true" />
+							</do_elseif>
+							<do_elseif value="($OldRelation lt 0) and ($NewRelation lt 0)">
 								<do_if value="($NewRelation lt 0) and ($NewRelation gt -0.1)">
-									<set_value name="$Message" exact="{33232471,107}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+									<set_value name="$Message" exact="{33232471,107}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
 								</do_if>
-								<do_if value="($NewRelation le -0.1) and ($NewRelation gt -0.32)">
-									<set_value name="$Message" exact="{33232471,108}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_if>
-								<do_if value="($NewRelation le -0.32) and ($NewRelation gt -1.0)">
-									<set_value name="$Message" exact="{33232471,109}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_if>
-								<show_notification priority="7" text="$Message" />
+								<do_elseif value="($NewRelation le -0.1) and ($NewRelation gt -0.32)">
+									<set_value name="$Message" exact="{33232471,108}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_elseif>
+								<do_elseif value="($NewRelation le -0.32) and ($NewRelation gt -1.0)">
+									<set_value name="$Message" exact="{33232471,109}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_elseif>
+								<show_notification priority="2" text="[[$Message,255,255,0]]" />
 								<do_any>
-									<set_value name="$FlavorText" exact="{33232471,206}.[$FactionOneNames,$FactionTwoNames]" weight="25"/>
-									<set_value name="$FlavorText" exact="{33232471,207}.[$FactionOneNames,$FactionTwoNames]" weight="25"/>
-									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
-									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+									<set_value name="$FlavorText" exact="{33232471,206}.[$FactionOneName,$FactionTwoName]" weight="25"/>
+									<set_value name="$FlavorText" exact="{33232471,207}.[$FactionOneName,$FactionTwoName]" weight="25"/>
 								</do_any>
-								<write_to_logbook category="news" title="$Message" text="$FlavorText" />
-							</do_if>
+								<write_to_logbook category="news" title="$Message" text="$FlavorText" highlighted="true" />
+							</do_elseif>
 						</do_if>
-						<do_if value="$DynamicWarEvent == 'SmallBoost'">
+						<do_elseif value="$DynamicWarEvent == 'SmallBoost'">
 							<do_if value="($OldRelation ge 0) and ($NewRelation gt 0)">
 								<do_if value="($NewRelation gt 0) and ($NewRelation lt 0.1)">
-									<set_value name="$Message" exact="{33232471,110}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+									<set_value name="$Message" exact="{33232471,110}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
 								</do_if>
-								<do_if value="($NewRelation ge 0.1) and ($NewRelation lt 1.0)">
-									<set_value name="$Message" exact="{33232471,111}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_if>
-								<show_notification priority="5" text="$Message" />
+								<do_elseif value="($NewRelation ge 0.1) and ($NewRelation le 1.0)">
+									<set_value name="$Message" exact="{33232471,111}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_elseif>
+								<show_notification priority="2" text="[[$Message,43,206,72]]" />
 								<do_any>
-									<set_value name="$FlavorText" exact="{33232471,208}.[$FactionOneNames,$FactionTwoNames]" weight="25"/>
-									<set_value name="$FlavorText" exact="{33232471,209}.[$FactionOneNames,$FactionTwoNames]" weight="25"/>
-									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
-									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+									<set_value name="$FlavorText" exact="{33232471,208}.[$FactionOneName,$FactionTwoName]" weight="25"/>
+									<set_value name="$FlavorText" exact="{33232471,209}.[$FactionOneName,$FactionTwoName]" weight="25"/>
 								</do_any>
-								<write_to_logbook category="news" title="$Message" text="$FlavorText" />
+								<write_to_logbook category="news" title="$Message" text="$FlavorText" highlighted="true" />
 							</do_if>
-							<do_if value="($OldRelation lt 0) and ($NewRelation ge 0)">
-								<set_value name="$Message" exact="{33232471,112}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								<show_notification priority="7" text="$Message" />
+							<do_elseif value="($OldRelation lt 0) and ($NewRelation ge 0)">
+								<set_value name="$Message" exact="{33232471,112}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								<show_notification priority="2" text="[[$Message,43,206,72]]" />
 								<do_any>
-									<set_value name="$FlavorText" exact="{33232471,210}.[$FactionOneNames,$FactionTwoNames]" weight="25"/>
-									<set_value name="$FlavorText" exact="{33232471,211}.[$FactionOneNames,$FactionTwoNames]" weight="25"/>
-									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
-									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+									<set_value name="$FlavorText" exact="{33232471,210}.[$FactionOneName,$FactionTwoName]" weight="25"/>
+									<set_value name="$FlavorText" exact="{33232471,211}.[$FactionOneName,$FactionTwoName]" weight="25"/>
 								</do_any>
-								<write_to_logbook category="news" title="$Message" text="$FlavorText" />
-							</do_if>
-							<do_if value="($OldRelation lt 0) and ($NewRelation lt 0)">
+								<write_to_logbook category="news" title="$Message" text="$FlavorText" highlighted="true" />
+							</do_elseif>
+							<do_elseif value="($OldRelation lt 0) and ($NewRelation lt 0)">
 								<do_if value="($NewRelation lt 0) and ($NewRelation gt -0.1)">
-									<set_value name="$Message" exact="{33232471,113}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+									<set_value name="$Message" exact="{33232471,113}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
 								</do_if>
-								<do_if value="($NewRelation le -0.1) and ($NewRelation gt -0.32)">
-									<set_value name="$Message" exact="{33232471,114}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_if>
-								<do_if value="($NewRelation le -0.32) and ($NewRelation gt -1.0)">
-									<set_value name="$Message" exact="{33232471,115}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_if>
-								<show_notification priority="7" text="$Message" />
+								<do_elseif value="($NewRelation le -0.1) and ($NewRelation gt -0.32)">
+									<set_value name="$Message" exact="{33232471,114}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_elseif>
+								<do_elseif value="($NewRelation le -0.32) and ($NewRelation ge -1.0)">
+									<set_value name="$Message" exact="{33232471,115}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_elseif>
+								<show_notification priority="2" text="[[$Message,255,255,0]]" />
 								<do_any>
-									<set_value name="$FlavorText" exact="{33232471,212}.[$FactionOneNames,$FactionTwoNames]" weight="25"/>
-									<set_value name="$FlavorText" exact="{33232471,213}.[$FactionOneNames,$FactionTwoNames]" weight="25"/>
-									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
-									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+									<set_value name="$FlavorText" exact="{33232471,212}.[$FactionOneName,$FactionTwoName]" weight="25"/>
+									<set_value name="$FlavorText" exact="{33232471,213}.[$FactionOneName,$FactionTwoName]" weight="25"/>
 								</do_any>
-								<write_to_logbook category="news" title="$Message" text="$FlavorText" />
-							</do_if>
-						</do_if>
-						<do_if value="$DynamicWarEvent == 'SmallBlow'">
+								<write_to_logbook category="news" title="$Message" text="$FlavorText" highlighted="true" />
+							</do_elseif>
+						</do_elseif>
+						<do_elseif value="$DynamicWarEvent == 'SmallBlow'">
 							<do_if value="($OldRelation gt 0) and ($NewRelation gt 0)">
 								<do_if value="($NewRelation gt 0) and ($NewRelation lt 0.1)">
-									<set_value name="$Message" exact="{33232471,116}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+									<set_value name="$Message" exact="{33232471,116}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
 								</do_if>
-								<do_if value="($NewRelation ge 0.1) and ($NewRelation lt 1.0)">
-									<set_value name="$Message" exact="{33232471,117}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_if>
-								<show_notification priority="6" text="$Message" />
+								<do_elseif value="($NewRelation ge 0.1) and ($NewRelation le 1.0)">
+									<set_value name="$Message" exact="{33232471,117}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_elseif>
+								<show_notification priority="2" text="[[$Message,255,164,5]]" />
 								<do_any>
-									<set_value name="$FlavorText" exact="{33232471,214}.[$FactionOneNames,$FactionTwoNames]" weight="25"/>
-									<set_value name="$FlavorText" exact="{33232471,215}.[$FactionOneNames,$FactionTwoNames]" weight="25"/>
-									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
-									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+									<set_value name="$FlavorText" exact="{33232471,214}.[$FactionOneName,$FactionTwoName]" weight="25"/>
+									<set_value name="$FlavorText" exact="{33232471,215}.[$FactionOneName,$FactionTwoName]" weight="25"/>
 								</do_any>
-								<write_to_logbook category="news" title="$Message" text="$FlavorText" />
+								<write_to_logbook category="news" title="$Message" text="$FlavorText" highlighted="true" />
 							</do_if>
-							<do_if value="($OldRelation lt 0) and ($NewRelation lt 0)">
+							<do_elseif value="($OldRelation lt 0) and ($NewRelation lt 0)">
 								<do_if value="($NewRelation lt 0) and ($NewRelation gt -0.1)">
-									<set_value name="$Message" exact="{33232471,118}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+									<set_value name="$Message" exact="{33232471,118}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
 								</do_if>
-								<do_if value="($NewRelation le -0.1) and ($NewRelation gt -0.32)">
-									<set_value name="$Message" exact="{33232471,119}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_if>
-								<do_if value="($NewRelation le -0.32) and ($NewRelation gt -1.0)">
-									<set_value name="$Message" exact="{33232471,120}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_if>
-								<do_if value="($NewRelation == -1.0)">
-									<set_value name="$Message" exact="{33232471,121}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_if>
-								<show_notification priority="5" text="$Message" />
+								<do_elseif value="($NewRelation le -0.1) and ($NewRelation gt -0.32)">
+									<set_value name="$Message" exact="{33232471,119}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_elseif>
+								<do_elseif value="($NewRelation le -0.32) and ($NewRelation gt -1.0)">
+									<set_value name="$Message" exact="{33232471,120}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_elseif>
+								<do_elseif value="($NewRelation == -1.0)">
+									<set_value name="$Message" exact="{33232471,121}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_elseif>
+								<show_notification priority="2" text="[[$Message,255,164,5]]" />
 								<do_any>
-									<set_value name="$FlavorText" exact="{33232471,216}.[$FactionOneNames,$FactionTwoNames]" weight="25"/>
-									<set_value name="$FlavorText" exact="{33232471,217}.[$FactionOneNames,$FactionTwoNames]" weight="25"/>
-									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
-									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+									<set_value name="$FlavorText" exact="{33232471,216}.[$FactionOneName,$FactionTwoName]" weight="25"/>
+									<set_value name="$FlavorText" exact="{33232471,217}.[$FactionOneName,$FactionTwoName]" weight="25"/>
 								</do_any>
-								<write_to_logbook category="news" title="$Message" text="$FlavorText" />
-							</do_if>
-							<do_if value="($OldRelation ge 0) and ($NewRelation lt 0)">
+								<write_to_logbook category="news" title="$Message" text="$FlavorText" highlighted="true" />
+							</do_elseif>
+							<do_elseif value="($OldRelation ge 0) and ($NewRelation lt 0)">
 								<do_if value="($NewRelation lt 0) and ($NewRelation gt -0.1)">
-									<set_value name="$Message" exact="{33232471,122}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+									<set_value name="$Message" exact="{33232471,122}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
 								</do_if>
-								<do_if value="($NewRelation le -0.1) and ($NewRelation gt -0.32)">
-									<set_value name="$Message" exact="{33232471,123}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_if>
-								<do_if value="($NewRelation le -0.32) and ($NewRelation gt -1.0)">
-									<set_value name="$Message" exact="{33232471,124}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_if>
-								<do_if value="($NewRelation == -1.0)">
-									<set_value name="$Message" exact="{33232471,125}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_if>
-								<show_notification priority="7" text="$Message" />
+								<do_elseif value="($NewRelation le -0.1) and ($NewRelation gt -0.32)">
+									<set_value name="$Message" exact="{33232471,123}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_elseif>
+								<do_elseif value="($NewRelation le -0.32) and ($NewRelation gt -1.0)">
+									<set_value name="$Message" exact="{33232471,124}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_elseif>
+								<do_elseif value="($NewRelation == -1.0)">
+									<set_value name="$Message" exact="{33232471,125}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_elseif>
+								<show_notification priority="2" text="[[$Message,255,0,16]]" />
 								<do_any>
-									<set_value name="$FlavorText" exact="{33232471,218}.[$FactionOneNames,$FactionTwoNames]" weight="25"/>
-									<set_value name="$FlavorText" exact="{33232471,219}.[$FactionOneNames,$FactionTwoNames]" weight="25"/>
-									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
-									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+									<set_value name="$FlavorText" exact="{33232471,218}.[$FactionOneName,$FactionTwoName]" weight="25"/>
+									<set_value name="$FlavorText" exact="{33232471,219}.[$FactionOneName,$FactionTwoName]" weight="25"/>
 								</do_any>
-								<write_to_logbook category="news" title="$Message" text="$FlavorText" />
-							</do_if>
-						</do_if>
-						<do_if value="($DynamicWarEvent == 'BigBlow') or ($DynamicWarEvent == 'Nemesis')">
+								<write_to_logbook category="news" title="$Message" text="$FlavorText" highlighted="true" />
+							</do_elseif>
+						</do_elseif>
+						<do_elseif value="($DynamicWarEvent == 'BigBlow') or ($DynamicWarEvent == 'Nemesis')">
 							<do_if value="($OldRelation gt 0) and ($NewRelation gt 0)">
 								<do_if value="($NewRelation gt 0) and ($NewRelation lt 0.1)">
-									<set_value name="$Message" exact="{33232471,126}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+									<set_value name="$Message" exact="{33232471,126}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
 								</do_if>
-								<do_if value="($NewRelation ge 0.1) and ($NewRelation lt 1.0)">
-									<set_value name="$Message" exact="{33232471,127}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_if>
-								<show_notification priority="6" text="$Message" />
+								<do_elseif value="($NewRelation ge 0.1) and ($NewRelation le 1.0)">
+									<set_value name="$Message" exact="{33232471,127}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_elseif>
+								<show_notification priority="2" text="[[$Message,255,164,5]]" />
 								<do_any>
-									<set_value name="$FlavorText" exact="{33232471,220}.[$FactionOneNames,$FactionTwoNames]" weight="25"/>
-									<set_value name="$FlavorText" exact="{33232471,221}.[$FactionOneNames,$FactionTwoNames]" weight="25"/>
-									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
-									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+									<set_value name="$FlavorText" exact="{33232471,220}.[$FactionOneName,$FactionTwoName]" weight="25"/>
+									<set_value name="$FlavorText" exact="{33232471,221}.[$FactionOneName,$FactionTwoName]" weight="25"/>
 								</do_any>
-								<write_to_logbook category="news" title="$Message" text="$FlavorText" />
+								<write_to_logbook category="news" title="$Message" text="$FlavorText" highlighted="true" />
 							</do_if>
-							<do_if value="($OldRelation lt 0) and ($NewRelation lt 0)">
+							<do_elseif value="($OldRelation lt 0) and ($NewRelation lt 0)">
 								<do_if value="($NewRelation lt 0) and ($NewRelation gt -0.1)">
-									<set_value name="$Message" exact="{33232471,128}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+									<set_value name="$Message" exact="{33232471,128}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
 								</do_if>
-								<do_if value="($NewRelation le -0.1) and ($NewRelation gt -0.32)">
-									<set_value name="$Message" exact="{33232471,129}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_if>
-								<do_if value="($NewRelation le -0.32) and ($NewRelation gt -1.0)">
-									<set_value name="$Message" exact="{33232471,130}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_if>
-								<do_if value="($NewRelation == -1.0)">
-									<set_value name="$Message" exact="{33232471,131}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_if>
-								<show_notification priority="6" text="$Message" />
+								<do_elseif value="($NewRelation le -0.1) and ($NewRelation gt -0.32)">
+									<set_value name="$Message" exact="{33232471,129}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_elseif>
+								<do_elseif value="($NewRelation le -0.32) and ($NewRelation gt -1.0)">
+									<set_value name="$Message" exact="{33232471,130}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_elseif>
+								<do_elseif value="($NewRelation == -1.0)">
+									<set_value name="$Message" exact="{33232471,131}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_elseif>
+								<show_notification priority="2" text="[[$Message,255,164,5]]" />
 								<do_any>
-									<set_value name="$FlavorText" exact="{33232471,222}.[$FactionOneNames,$FactionTwoNames]" weight="25"/>
-									<set_value name="$FlavorText" exact="{33232471,223}.[$FactionOneNames,$FactionTwoNames]" weight="25"/>
-									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
-									<!--<set_value name="$FlavorText" exact="'Story'" weight="25"/>-->
+									<set_value name="$FlavorText" exact="{33232471,222}.[$FactionOneName,$FactionTwoName]" weight="25"/>
+									<set_value name="$FlavorText" exact="{33232471,223}.[$FactionOneName,$FactionTwoName]" weight="25"/>
 								</do_any>
-								<write_to_logbook category="news" title="$Message" text="$FlavorText" />
-							</do_if>
-							<do_if value="($OldRelation ge 0) and ($NewRelation lt 0)">
+								<write_to_logbook category="news" title="$Message" text="$FlavorText" highlighted="true" />
+							</do_elseif>
+							<do_elseif value="($OldRelation ge 0) and ($NewRelation lt 0)">
 								<do_if value="($NewRelation lt 0) and ($NewRelation gt -0.1)">
-									<set_value name="$Message" exact="{33232471,132}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+									<set_value name="$Message" exact="{33232471,132}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
 								</do_if>
-								<do_if value="($NewRelation le -0.1) and ($NewRelation gt -0.32)">
-									<set_value name="$Message" exact="{33232471,133}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_if>
-								<do_if value="($NewRelation le -0.32) and ($NewRelation gt -1.0)">
-									<set_value name="$Message" exact="{33232471,134}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_if>
-								<do_if value="($NewRelation == -1.0)">
-									<set_value name="$Message" exact="{33232471,135}.[$FactionOneNames,$FactionTwoNames,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_if>
-								<show_notification priority="8" text="$Message" />
+								<do_elseif value="($NewRelation le -0.1) and ($NewRelation gt -0.32)">
+									<set_value name="$Message" exact="{33232471,133}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_elseif>
+								<do_elseif value="($NewRelation le -0.32) and ($NewRelation gt -1.0)">
+									<set_value name="$Message" exact="{33232471,134}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_elseif>
+								<do_elseif value="($NewRelation == -1.0)">
+									<set_value name="$Message" exact="{33232471,135}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_elseif>
+								<show_notification priority="2" text="[[$Message,255,0,16]]" />
 								<do_any>
-									<set_value name="$FlavorText" exact="{33232471,224}.[$FactionTwoNames,$FactionOneNames]" weight="25"/>
-									<set_value name="$FlavorText" exact="{33232471,225}.[$FactionOneNames,$FactionTwoNames]" weight="25"/>
-									<set_value name="$FlavorText" exact="{33232471,226}.[$FactionTwoNames,$FactionOneNames,$FactionOneNames]" weight="25"/>
-									<set_value name="$FlavorText" exact="{33232471,227}.[$FactionTwoNames,$FactionOneNames]" weight="25"/>
+									<set_value name="$FlavorText" exact="{33232471,224}.[$FactionTwoName,$FactionOneName]" weight="25"/>
+									<set_value name="$FlavorText" exact="{33232471,225}.[$FactionOneName,$FactionTwoName]" weight="25"/>
+									<set_value name="$FlavorText" exact="{33232471,226}.[$FactionTwoName,$FactionOneName,$FactionOneName]" weight="25"/>
+									<set_value name="$FlavorText" exact="{33232471,227}.[$FactionTwoName,$FactionOneName]" weight="25"/>
 								</do_any>
-								<write_to_logbook category="news" title="$Message" text="$FlavorText" />
-							</do_if>
-						</do_if>
+								<write_to_logbook category="news" title="$Message" text="$FlavorText" highlighted="true" />
+							</do_elseif>
+						</do_elseif>
+						<remove_value name="$FactionOneName" />
+						<remove_value name="$FactionTwoName" />
+						<remove_value name="$Message" />
+						<remove_value name="$FlavorText" />
 					</actions>
 				</library>
 				<library name="DynamicWarCalculateMilStrengthFactor">
@@ -617,7 +627,7 @@
 								<remove_value name="$ClaimspaceCounter" />
 							</do_if>
 							<!-- Comparison favors strength -->
-							<do_if value="($DynamicWarEvent == 'SmallBlow') or ($DynamicWarEvent == 'BigBlow') or ($DynamicWarEvent == 'Nemesis')">
+							<do_elseif value="($DynamicWarEvent == 'SmallBlow') or ($DynamicWarEvent == 'BigBlow') or ($DynamicWarEvent == 'Nemesis')">
 								<!-- We need to calculate the first factions strength -->
 								<find_ship_by_true_owner groupname="$DynamicWarEventFactionMilShips" space="player.galaxy" multiple="true" faction="$DynamicWarEventFaction" primarypurpose="purpose.fight" append="true" />
 								<find_sector groupname="$DynamicWarEventFactionSectors" space="player.galaxy" multiple="true" owner="$DynamicWarEventFaction" append="true" />
@@ -640,7 +650,7 @@
 								<remove_value name="$DynamicWarEventFactionMilShips" />
 								<remove_value name="$DynamicWarEventFactionSectors" />
 								<remove_value name="$ClaimspaceCounter" />
-							</do_if>
+							</do_elseif>
 						</do_if>
 					</actions>
 				</library>
@@ -677,25 +687,26 @@
 						<!-- 1.0 = 30		0.32 = 25		0.1 = 20		0.032 = 15		0.01 = 10		0.0032 = 5 -->
 						<!-- 1.0 = 30		0.316 = 25		0.1 = 20		0.0316 = 15		0.01 = 10		0.00316 = 5 -->
 						<!-- Requires $FactionOne, $FactionTwo, and $UIRelationChange -->
-						<!-- Returns $NewAbsoluteRepValue and $AbsoluteRepValueChange-->
+						<!-- Returns $NewAbsoluteRepValue and $AbsoluteRepValueChange -->
 					<do_if value="$UIRelationChange != 0">
 						<set_value name="$OldUIRepValue" exact="$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue" />
 						<set_value name="$OldAbsoluteRepValue" exact="$FactionOne.relationto.{$FactionTwo}" />
-						<set_value name="$RepChangeNegativeorPositiveMod" exact="if ($UIRelationChange lt 0) then (-1) else (1)" />
-						<do_if value="$OldUIRepValue ge 5">
+						<do_if value="($OldUIRepValue ge 5) or ($OldUIRepValue le -5)">
 							<set_value name="$NewUIRepValue" exact="$OldUIRepValue + $UIRelationChange" />
-							<set_value name="$AbsoluteRepValueChange" exact="$OldAbsoluteRepValue + $RepChangeNegativeorPositiveMod * (10^((sqrt($NewUIRepValue ^ 2)/10))/1000)" />
-							<set_value name="$NewAbsoluteRepValue" exact="[(($OldAbsoluteRepValue + $AbsoluteRepValueChange) * $RepChangeNegativeorPositiveMod), 1].min" />
+							<!-- =(10^(SQRT((S2+T2)^2)/10)/1000)*IF(S2+T2<0,-1,1) -->
+							<set_value name="$NewAbsoluteRepValue" exact="(10^(sqrt(($OldUIRepValue + $UIRelationChange) ^ 2)/10) / 1000) * (if ($OldUIRepValue + $UIRelationChange lt 0) then -1 else 1)" />
+							<do_if value="$NewAbsoluteRepValue lt -1">
+								<set_value name="$NewAbsoluteRepValue" exact="-1" />
+							</do_if>
+							<do_if value="$NewAbsoluteRepValue gt 1">
+								<set_value name="$NewAbsoluteRepValue" exact="1" />
+							</do_if>
+							<set_value name="$AbsoluteRepValueChange" exact="$NewAbsoluteRepValue - $OldAbsoluteRepValue" />
 						</do_if>
-						<do_if value="$OldUIRepValue lt 5 and $OldUIRepValue gt -5">
+						<do_if value="($OldUIRepValue lt 5) and ($OldUIRepValue gt -5)">
 							<set_value name="$NewUIRepValue" exact="$OldUIRepValue + $UIRelationChange" />
-							<set_value name="$AbsoluteRepValueChange" exact="$RepChangeNegativeorPositiveMod * ($UIRelationChange * 0.00064)" />
-							<set_value name="$NewAbsoluteRepValue" exact="$OldAbsoluteRepValue + $AbsoluteRepValueChange" />
-						</do_if>
-						<do_if value="$OldUIRepValue le -5">
-							<set_value name="$NewUIRepValue" exact="$OldUIRepValue + $UIRelationChange" />
-							<set_value name="$AbsoluteRepValueChange" exact="$OldAbsoluteRepValue - $RepChangeNegativeorPositiveMod * (10^((sqrt($NewUIRepValue ^ 2)/10))/1000)" />
-							<set_value name="$NewAbsoluteRepValue" exact="[(($OldAbsoluteRepValue - $AbsoluteRepValueChange) * $RepChangeNegativeorPositiveMod), -1].max" />
+							<set_value name="$NewAbsoluteRepValue" exact="$OldAbsoluteRepValue + ($UIRelationChange * 0.00064)" />
+							<set_value name="$AbsoluteRepValueChange" exact="$NewAbsoluteRepValue - $OldAbsoluteRepValue" />
 						</do_if>
 					</do_if>
 					</actions>
@@ -745,8 +756,8 @@
 											<set_value name="$CommonFriends" exact="$CommonFriends - 1" />
 										</do_if>
 									</do_all>
-									<!-- we will get a factor of 1.1 or 0.9-->
-									<set_value name="$PossibleFactionMiscModifier" exact="$PossibleFactionMiscModifier * (if (($CommonFriends + $CommonEnemies) ge 0) then 1.1 else 0.9)" />
+									<!-- we will get a factor of 1.2 or 0.8-->
+									<set_value name="$PossibleFactionMiscModifier" exact="$PossibleFactionMiscModifier * (if (($CommonFriends + $CommonEnemies) ge 0) then 1.2 else 0.8)" />
 									<set_value name="$MiscDebug" exact="$MiscDebug + ' - $PossibleFactionMiscModifier: ' + $PossibleFactionMiscModifier" />
 									<!-- After we calculate, add it to the list and print -->
 									<set_value name="$MiscDebug" exact="$MiscDebug + ' - Common Friends/Enemies: ' + $CommonFriends + ' / ' + $CommonEnemies" />
@@ -759,7 +770,7 @@
 								</do_all>
 								<remove_value name="$ClaimspaceCounter" />
 							</do_if>
-							<do_if value="($DynamicWarEvent == 'SmallBlow') or ($DynamicWarEvent == 'BigBlow') or ($DynamicWarEvent == 'Nemesis')">
+							<do_elseif value="($DynamicWarEvent == 'SmallBlow') or ($DynamicWarEvent == 'BigBlow') or ($DynamicWarEvent == 'Nemesis')">
 								<do_all exact="$Claimspacelist.count" counter="$ClaimspaceCounter">
 									<set_value name="$PossibleFactionMiscModifier" exact="1" />
 									<set_value name="$PrimaryRaceModifier" exact="0.1" />
@@ -801,8 +812,8 @@
 											<set_value name="$CommonFriends" exact="$CommonFriends - 1" />
 										</do_if>
 									</do_all>
-									<!-- we will get a factor of 1.1 or 0.9-->
-									<set_value name="$PossibleFactionMiscModifier" exact="$PossibleFactionMiscModifier * (if (($CommonFriends + $CommonEnemies) ge 0) then 0.9 else 1.1)" />
+									<!-- we will get a factor of 1.2 or 0.8-->
+									<set_value name="$PossibleFactionMiscModifier" exact="$PossibleFactionMiscModifier * (if (($CommonFriends + $CommonEnemies) ge 0) then 0.8 else 1.2)" />
 									<set_value name="$MiscDebug" exact="$MiscDebug + ' - $PossibleFactionMiscModifier: ' + $PossibleFactionMiscModifier" />
 									<!-- After we calculate, add it to the list and print -->
 									<set_value name="$MiscDebug" exact="$MiscDebug + ' - Common Friends/Enemies: ' + $CommonFriends + ' / ' + $CommonEnemies" />
@@ -814,7 +825,7 @@
 									<remove_value name="$FriendsCounter" />
 								</do_all>
 								<remove_value name="$ClaimspaceCounter" />
-							</do_if>
+							</do_elseif>
 						</do_if>
 					</actions>
 				</library>
