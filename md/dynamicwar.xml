@@ -297,7 +297,7 @@
 						<do_elseif value="$DynamicWarEvent == 'BigBlow'">
 							<set_value name="$FactionOne" exact="$DynamicWarEventFaction" />
 							<set_value name="$FactionTwo" exact="$DynamicWarEventFactionTwo" />
-							<set_value name="$UIRelationChange" exact="5" />
+							<set_value name="$UIRelationChange" exact="-10" />
 							<!-- Requires $FactionOne, $FactionTwo, and $UIRelationChange -->
 							<!-- Returns $NewAbsoluteRepValue and $AbsoluteRepValueChange -->
 							<include_actions ref="CalculateUiValueRepChange" />
@@ -383,6 +383,7 @@
 						<set_value name="$FactionTwoName" exact="$FactionTwo.name" />
 						
 						<do_if value="$DynamicWarEvent == 'BigBoost' or ($DynamicWarEvent == 'Besties')">
+							<!-- positive or 0 to higher positive -->
 							<do_if value="($OldRelation ge 0) and ($NewRelation gt 0)">
 								<do_if value="($NewRelation gt 0) and ($NewRelation lt 0.1)">
 									<set_value name="$Message" exact="{33232471,101}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
@@ -400,8 +401,9 @@
 								</do_any>
 								<write_to_logbook category="news" title="$Message" text="$FlavorText" highlighted="true" />
 							</do_if>
+							<!-- negative to positive or 0 -->
 							<do_elseif value="($OldRelation lt 0) and ($NewRelation ge 0)">
-								<do_if value="($NewRelation gt 0) and ($NewRelation lt 0.1)">
+								<do_if value="($NewRelation ge 0) and ($NewRelation lt 0.1)">
 									<set_value name="$Message" exact="{33232471,104}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
 								</do_if>
 								<do_elseif value="($NewRelation ge 0.1) and ($NewRelation lt 0.9)">
@@ -418,6 +420,7 @@
 								</do_any>
 								<write_to_logbook category="news" title="$Message" text="$FlavorText" highlighted="true" />
 							</do_elseif>
+							<!-- negative to higher negative NOT 0 -->
 							<do_elseif value="($OldRelation lt 0) and ($NewRelation lt 0)">
 								<do_if value="($NewRelation lt 0) and ($NewRelation gt -0.1)">
 									<set_value name="$Message" exact="{33232471,107}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
@@ -425,7 +428,7 @@
 								<do_elseif value="($NewRelation le -0.1) and ($NewRelation gt -0.32)">
 									<set_value name="$Message" exact="{33232471,108}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
 								</do_elseif>
-								<do_elseif value="($NewRelation le -0.32) and ($NewRelation gt -1.0)">
+								<do_elseif value="($NewRelation le -0.32) and ($NewRelation ge -1.0)"><!-- not possible to still be -1.0 but might as well close any gaps -->
 									<set_value name="$Message" exact="{33232471,109}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
 								</do_elseif>
 								<show_notification priority="2" text="[[$Message,255,255,0]]" />
@@ -437,6 +440,7 @@
 							</do_elseif>
 						</do_if>
 						<do_elseif value="$DynamicWarEvent == 'SmallBoost'">
+							<!-- positive or 0 to higher positive -->
 							<do_if value="($OldRelation ge 0) and ($NewRelation gt 0)">
 								<do_if value="($NewRelation gt 0) and ($NewRelation lt 0.1)">
 									<set_value name="$Message" exact="{33232471,110}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
@@ -451,6 +455,7 @@
 								</do_any>
 								<write_to_logbook category="news" title="$Message" text="$FlavorText" highlighted="true" />
 							</do_if>
+							<!-- negative to positive or 0 -->
 							<do_elseif value="($OldRelation lt 0) and ($NewRelation ge 0)">
 								<set_value name="$Message" exact="{33232471,112}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
 								<show_notification priority="2" text="[[$Message,43,206,72]]" />
@@ -460,6 +465,7 @@
 								</do_any>
 								<write_to_logbook category="news" title="$Message" text="$FlavorText" highlighted="true" />
 							</do_elseif>
+							<!-- negative to higher negative NOT 0 -->
 							<do_elseif value="($OldRelation lt 0) and ($NewRelation lt 0)">
 								<do_if value="($NewRelation lt 0) and ($NewRelation gt -0.1)">
 									<set_value name="$Message" exact="{33232471,113}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
@@ -479,8 +485,9 @@
 							</do_elseif>
 						</do_elseif>
 						<do_elseif value="$DynamicWarEvent == 'SmallBlow'">
-							<do_if value="($OldRelation gt 0) and ($NewRelation gt 0)">
-								<do_if value="($NewRelation gt 0) and ($NewRelation lt 0.1)">
+							<!-- positive to lower positive or 0 -->
+							<do_if value="($OldRelation gt 0) and ($NewRelation ge 0)">
+								<do_if value="($NewRelation ge 0) and ($NewRelation lt 0.1)">
 									<set_value name="$Message" exact="{33232471,116}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
 								</do_if>
 								<do_elseif value="($NewRelation ge 0.1) and ($NewRelation le 1.0)">
@@ -493,26 +500,7 @@
 								</do_any>
 								<write_to_logbook category="news" title="$Message" text="$FlavorText" highlighted="true" />
 							</do_if>
-							<do_elseif value="($OldRelation lt 0) and ($NewRelation lt 0)">
-								<do_if value="($NewRelation lt 0) and ($NewRelation gt -0.1)">
-									<set_value name="$Message" exact="{33232471,118}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_if>
-								<do_elseif value="($NewRelation le -0.1) and ($NewRelation gt -0.32)">
-									<set_value name="$Message" exact="{33232471,119}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_elseif>
-								<do_elseif value="($NewRelation le -0.32) and ($NewRelation gt -1.0)">
-									<set_value name="$Message" exact="{33232471,120}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_elseif>
-								<do_elseif value="($NewRelation == -1.0)">
-									<set_value name="$Message" exact="{33232471,121}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_elseif>
-								<show_notification priority="2" text="[[$Message,255,164,5]]" />
-								<do_any>
-									<set_value name="$FlavorText" exact="{33232471,216}.[$FactionOneName,$FactionTwoName]" weight="25"/>
-									<set_value name="$FlavorText" exact="{33232471,217}.[$FactionOneName,$FactionTwoName]" weight="25"/>
-								</do_any>
-								<write_to_logbook category="news" title="$Message" text="$FlavorText" highlighted="true" />
-							</do_elseif>
+							<!-- positive or 0 to negative NOT 0 -->
 							<do_elseif value="($OldRelation ge 0) and ($NewRelation lt 0)">
 								<do_if value="($NewRelation lt 0) and ($NewRelation gt -0.1)">
 									<set_value name="$Message" exact="{33232471,122}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
@@ -533,10 +521,32 @@
 								</do_any>
 								<write_to_logbook category="news" title="$Message" text="$FlavorText" highlighted="true" />
 							</do_elseif>
+							<!-- negative NOT 0 to lower negative -->
+							<do_elseif value="($OldRelation lt 0) and ($NewRelation lt 0)">
+								<do_if value="($NewRelation lt 0) and ($NewRelation gt -0.1)">
+									<set_value name="$Message" exact="{33232471,118}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_if>
+								<do_elseif value="($NewRelation le -0.1) and ($NewRelation gt -0.32)">
+									<set_value name="$Message" exact="{33232471,119}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_elseif>
+								<do_elseif value="($NewRelation le -0.32) and ($NewRelation gt -1.0)">
+									<set_value name="$Message" exact="{33232471,120}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_elseif>
+								<do_elseif value="($NewRelation == -1.0)">
+									<set_value name="$Message" exact="{33232471,121}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_elseif>
+								<show_notification priority="2" text="[[$Message,255,164,5]]" />
+								<do_any>
+									<set_value name="$FlavorText" exact="{33232471,216}.[$FactionOneName,$FactionTwoName]" weight="25"/>
+									<set_value name="$FlavorText" exact="{33232471,217}.[$FactionOneName,$FactionTwoName]" weight="25"/>
+								</do_any>
+								<write_to_logbook category="news" title="$Message" text="$FlavorText" highlighted="true" />
+							</do_elseif>
 						</do_elseif>
 						<do_elseif value="($DynamicWarEvent == 'BigBlow') or ($DynamicWarEvent == 'Nemesis')">
-							<do_if value="($OldRelation gt 0) and ($NewRelation gt 0)">
-								<do_if value="($NewRelation gt 0) and ($NewRelation lt 0.1)">
+							<!-- positive to lower positive or 0 -->
+							<do_if value="($OldRelation gt 0) and ($NewRelation ge 0)">
+								<do_if value="($NewRelation ge 0) and ($NewRelation lt 0.1)">
 									<set_value name="$Message" exact="{33232471,126}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
 								</do_if>
 								<do_elseif value="($NewRelation ge 0.1) and ($NewRelation le 1.0)">
@@ -549,26 +559,7 @@
 								</do_any>
 								<write_to_logbook category="news" title="$Message" text="$FlavorText" highlighted="true" />
 							</do_if>
-							<do_elseif value="($OldRelation lt 0) and ($NewRelation lt 0)">
-								<do_if value="($NewRelation lt 0) and ($NewRelation gt -0.1)">
-									<set_value name="$Message" exact="{33232471,128}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_if>
-								<do_elseif value="($NewRelation le -0.1) and ($NewRelation gt -0.32)">
-									<set_value name="$Message" exact="{33232471,129}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_elseif>
-								<do_elseif value="($NewRelation le -0.32) and ($NewRelation gt -1.0)">
-									<set_value name="$Message" exact="{33232471,130}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_elseif>
-								<do_elseif value="($NewRelation == -1.0)">
-									<set_value name="$Message" exact="{33232471,131}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
-								</do_elseif>
-								<show_notification priority="2" text="[[$Message,255,164,5]]" />
-								<do_any>
-									<set_value name="$FlavorText" exact="{33232471,222}.[$FactionOneName,$FactionTwoName]" weight="25"/>
-									<set_value name="$FlavorText" exact="{33232471,223}.[$FactionOneName,$FactionTwoName]" weight="25"/>
-								</do_any>
-								<write_to_logbook category="news" title="$Message" text="$FlavorText" highlighted="true" />
-							</do_elseif>
+							<!-- positive or 0 to negative NOT 0 -->
 							<do_elseif value="($OldRelation ge 0) and ($NewRelation lt 0)">
 								<do_if value="($NewRelation lt 0) and ($NewRelation gt -0.1)">
 									<set_value name="$Message" exact="{33232471,132}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
@@ -588,6 +579,27 @@
 									<set_value name="$FlavorText" exact="{33232471,225}.[$FactionOneName,$FactionTwoName]" weight="25"/>
 									<set_value name="$FlavorText" exact="{33232471,226}.[$FactionTwoName,$FactionOneName,$FactionOneName]" weight="25"/>
 									<set_value name="$FlavorText" exact="{33232471,227}.[$FactionTwoName,$FactionOneName]" weight="25"/>
+								</do_any>
+								<write_to_logbook category="news" title="$Message" text="$FlavorText" highlighted="true" />
+							</do_elseif>
+							<!-- negative NOT 0 to lower negative -->
+							<do_elseif value="($OldRelation lt 0) and ($NewRelation lt 0)">
+								<do_if value="($NewRelation lt 0) and ($NewRelation gt -0.1)">
+									<set_value name="$Message" exact="{33232471,128}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_if>
+								<do_elseif value="($NewRelation le -0.1) and ($NewRelation gt -0.32)">
+									<set_value name="$Message" exact="{33232471,129}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_elseif>
+								<do_elseif value="($NewRelation le -0.32) and ($NewRelation gt -1.0)">
+									<set_value name="$Message" exact="{33232471,130}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_elseif>
+								<do_elseif value="($NewRelation == -1.0)">
+									<set_value name="$Message" exact="{33232471,131}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
+								</do_elseif>
+								<show_notification priority="2" text="[[$Message,255,164,5]]" />
+								<do_any>
+									<set_value name="$FlavorText" exact="{33232471,222}.[$FactionOneName,$FactionTwoName]" weight="25"/>
+									<set_value name="$FlavorText" exact="{33232471,223}.[$FactionOneName,$FactionTwoName]" weight="25"/>
 								</do_any>
 								<write_to_logbook category="news" title="$Message" text="$FlavorText" highlighted="true" />
 							</do_elseif>
