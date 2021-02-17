@@ -59,7 +59,7 @@
 
         <set_value name="$validFactions" exact="[faction.alliance, faction.antigone, faction.argon, faction.buccaneers, faction.court, faction.fallensplit, faction.freesplit, faction.hatikvah, faction.holyorder, faction.ministry, faction.paranid, faction.scaleplate, faction.split, faction.teladi, faction.trinity]"/>
         <do_all exact="$validFactions.count" counter="$i" reverse="true">
-          <do_if value="($validFactions.{$i}.relationto.{event.object.trueowner} ge 0) or ($validFactions.{$i} == event.object.trueowner)">
+          <do_if value="($validFactions.{$i}.relationto.{event.object.trueowner} ge 0) or ($validFactions.{$i} == event.object.trueowner) or (not $validFactions.{$i}.isactive)">
             <remove_value name="$validFactions.{$i}"/>
           </do_if>
         </do_all>
@@ -161,7 +161,7 @@
 
 		<set_value name="$validFactions" exact="[faction.alliance, faction.antigone, faction.argon, faction.buccaneers, faction.court, faction.fallensplit, faction.freesplit, faction.hatikvah, faction.holyorder, faction.ministry, faction.paranid, faction.scaleplate, faction.split, faction.teladi, faction.trinity]"/>
         <do_all exact="$validFactions.count" counter="$j" reverse="true">
-          <do_if value="($validFactions.{$j} == event.object.trueowner)">
+          <do_if value="($validFactions.{$j} == event.object.trueowner) or (not $validFactions.{$j}.isactive)">
             <remove_value name="$validFactions.{$j}"/>
           </do_if>
         </do_all>

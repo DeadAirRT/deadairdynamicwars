@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mdscript name="DynamicWarFourPointOh" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="md.xsd">
+<mdscript name="DynamicWar" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="md.xsd">
 	<cues>
 		<cue name="Init">
 			<actions>
 				<!-- This will only run once or after any patch to reset the script -->
 				<!-- This setting controls informational debug messages -->
 				<set_value name="$DynamicWarDebugChance" exact="false" />
+				<!-- Remove BUC/HAT depending on variables. True is removed -->
+				<do_if value="(not md.$DADynWarBUC?)">
+					<set_value name="md.$DADynWarBUC" exact="true" />
+				</do_if>
+				<do_if value="(not md.$DADynWarHAT?)">
+					<set_value name="md.$DADynWarHAT" exact="true" />
+				</do_if>
 				<!-- This should contain an initial search of factions that meet the requirements (claimspace, not "peaceful", and active) -->
 				<include_actions ref="DynamicWarFindFactions" />
 				<!-- $ClaimspaceList should be only valid factions now -->
@@ -17,11 +24,11 @@
 				<do_else>
 					<!-- The table already exists and we don't want to overwrite it unless necessary -->
 				</do_else>
-				<!-- Set default chance for all valid factions to 15 -->
+				<!-- Set default chance for all valid factions to 10-15 -->
 				<do_all exact="$ClaimspaceList.count" counter="$B">
 					<do_if value="$ClaimspaceList.{$B} != null">
 						<do_if value="(not $FactionTable.{$ClaimspaceList.{$B}}?)">
-							<set_value name="$FactionTable.{$ClaimspaceList.{$B}}" exact="15" />
+							<set_value name="$FactionTable.{$ClaimspaceList.{$B}}" min="10" max="15" />
 						</do_if>
 						<do_else>
 							<!-- The faction is already set in the table -->
@@ -277,6 +284,16 @@
 						<remove_from_list name="$ClaimspaceList" list="$ExcludedFactions" multiple="true"/>
 						<remove_from_list name="$ClaimspaceList" list="$PeacefulList" multiple="true"/>
 						<remove_from_list name="$ClaimspaceList" list="$VisitorList" multiple="true"/>
+						<do_if value="md.$DADynWarBUC">
+						  <!-- Remove buccaneers until story line stuff happens -->
+						  <remove_from_list name="$ClaimspaceList" exact="faction.buccaneers" multiple="true" />
+						  <append_to_list name="$ExcludedFactions" exact="faction.buccaneers"/>
+						</do_if>
+						<do_if value="md.$DADynWarHAT">
+						  <!-- Remove hatikvah based on options -->
+						  <remove_from_list name="$ClaimspaceList" exact="faction.hatikvah" multiple="true" />
+						  <append_to_list name="$ExcludedFactions" exact="faction.hatikvah"/>
+						</do_if>
 						
 						<do_all exact="$ClaimspaceList.count" counter="$A" reverse="true">
 							<do_if value="($ClaimspaceList.{$A} == null) or ($ClaimspaceList.{$A}.isactive != true)">
@@ -316,7 +333,7 @@
 							<set_value name="$FactionOne" exact="$DynamicWarEventFaction" />
 							<set_value name="$FactionTwo" exact="$DynamicWarEventFactionTwo" />
 							<do_if value="$DynamicWarEvent == 'BigBoost'">
-								<set_value name="$UIRelationChange" exact="10" />
+								<set_value name="$UIRelationChange" exact="15" />
 							</do_if>
 							<do_elseif value="$DynamicWarEvent == 'SmallBoost'">
 								<set_value name="$UIRelationChange" exact="5" />
@@ -325,7 +342,7 @@
 								<set_value name="$UIRelationChange" exact="-5" />
 							</do_elseif>
 							<do_elseif value="$DynamicWarEvent == 'BigBlow'">
-								<set_value name="$UIRelationChange" exact="-10" />
+								<set_value name="$UIRelationChange" exact="-15" />
 							</do_elseif>
 							<!-- Requires $FactionOne, $FactionTwo, and $UIRelationChange -->
 							<!-- Returns $NewAbsoluteRepValue and $AbsoluteRepValueChange -->
@@ -689,13 +706,13 @@
 						<!-- update chance only after factions have been selected -->
 						<do_if value="$DynamicWarEventFaction? and $DynamicWarEventFactionTwo?">
 							<do_all exact="$ClaimspaceListFull.count" counter="$M">
-								<!-- If faction was selected, they will have their chance lowered by 20 -->
+								<!-- If faction was selected, they will have their chance lowered by 20 with a minimum of 1-5 -->
 								<do_if value="($ClaimspaceListFull.{$M} == $DynamicWarEventFaction) or ($ClaimspaceListFull.{$M} == $DynamicWarEventFactionTwo)">
-									<set_value name="$FactionTable.{$ClaimspaceListFull.{$M}}" exact="if $FactionTable.{$ClaimspaceListFull.{$M}}? then [$FactionTable.{$ClaimspaceListFull.{$M}} - 20, 5].max else 5" />
+									<set_value name="$FactionTable.{$ClaimspaceListFull.{$M}}" exact="if $FactionTable.{$ClaimspaceListFull.{$M}}? then [$FactionTable.{$ClaimspaceListFull.{$M}} - 20, ([1,2,3,4,5].random)].max else 5" />
 								</do_if>
-								<!-- If faction wasn't selected, they will have their chance increased by 5 up to a max of 30 -->
+								<!-- If faction wasn't selected, they will have their chance increased by 1-5 up to a max of 30 -->
 								<do_else>
-									<set_value name="$FactionTable.{$ClaimspaceListFull.{$M}}" exact="if $FactionTable.{$ClaimspaceListFull.{$M}}? then [$FactionTable.{$ClaimspaceListFull.{$M}} + 5, 30].min else 20" />
+									<set_value name="$FactionTable.{$ClaimspaceListFull.{$M}}" exact="if $FactionTable.{$ClaimspaceListFull.{$M}}? then [$FactionTable.{$ClaimspaceListFull.{$M}} + ([1,2,3,4,5].random), 30].min else 20" />
 								</do_else>
 							</do_all>
 						</do_if>
@@ -747,8 +764,8 @@
 										<set_value name="$MiscDebug" exact="player.age + ' - ' + $ClaimspaceList.{$G}.name + ' - Primary Race Comparison Factor: ' + (if $DynamicWarEventFaction.primaryrace == $ClaimspaceList.{$G}.primaryrace then ($PrimaryRaceModifier + 1) else (1 - $PrimaryRaceModifier))" />
 									</do_if>
 									<!-- Compare current relations -->
-									<!-- if we do [rawrelation + 1, $MinimumRelationFactor].max we get between a 0.75 factor and 2 -->
-									<set_value name="$MinimumRelationFactor" exact="0.75" />
+									<!-- if we do [rawrelation + 1, $MinimumRelationFactor].max we get between a 0.5 factor and 2 -->
+									<set_value name="$MinimumRelationFactor" exact="0.5" />
 									<set_value name="$PossibleFactionMiscModifier" exact="$PossibleFactionMiscModifier * [($DynamicWarEventFaction.relationto.{$ClaimspaceList.{$G}} + 1), $MinimumRelationFactor].max" />
 									<do_if value="@$DynamicWarDebugChance">
 										<set_value name="$MiscDebug" exact="$MiscDebug + ' - Relation Factor: ' + [($DynamicWarEventFaction.relationto.{$ClaimspaceList.{$G}} + 1), $MinimumRelationFactor].max" />
@@ -817,9 +834,9 @@
 									<do_if value="@$DynamicWarDebugChance">
 										<set_value name="$MiscDebug" exact="player.age + ' - ' + $ClaimspaceList.{$H}.name + ' - Primary Race Comparison Factor: ' + (if $DynamicWarEventFaction.primaryrace != $ClaimspaceList.{$H}.primaryrace then ($PrimaryRaceModifier + 1) else (1 - $PrimaryRaceModifier))" />
 									</do_if>
-									<set_value name="$MinimumRelationFactor" exact="0.75" />
+									<set_value name="$MinimumRelationFactor" exact="0.5" />
 									<!-- Compare current relations -->
-									<!-- if we do [-rawrelation + 1, $MinimumRelationFactor].max we get between a 0.75 factor and 2 -->
+									<!-- if we do [-rawrelation + 1, $MinimumRelationFactor].max we get between a 0.5 factor and 2 -->
 									<set_value name="$PossibleFactionMiscModifier" exact="$PossibleFactionMiscModifier * [(-$DynamicWarEventFaction.relationto.{$ClaimspaceList.{$H}} + 1), $MinimumRelationFactor].max" />
 									<do_if value="@$DynamicWarDebugChance">
 										<set_value name="$MiscDebug" exact="$MiscDebug + ' - Relation Factor: ' + [(-$DynamicWarEventFaction.relationto.{$ClaimspaceList.{$H}} + 1), $MinimumRelationFactor].max" />

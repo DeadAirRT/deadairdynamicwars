@@ -186,5 +186,7 @@
  <t id="410">XL Commerce et construction de navires</t>
  <!--Station: ' + (if $Stations.count gt 0 then $Stations.count else 0)-->
  <t id="411">Station: %1</t>
+ <!-- Disallow HAT in Dynamic Wars -->
+ <t id="412">Disallow {20203,901} in Dynamic Wars</t>
 </page>
 </language>

@@ -4,6 +4,7 @@
 		<cue name="Init" instantiate="false">
 			<actions>
 				<get_factions_by_tag tag="tag.claimspace" result="$FactionList" />
+				<create_list name="$EconomicList" />
 			</actions>
 			<cues>
 				<cue name="Register_Options_Menu" instantiate="true">
@@ -45,9 +46,35 @@
 						<event_cue_signalled/>
 					</conditions>
 					<actions>
+						<clear_list list="$FactionList" />
+						<clear_list list="$EconomicList" />
+						<get_factions_by_tag tag="tag.claimspace" result="$FactionList" />
+						<get_factions_by_tag tag="tag.economic" result="$EconomicList" />
+						<remove_from_list name="$EconomicList" list="$FactionList" multiple="true" />
+						<append_list_elements name="$FactionList" other="$EconomicList" />
+						<sort_list list="$FactionList" sortbyvalue="loop.element.knownname" />
+						
 						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Submenu_Link" param="table[$text={33232471,402}, $id='relationsmenu']" />
 						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Submenu_Link" param="table[$text={33232471,403}, $id='milstrengthmenu']" />
 						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Submenu_Link" param="table[$text={33232471,404}, $id='econstrengthmenu']" />
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" />
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" 
+							param="table[
+								$col=1,
+								$colSpan=2,
+								$text = {33232471,412},
+							]" />
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" 
+							param="table[
+								$col = 3, 
+								$text = table[
+								  $text   =  if md.$DADynWarHAT == true then 'true' else 'false', 
+								  $color  = 'Helper.color.brightyellow',
+								  $halign = 'center',
+								],
+								$onClick = DeadAirDynWarHat,
+								$onRightClick = DeadAirDynWarHat,
+							]" />
 					</actions>
 				</cue>
 				
@@ -60,7 +87,7 @@
 							<set_value name="$FactionOne" exact="$FactionList.{$FactionOneCounter}" />
 							<do_all exact="$FactionList.count" counter="$FactionTwoCounter">
 								<set_value name="$FactionTwo" exact="$FactionList.{$FactionTwoCounter}" />
-								<do_if value="$FactionOne != $FactionTwo">
+								<do_if value="($FactionOne != $FactionTwo) and ($FactionOne.isactive) and ($FactionTwo.isactive)">
 									<include_actions ref="AddFactionRelationRows" />
 								</do_if>
 							</do_all>
@@ -75,7 +102,9 @@
 					<actions>
 						<do_all exact="$FactionList.count" counter="$FactionOneCounter">
 							<set_value name="$FactionOne" exact="$FactionList.{$FactionOneCounter}" />
-							<include_actions ref="AddFactionMilStrengthRows" />
+							<do_if value="($FactionOne.isactive)">
+								<include_actions ref="AddFactionMilStrengthRows" />
+							</do_if>
 						</do_all>
 					</actions>
 				</cue>
@@ -87,8 +116,20 @@
 					<actions>
 						<do_all exact="$FactionList.count" counter="$FactionOneCounter">
 							<set_value name="$FactionOne" exact="$FactionList.{$FactionOneCounter}" />
-							<include_actions ref="AddFactionEconStrengthRows" />
+							<do_if value="($FactionOne.isactive)">
+								<include_actions ref="AddFactionEconStrengthRows" />
+							</do_if>
 						</do_all>
+					</actions>
+				</cue>
+				
+				<cue name="DeadAirDynWarHat" instantiate="true">
+					<conditions>
+						<event_cue_signalled />
+					</conditions>
+					<actions>
+						<set_value name="md.$DADynWarHAT" exact="if md.$DADynWarHAT == true then false else true" />
+						<signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
 					</actions>
 				</cue>
 				
