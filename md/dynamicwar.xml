@@ -67,11 +67,11 @@
 						</do_if>
 						<do_any>
 							<set_value name="$DynamicWarEvent" exact="'Besties'" weight="5" />
-							<set_value name="$DynamicWarEvent" exact="'BigBoost'" weight="25" />
-							<set_value name="$DynamicWarEvent" exact="'SmallBoost'" weight="50" />
-							<set_value name="$DynamicWarEvent" exact="'SmallBlow'" weight="50" />
-							<set_value name="$DynamicWarEvent" exact="'BigBlow'" weight="25" />
-							<set_value name="$DynamicWarEvent" exact="'Nemesis'" weight="5" />
+							<set_value name="$DynamicWarEvent" exact="'BigBoost'" weight="125" />
+							<set_value name="$DynamicWarEvent" exact="'SmallBoost'" weight="250" />
+							<set_value name="$DynamicWarEvent" exact="'SmallBlow'" weight="250" />
+							<set_value name="$DynamicWarEvent" exact="'BigBlow'" weight="125" />
+							<set_value name="$DynamicWarEvent" exact="'Nemesis'" weight="15" />
 							<set_value name="$DynamicWarEvent" exact="'Nothing'" weight="0" />
 						</do_any>
 						<!-- $DynamicWarEvent is now a string with the event-->
@@ -566,7 +566,7 @@
 								<do_elseif value="($NewRelation ge 0.1) and ($NewRelation le 1.0)">
 									<set_value name="$Message" exact="{33232471,127}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
 								</do_elseif>
-								<show_notification priority="2" text="[[$Message,255,164,5]]" />
+								<show_notification priority="2" text="[[$Message,255,164,5]]" sound="notification_warning"/>
 								<do_any>
 									<set_value name="$FlavorText" exact="{33232471,220}.[$FactionOneName,$FactionTwoName]" weight="25"/>
 									<set_value name="$FlavorText" exact="{33232471,221}.[$FactionOneName,$FactionTwoName]" weight="25"/>
@@ -587,7 +587,7 @@
 								<do_elseif value="($NewRelation == -1.0)">
 									<set_value name="$Message" exact="{33232471,135}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
 								</do_elseif>
-								<show_notification priority="2" text="[[$Message,255,0,16]]" />
+								<show_notification priority="2" text="[[$Message,255,0,16]]" sound="notification_warning"/>
 								<do_any>
 									<set_value name="$FlavorText" exact="{33232471,224}.[$FactionTwoName,$FactionOneName]" weight="25"/>
 									<set_value name="$FlavorText" exact="{33232471,225}.[$FactionOneName,$FactionTwoName]" weight="25"/>
@@ -610,7 +610,7 @@
 								<do_elseif value="($NewRelation == -1.0)">
 									<set_value name="$Message" exact="{33232471,131}.[$FactionOneName,$FactionTwoName,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" />
 								</do_elseif>
-								<show_notification priority="2" text="[[$Message,255,164,5]]" />
+								<show_notification priority="2" text="[[$Message,255,164,5]]" sound="notification_warning"/>
 								<do_any>
 									<set_value name="$FlavorText" exact="{33232471,222}.[$FactionOneName,$FactionTwoName]" weight="25"/>
 									<set_value name="$FlavorText" exact="{33232471,223}.[$FactionOneName,$FactionTwoName]" weight="25"/>
