@@ -1,0 +1,534 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mdscript name="DynamicWarDiplomacy" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="md.xsd">
+	<cues>
+		<cue name="Init" instantiate="false">
+			<actions>
+				<include_actions ref="Lib_GetFactions"/>
+			</actions>
+			<cues>
+				<cue name="DeadAir">
+					<actions>
+						<set_value name="DeadAir.$DynamicWarDiplomacyFaction" exact="$FactionList.{1}"/>
+						<set_value name="$IncreaseRelationsNumber" exact="5" />
+						<set_value name="$DecreaseRelationsNumber" exact="-5" />
+						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Ready for variable storage'.[player.age]" context="false" filter="scripts"/>
+					</actions>
+				</cue>
+				<cue name="Register_Options_Menu" instantiate="true">
+					<conditions>
+						<event_cue_signalled cue="md.Simple_Menu_API.Reloaded"/>
+					</conditions>
+					<actions>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Register_Options_Menu" param="table[$id = 'diplomacy_menu', $columns = 2, $title   = {33232471,501}, $onOpen  = Main_Menu ]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Register_Options_Menu" param="table[
+								$id      = 'increase_relations_menu',
+								$columns = 12, 
+								$title   = {33232471,502},
+								$onOpen  = Increase_Relations_menu,
+								$private = 1,
+							]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Register_Options_Menu" param="table[
+								$id      = 'decrease_relations_menu',
+								$columns = 12, 
+								$title   = {33232471,503},
+								$onOpen  = Decrease_Relations_menu,
+								$private = 1,
+							]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Register_Options_Menu" param="table[
+								$id      = 'recent_news_menu',
+								$columns = 8, 
+								$title   = {33232471,504},
+								$onOpen  = Recent_News_menu,
+								$private = 1,
+							]"/>
+					</actions>
+				</cue>
+				<cue name="Main_Menu" instantiate="true">
+					<conditions>
+						<event_cue_signalled/>
+					</conditions>
+					<actions>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Submenu_Link" param="table[$text={33232471,502}, $id='increase_relations_menu']"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Submenu_Link" param="table[$text={33232471,503}, $id='decrease_relations_menu']"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Submenu_Link" param="table[$text={33232471,504}, $id='recent_news_menu']"/>
+					</actions>
+				</cue>
+				<cue name="Increase_Relations_menu" instantiate="true">
+					<conditions>
+						<event_cue_signalled/>
+					</conditions>
+					<actions>
+						<include_actions ref="Lib_Add_Faction_Dropdown"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 1, $colSpan=3,	$halign='center', $text = {1001,43},]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 4, $colSpan=4,	$halign='center', $text = {33232471,402},]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 8, $colSpan=2,	$halign='center', $text = {1001,2926},]"/>
+						<do_if value="DeadAir.$DynamicWarDiplomacyFaction != null">
+							<do_all exact="$FactionList.count" counter="$A">
+								<set_value name="$FactionOne" exact="DeadAir.$DynamicWarDiplomacyFaction"/>
+								<set_value name="$FactionTwo" exact="$FactionList.{$A}"/>
+								<do_if value="($FactionOne != $FactionTwo) and ($FactionTwo.isactive) and (not $ExcludedFactions.indexof.{$FactionTwo})">
+									<!-- Faction name - Current Relations - Increase Relations Option - Cost - Buy +5 -->
+									<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
+									<!-- $col 1 + 2 + 3 -->
+									<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 1, $colSpan=3,	$halign='left', $text = $FactionTwo.knownname,]"/>
+									<!-- $col 4 & $col 5 + 6 + 7 -->
+									<include_actions ref="Lib_FactionRelationBar"/>
+									<do_if value="$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue + $IncreaseRelationsNumber le 25">
+										<include_actions ref="Lib_Relation_Increase_Cost"/>
+										<!-- $col 8 + 9 -->
+										<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 8, $colSpan=2, $halign='right', $text = '%1 %2'.[($IncreaseRelationsCostTable.{$FactionOne}.{$FactionTwo} / 100),{1001,101}],]"/>
+										<do_if value="player.money ge $IncreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}">
+											<!-- $col 10 + 11 + 12 -->
+											<signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
+												$col = 10,
+												$colSpan=3,
+												$text = table[
+												  $text   =  {33232471,507}, 
+												  $color  = 'Helper.color.green',
+												  $halign = 'center',
+												],
+												$onClick = IncreaseRelationsOption,
+												$onRightClick = IncreaseRelationsOption,
+												$echo = [DeadAir.$DynamicWarDiplomacyFaction, $FactionList.{$A}],
+												]" />
+										</do_if>
+										<do_else>
+											<!-- $col 10 + 11 + 12 -->
+											<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 10, $colSpan=3, $halign = 'center', $text = {33232471,506},]"/>
+										</do_else>
+									</do_if>
+									<do_else>
+										<!-- $col 8 + 9 + 10 + 11 + 12 -->
+										<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 8, $colSpan=5, $halign = 'center', $text = {33232471,505},]"/>
+									</do_else>
+								</do_if>
+							</do_all>
+						</do_if>
+					</actions>
+				</cue>
+				<cue name="Decrease_Relations_menu" instantiate="true">
+					<conditions>
+						<event_cue_signalled/>
+					</conditions>
+					<actions>
+						<include_actions ref="Lib_Add_Faction_Dropdown"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 1, $colSpan=3,	$halign='center', $text = {1001,43},]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 4, $colSpan=4,	$halign='center', $text = {33232471,402},]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 8, $colSpan=2,	$halign='center', $text = {1001,2926},]"/>
+						<do_if value="DeadAir.$DynamicWarDiplomacyFaction != null">
+							<do_all exact="$FactionList.count" counter="$A">
+								<set_value name="$FactionOne" exact="DeadAir.$DynamicWarDiplomacyFaction"/>
+								<set_value name="$FactionTwo" exact="$FactionList.{$A}"/>
+								<do_if value="($FactionOne != $FactionTwo) and ($FactionTwo.isactive) and (not $ExcludedFactions.indexof.{$FactionTwo})">
+									<!-- Faction name - Current Relations - Decrease Relations Option - Cost - Buy -5 -->
+									<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
+									<!-- $col 1 + 2 + 3 -->
+									<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 1, $colSpan=3,	$halign='left', $text = $FactionTwo.knownname,]"/>
+									<!-- $col 4 & $col 5 + 6 + 7 -->
+									<include_actions ref="Lib_FactionRelationBar"/>
+									<do_if value="($FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue + $DecreaseRelationsNumber ge -25) and (($FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue * -1) le $FactionOne.relation.{$FactionOne.relationto.{faction.player}}.uivalue)">
+										<include_actions ref="Lib_Relation_Decrease_Cost"/>
+										<!-- $col 8 + 9 -->
+										<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 8, $colSpan=2, $halign='right', $text = '%1 %2'.[($DecreaseRelationsCostTable.{$FactionOne}.{$FactionTwo} / 100),{1001,101}],]"/>
+										<do_if value="player.money ge $DecreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}">
+											<!-- $col 10 + 11 + 12 -->
+											<signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
+												$col = 10,
+												$colSpan=3,
+												$text = table[
+												  $text   =  {33232471,508}, 
+												  $color  = 'Helper.color.green',
+												  $halign = 'center',
+												],
+												$onClick = DecreaseRelationsOption,
+												$onRightClick = DecreaseRelationsOption,
+												$echo = [DeadAir.$DynamicWarDiplomacyFaction, $FactionList.{$A}],
+												]" />
+										</do_if>
+										<do_else>
+											<!-- $col 10 + 11 + 12 -->
+											<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 10, $colSpan=3, $halign = 'center', $text = {33232471,506},]"/>
+										</do_else>
+									</do_if>
+									<do_else>
+										<!-- $col 8 + 9 + 10 + 11 + 12 -->
+										<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 8, $colSpan=5, $halign = 'center', $text = {33232471,505},]"/>
+									</do_else>
+								</do_if>
+							</do_all>
+						</do_if>
+					</actions>
+				</cue>
+				<cue name="Recent_News_menu" instantiate="true">
+					<conditions>
+						<event_cue_signalled/>
+					</conditions>
+					<actions>
+						<!-- TODO: Implement recent dynamic war news -->
+					</actions>
+				</cue>
+				<cue name="IncreaseRelationsOption" instantiate="true">
+					<conditions>
+						<event_cue_signalled />
+					</conditions>
+					<actions>
+						<set_value name="$SelectedFactionOne" exact="event.param.$echo.{1}" />
+						<set_value name="$SelectedFactionTwo" exact="event.param.$echo.{2}" />
+						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- IncreaseRelationsOption -- %2 -- %3 -- %4'.[player.age,$SelectedFactionOne.knownname,$SelectedFactionTwo.knownname,$IncreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo}]" context="false" filter="scripts"/>
+						<set_value name="$UIRelationChange" exact="5" />
+						<include_actions ref="Lib_CalculateUiValueRepChange"/>
+						<!-- Returns $NewAbsoluteRepValue and $AbsoluteRepValueChange -->
+						<reward_player money="$IncreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo} * -1"/>
+						<set_faction_relation faction="$SelectedFactionOne" otherfaction="$SelectedFactionTwo" value="([$NewAbsoluteRepValue, 1].min)" />
+						<set_faction_relation faction="$SelectedFactionTwo" otherfaction="$SelectedFactionOne" value="([$NewAbsoluteRepValue, 1].min)" />
+						<signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
+					</actions>
+				</cue>
+				<cue name="DecreaseRelationsOption" instantiate="true">
+					<conditions>
+						<event_cue_signalled />
+					</conditions>
+					<actions>
+						<set_value name="$SelectedFactionOne" exact="event.param.$echo.{1}" />
+						<set_value name="$SelectedFactionTwo" exact="event.param.$echo.{2}" />
+						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- DecreaseRelationsOption -- %2 -- %3 -- %4'.[player.age,$SelectedFactionOne.knownname,$SelectedFactionTwo.knownname,$DecreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo}]" context="false" filter="scripts"/>
+						<set_value name="$UIRelationChange" exact="-5" />
+						<include_actions ref="Lib_CalculateUiValueRepChange"/>
+						<!-- Returns $NewAbsoluteRepValue and $AbsoluteRepValueChange -->
+						<reward_player money="$DecreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo} * -1"/>
+						<set_faction_relation faction="$SelectedFactionOne" otherfaction="$SelectedFactionTwo" value="([$NewAbsoluteRepValue, -1].max)" />
+						<set_faction_relation faction="$SelectedFactionTwo" otherfaction="$SelectedFactionOne" value="([$NewAbsoluteRepValue, -1].max)" />
+						<signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
+					</actions>
+				</cue>
+				<cue name="Handle_Option_Change" instantiate="true">
+					<conditions>
+						<event_cue_signalled/>
+					</conditions>
+					<actions>
+						<set_value name="$args" exact="event.param"/>
+						<do_if value="$args.$echo.$type == 'dropdown'">
+							<set_value name="DeadAir.{$args.$echo.$name}" exact="$args.$option.$value"/>
+						</do_if>
+						<do_else>
+							<set_value name="DeadAir.{$args.$echo.$name}" exact="$args.$echo.$value"/>
+						</do_else>
+						<do_if value="$args.$echo.$refresh">
+							<signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
+						</do_if>
+					</actions>
+				</cue>
+				<library name="Lib_GetFactions">
+					<actions>
+						<do_if value="$FactionList?">
+							<clear_list list="$FactionList"/>
+						</do_if>
+						<do_else>
+							<create_list name="$FactionList"/>
+						</do_else>
+						<do_if value="$EconomicList?">
+							<clear_list list="$EconomicList"/>
+						</do_if>
+						<do_else>
+							<create_list name="$EconomicList"/>
+						</do_else>
+						<do_if value="$VisitorList?">
+							<clear_list list="$VisitorList"/>
+						</do_if>
+						<do_else>
+							<create_list name="$VisitorList"/>
+						</do_else>
+						<!-- TODO: allow player once this is working -->
+						<set_value name="$ExcludedFactions" exact="[faction.civilian, faction.criminal, faction.khaak, faction.player, faction.smuggler, faction.visitor, faction.xenon]"/>
+						<get_factions_by_tag tag="tag.claimspace" result="$FactionList"/>
+						<get_factions_by_tag tag="tag.economic" result="$EconomicList"/>
+						<get_factions_by_tag tag="tag.visitor" result="$VisitorList"/>
+						<remove_from_list name="$EconomicList" list="$FactionList" multiple="true"/>
+						<append_list_elements name="$FactionList" other="$EconomicList"/>
+						<remove_from_list name="$FactionList" list="$VisitorList" multiple="true"/>
+						<remove_from_list name="$FactionList" list="$ExcludedFactions" multiple="true"/>
+						<do_all exact="$FactionList.count" counter="$B" reverse="true">
+							<do_if value="($FactionList.{$B} == null) or ($FactionList.{$B}.isactive != true)">
+								<remove_value name="$FactionList.{$B}" />
+							</do_if>
+						</do_all>
+						<sort_list list="$FactionList" sortbyvalue="loop.element.knownname"/>
+						<!-- $FactionList has the factions we care about -->
+					</actions>
+				</library>
+				<library name="Lib_Add_Faction_Dropdown">
+					<actions>
+						<include_actions ref="Lib_GetFactions"/>
+						<!--Figure out which entry is currently selected.-->
+						<set_value name="$dropdown_index" exact="$FactionList.indexof.{DeadAir.$DynamicWarDiplomacyFaction}"/>
+						<!--Translate to list of tables, that pair factions with names.-->
+						<set_value name="$options_list" exact="[]"/>
+						<do_for_each name="$faction" in="$FactionList">
+							<set_value name="$name" exact="'%s'.[$faction.knownname]"/>
+							<append_to_list name="$options_list" exact="table[
+							$text = $name,
+							$value = $faction,
+							]"/>
+						</do_for_each>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+							$col = 1,
+							$colSpan = 2,
+							$text = 'Faction:',
+							]"/>
+						<!--Have this stretch over extra columns.-->
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Dropdown" param="table[
+							$col = 3, 
+							$options = $options_list,
+							$startOption = $dropdown_index,
+							$colSpan = event.param.$columns - 2,
+							$onDropDownConfirmed = Handle_Option_Change,
+							$echo = table[
+								$type  = 'dropdown',
+								$name  = '$DynamicWarDiplomacyFaction',
+								$refresh = true,
+								],
+							]"/>
+					</actions>
+				</library>
+				<library name="Lib_FactionRelationBar">
+					<actions>
+						<do_if value="$FactionOne and $FactionTwo" >
+							<set_value name="$Current" exact="$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue + 30" />
+							<set_value name="$Relation" exact="$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue" />
+							<set_value name="$RelationColor" exact="'Helper.color.transparent'" />
+							<do_if value="$Relation le (-20)">
+								<set_value name="$PositiveColor" exact="'Helper.color.transparent'" />
+								<set_value name="$NegativeColor" exact="'Helper.color.red'" />
+							</do_if>
+							<do_elseif value="$Relation le (-10) and $Relation gt (-20)">
+								<set_value name="$PositiveColor" exact="'Helper.color.transparent'" />
+								<set_value name="$NegativeColor" exact="'Helper.color.orange'" />
+							</do_elseif>
+							<do_elseif value="$Relation le (-1) and $Relation gt (-10)">
+								<set_value name="$PositiveColor" exact="'Helper.color.transparent'" />
+								<set_value name="$NegativeColor" exact="'Helper.color.yellow'" />
+							</do_elseif>
+							<do_elseif value="$Relation le (1) and $Relation gt (-1)">
+								<set_value name="$PositiveColor" exact="'Helper.color.yellow'" />
+								<set_value name="$NegativeColor" exact="'Helper.color.transparent'" />
+							</do_elseif>
+							<do_elseif value="$Relation le (10) and $Relation gt (1)">
+								<set_value name="$PositiveColor" exact="'Helper.color.playergreen'" />
+								<set_value name="$NegativeColor" exact="'Helper.color.transparent'" />
+							</do_elseif>
+							<do_elseif value="$Relation lt (20) and $Relation gt (10)">
+								<set_value name="$PositiveColor" exact="'Helper.color.lightgreen'" />
+								<set_value name="$NegativeColor" exact="'Helper.color.transparent'" />
+							</do_elseif>
+							<do_elseif value="$Relation ge (20)">
+								<set_value name="$PositiveColor" exact="'Helper.color.green'" />
+								<set_value name="$NegativeColor" exact="'Helper.color.transparent'" />
+							</do_elseif>
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=4,
+								$colSpan=1,
+								$halign='center',
+								$text = $Relation,
+								]" />
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_StatusBar" param="table[
+								$col			= 5,
+								$colSpan		= 3,
+								$scaling		= true,
+								$type			= 'statusbar',
+								$start			= 30,
+								$current		= $Current,
+								$max			= 60,
+								$valueColor		= $RelationColor,
+								$posChangeColor	= $PositiveColor,
+								$negChangeColor	= $NegativeColor,
+								]" />	
+						</do_if>
+					</actions>				
+				</library>
+				<library name="Lib_Relation_Increase_Cost">
+					<actions>
+						<!-- Uses $FactionOne and $FactionTwo -->
+						<!-- This library will create a table with [$FactionOne, $FactionTwo, $Cost] -->
+						<set_value name="$CostFound" exact="false" />
+						<do_if value="not $IncreaseRelationsCostTable?">
+							<set_value name="$IncreaseRelationsCostTable" exact="table[]" />
+						</do_if>
+						<do_if value="$FactionOne and $FactionTwo">
+							<do_if value="$IncreaseRelationsCostTable.{$FactionOne}? and $IncreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}?">
+								<!-- Update our entry -->
+								<include_actions ref="Lib_Calculate_Cost"/>
+								<set_value name="$IncreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}" exact="$Cost" />
+								<set_value name="$CostFound" exact="true" />
+							</do_if>
+							<do_elseif value="$IncreaseRelationsCostTable.{$FactionOne}? and (not $IncreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}?)">
+								<!-- We have the top level table, but not the specific entry -->
+								<include_actions ref="Lib_Calculate_Cost"/>
+								<set_value name="$IncreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}" exact="$Cost" />
+								<set_value name="$CostFound" exact="true" />
+							</do_elseif>
+							<do_else>
+								<!-- We have nothing sadface -->
+								<include_actions ref="Lib_Calculate_Cost"/>
+								<set_value name="$IncreaseRelationsCostTable.{$FactionOne}" exact="table[{$FactionTwo}=$Cost]" />
+								<set_value name="$CostFound" exact="true" />
+							</do_else>
+						</do_if>
+					</actions>
+				</library>
+				<library name="Lib_Relation_Decrease_Cost">
+					<actions>
+						<!-- Uses $FactionOne and $FactionTwo -->
+						<!-- This library will create a table with [$FactionOne, $FactionTwo, $Cost] -->
+						<set_value name="$CostFound" exact="false" />
+						<do_if value="not $DecreaseRelationsCostTable?">
+							<set_value name="$DecreaseRelationsCostTable" exact="table[]" />
+						</do_if>
+						<do_if value="$FactionOne and $FactionTwo">
+							<do_if value="$DecreaseRelationsCostTable.{$FactionOne}? and $DecreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}?">
+								<!-- Update our entry -->
+								<include_actions ref="Lib_Calculate_Cost"/>
+								<set_value name="$DecreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}" exact="$Cost" />
+								<set_value name="$CostFound" exact="true" />
+							</do_if>
+							<do_elseif value="$DecreaseRelationsCostTable.{$FactionOne}? and (not $DecreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}?)">
+								<!-- We have the top level table, but not the specific entry -->
+								<include_actions ref="Lib_Calculate_Cost"/>
+								<set_value name="$DecreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}" exact="$Cost" />
+								<set_value name="$CostFound" exact="true" />
+							</do_elseif>
+							<do_else>
+								<!-- We have nothing sadface -->
+								<include_actions ref="Lib_Calculate_Cost"/>
+								<set_value name="$DecreaseRelationsCostTable.{$FactionOne}" exact="table[{$FactionTwo}=$Cost]" />
+								<set_value name="$CostFound" exact="true" />
+							</do_else>
+						</do_if>
+					</actions>
+				</library>
+				<library name="Lib_Calculate_Cost">
+					<actions>
+						<!-- Uses $FactionOne and $FactionTwo -->
+						<!-- This library will create $Cost -->
+						<set_value name="$Cost" exact="0" />
+						<set_value name="$Relation" exact="$FactionOne.relationto.{$FactionTwo}" />
+						<set_value name="$NetWorth" exact="player.money" />
+						<do_if value="$Relation le 0">
+							<do_if value="$Relation le -1">
+								<set_value name="$Cost" exact="[500000000Cr, ($NetWorth * 15 / 100)].max" />
+							</do_if>
+							<do_elseif value="$Relation le -0.32">
+								<set_value name="$Cost" exact="[350000000Cr, ($NetWorth * 10 / 100)].max" />
+							</do_elseif>
+							<do_elseif value="$Relation le -0.1">
+								<set_value name="$Cost" exact="[225000000Cr, ($NetWorth * 5 / 100)].max" />
+							</do_elseif>
+							<do_elseif value="$Relation le -0.032">
+								<set_value name="$Cost" exact="[150000000Cr, ($NetWorth * 4 / 100)].max" />
+							</do_elseif>
+							<do_elseif value="$Relation le -0.01">
+								<set_value name="$Cost" exact="[75000000Cr, ($NetWorth * 3 / 100)].max" />
+							</do_elseif>
+							<do_elseif value="$Relation le -0.0032">
+								<set_value name="$Cost" exact="[25000000Cr, ($NetWorth * 2 / 100)].max" />
+							</do_elseif>
+							<do_elseif value="$Relation le 0">
+								<set_value name="$Cost" exact="[5000000Cr, ($NetWorth * 1 / 100)].max" />
+							</do_elseif>
+							<do_else>
+								<set_value name="$Cost" exact="[5000000Cr, ($NetWorth * 1 / 100)].max" />
+								<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- ERROR calculating cost -- %2 -- %3 -- %4'.[player.age,$FactionOne.knownname,$FactionTwo.knownname,$Relation]" context="false" filter="scripts"/>
+							</do_else>
+						</do_if>
+						<do_else>
+							<do_if value="$Relation ge 1">
+								<set_value name="$Cost" exact="[500000000Cr, ($NetWorth * 15 / 100)].max" />
+							</do_if>
+							<do_elseif value="$Relation ge 0.32">
+								<set_value name="$Cost" exact="[350000000Cr, ($NetWorth * 10 / 100)].max" />
+							</do_elseif>
+							<do_elseif value="$Relation ge 0.1">
+								<set_value name="$Cost" exact="[225000000Cr, ($NetWorth * 5 / 100)].max" />
+							</do_elseif>
+							<do_elseif value="$Relation ge 0.032">
+								<set_value name="$Cost" exact="[150000000Cr, ($NetWorth * 4 / 100)].max" />
+							</do_elseif>
+							<do_elseif value="$Relation ge 0.01">
+								<set_value name="$Cost" exact="[75000000Cr, ($NetWorth * 3 / 100)].max" />
+							</do_elseif>
+							<do_elseif value="$Relation ge 0.0032">
+								<set_value name="$Cost" exact="[25000000Cr, ($NetWorth * 2 / 100)].max" />
+							</do_elseif>
+							<do_elseif value="$Relation ge 0">
+								<set_value name="$Cost" exact="[5000000Cr, ($NetWorth * 1 / 100)].max" />
+							</do_elseif>
+							<do_else>
+								<set_value name="$Cost" exact="[5000000Cr, ($NetWorth * 1 / 100)].max" />
+								<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- ERROR calculating cost -- %2 -- %3 -- %4'.[player.age,$FactionOne.knownname,$FactionTwo.knownname,$Relation]" context="false" filter="scripts"/>
+							</do_else>
+						</do_else>
+					</actions>
+				</library>
+				<library name="Lib_CalculateUiValueRepChange">
+					<actions>
+						<!-- 1.0 = 30		0.32 = 25		0.1 = 20		0.032 = 15		0.01 = 10		0.0032 = 5 -->
+						<!-- 1.0 = 30		0.316 = 25		0.1 = 20		0.0316 = 15		0.01 = 10		0.00316 = 5 -->
+						<!-- Requires $SelectedFactionOne, $SelectedFactionTwo, and $UIRelationChange -->
+						<!-- Returns $NewAbsoluteRepValue and $AbsoluteRepValueChange -->
+					<do_if value="$UIRelationChange != 0">
+						<set_value name="$OldUIRepValue" exact="$SelectedFactionOne.relation.{$SelectedFactionOne.relationto.{$SelectedFactionTwo}}.uivalue" />
+						<set_value name="$OldAbsoluteRepValue" exact="$SelectedFactionOne.relationto.{$SelectedFactionTwo}" />
+						<do_if value="($OldUIRepValue ge 5) or ($OldUIRepValue le -5)">
+							<set_value name="$NewUIRepValue" exact="$OldUIRepValue + $UIRelationChange" />
+							<!-- =(10^(SQRT((S2+T2)^2)/10)/1000)*IF(S2+T2<0,-1,1) -->
+							<set_value name="$NewAbsoluteRepValue" exact="(10^(sqrt(($OldUIRepValue + $UIRelationChange) ^ 2)/10) / 1000) * (if ($OldUIRepValue + $UIRelationChange lt 0) then -1 else 1)" />
+							<do_if value="$NewAbsoluteRepValue lt -1">
+								<set_value name="$NewAbsoluteRepValue" exact="-1" />
+							</do_if>
+							<do_if value="$NewAbsoluteRepValue gt 1">
+								<set_value name="$NewAbsoluteRepValue" exact="1" />
+							</do_if>
+							<set_value name="$AbsoluteRepValueChange" exact="$NewAbsoluteRepValue - $OldAbsoluteRepValue" />
+						</do_if>
+						<do_elseif value="($OldUIRepValue lt 5) and ($OldUIRepValue gt -5)">
+							<set_value name="$NewUIRepValue" exact="$OldUIRepValue + $UIRelationChange" />
+							<set_value name="$NewAbsoluteRepValue" exact="$OldAbsoluteRepValue + ($UIRelationChange * 0.00064)" />
+							<set_value name="$AbsoluteRepValueChange" exact="$NewAbsoluteRepValue - $OldAbsoluteRepValue" />
+						</do_elseif>
+						<!-- Force Rounding is ugly but oh well -->
+						<!-- Round near 25 -->
+						<do_if value="($NewAbsoluteRepValue le 0.3238) and ($NewAbsoluteRepValue ge 0.3161)">
+							<set_value name="$NewAbsoluteRepValue" exact="0.32" />
+							<set_value name="$AbsoluteRepValueChange" exact="$NewAbsoluteRepValue - $OldAbsoluteRepValue" />
+						</do_if>
+						<do_elseif value="($NewAbsoluteRepValue ge -0.3238) and ($NewAbsoluteRepValue le -0.3161)">
+							<set_value name="$NewAbsoluteRepValue" exact="-0.32" />
+							<set_value name="$AbsoluteRepValueChange" exact="$NewAbsoluteRepValue - $OldAbsoluteRepValue" />
+						</do_elseif>
+						<!-- Round near 15 -->
+						<do_elseif value="($NewAbsoluteRepValue le 0.03238) and ($NewAbsoluteRepValue ge 0.03161)">
+							<set_value name="$NewAbsoluteRepValue" exact="0.032" />
+							<set_value name="$AbsoluteRepValueChange" exact="$NewAbsoluteRepValue - $OldAbsoluteRepValue" />
+						</do_elseif>
+						<do_elseif value="($NewAbsoluteRepValue ge -0.03238) and ($NewAbsoluteRepValue le -0.03161)">
+							<set_value name="$NewAbsoluteRepValue" exact="-0.032" />
+							<set_value name="$AbsoluteRepValueChange" exact="$NewAbsoluteRepValue - $OldAbsoluteRepValue" />
+						</do_elseif>
+						<!-- Round near 5 -->
+						<do_elseif value="($NewAbsoluteRepValue le 0.003238) and ($NewAbsoluteRepValue ge 0.003161)">
+							<set_value name="$NewAbsoluteRepValue" exact="0.0032" />
+							<set_value name="$AbsoluteRepValueChange" exact="$NewAbsoluteRepValue - $OldAbsoluteRepValue" />
+						</do_elseif>
+						<do_elseif value="($NewAbsoluteRepValue ge -0.003238) and ($NewAbsoluteRepValue le -0.003161)">
+							<set_value name="$NewAbsoluteRepValue" exact="-0.0032" />
+							<set_value name="$AbsoluteRepValueChange" exact="$NewAbsoluteRepValue - $OldAbsoluteRepValue" />
+						</do_elseif>
+					</do_if>
+					</actions>
+				</library>
+			</cues>
+		</cue>
+	</cues>
+</mdscript>

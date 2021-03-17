@@ -60,20 +60,40 @@
 						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" />
 						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" 
 							param="table[
-								$col=1,
-								$colSpan=2,
+								$col = 1,
+								$colSpan = 4,
 								$text = {33232471,412},
 							]" />
 						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" 
 							param="table[
-								$col = 3, 
+								$col = 5, 
+								$colSpan = 2,
 								$text = table[
 								  $text   =  if md.$DADynWarHAT == true then 'true' else 'false', 
-								  $color  = 'Helper.color.brightyellow',
+								  $color  = 'Helper.color.green',
 								  $halign = 'center',
 								],
 								$onClick = DeadAirDynWarHat,
 								$onRightClick = DeadAirDynWarHat,
+							]" />
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" />
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" 
+							param="table[
+								$col = 1,
+								$colSpan = 4,
+								$text = {33232471,413},
+							]" />
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" 
+							param="table[
+								$col = 5, 
+								$colSpan = 2,
+								$text = table[
+								  $text   =  if md.$DADynWarSCA == true then 'true' else 'false', 
+								  $color  = 'Helper.color.green',
+								  $halign = 'center',
+								],
+								$onClick = DeadAirDynWarSca,
+								$onRightClick = DeadAirDynWarSca,
 							]" />
 					</actions>
 				</cue>
@@ -129,6 +149,22 @@
 					</conditions>
 					<actions>
 						<set_value name="md.$DADynWarHAT" exact="if md.$DADynWarHAT == true then false else true" />
+						<signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
+					</actions>
+				</cue>
+				
+				<cue name="DeadAirDynWarSca" instantiate="true">
+					<conditions>
+						<event_cue_signalled />
+					</conditions>
+					<actions>
+						<set_value name="md.$DADynWarSCA" exact="if md.$DADynWarSCA == true then false else true" />
+						<do_if value="md.$DADynWarSCA == false">
+							<set_faction_relation_locked faction="faction.scaleplate" locked="false"/>
+						</do_if>
+						<do_else>
+							<set_faction_relation_locked faction="faction.scaleplate" locked="true"/>
+						</do_else>
 						<signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
 					</actions>
 				</cue>
