@@ -165,15 +165,15 @@
  
  <t id="400">(UI STUFF)</t>
  <!--Faction Information-->
- <t id="401">Faction Information</t>
+ <t id="401">Fraktionsinformationen</t>
  <!--Relations-->
- <t id="402">Relations</t>
+ <t id="402">Beziehungen</t>
  <!--Military Strength-->
- <t id="403">Military Strength</t>
+ <t id="403">Militärische Stärke</t>
  <!--Economic Strength-->
- <t id="404">Economic Strength</t>
+ <t id="404">Wirtschaftliche Stärke</t>
  <!--Total: ' + (if $TotalShips gt 0 then $TotalShips else 0)-->
- <t id="405">Total: %1</t>
+ <t id="405">Gesamt: %1</t>
  <!--XL: ' + (if $XLShips.count gt 0 then $XLShips.count else 0)-->
  <t id="406">XL: %1</t>
  <!--L: ' + (if $LShips.count gt 0 then $LShips.count else 0)-->
@@ -183,17 +183,17 @@
  <!--S: ' + (if $SShips.count gt 0 then $SShips.count else 0)-->
  <t id="409">S: %1</t>
  <!--XL Trading and Building Ships-->
- <t id="410">XL Trading and Building Ships</t>
+ <t id="410">XL Handels- und Bauschiffe</t>
  <!--Station: ' + (if $Stations.count gt 0 then $Stations.count else 0)-->
  <t id="411">Station: %1</t>
  <!-- Disallow HAT in Dynamic Wars -->
- <t id="412">Disallow {20203,901} in Dynamic Wars</t>
- <t id="413">Lock {20203,1001} Relations</t>
+ <t id="412">Nicht zulassen {20203,901} in Dynamic Wars</t>
+ <t id="413">Sperren {20203,1001} Beziehungen</t>
  <t id="500">(Diplomacy STUFF)</t>
- <t id="501">Diplomacy Menu</t>
- <t id="502">Increase Relations</t>
- <t id="503">Decrease Relations</t>
- <t id="504">Recent Events</t>
+ <t id="501">Diplomatie-Menü</t>
+ <t id="502">Beziehungen verbessern</t>
+ <t id="503">Beziehungen verringern</t>
+ <t id="504">Die jüngsten Ereignisse</t>
  <t id="505">N/A</t>
  <t id="506">{1015,28}</t>
  <t id="507">{1001,2701} +5</t>
