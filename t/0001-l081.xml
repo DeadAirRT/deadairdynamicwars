@@ -187,13 +187,13 @@
  <!--Station: ' + (if $Stations.count gt 0 then $Stations.count else 0)-->
  <t id="411">ST: %1</t>
  <!-- Disallow HAT in Dynamic Wars -->
- <t id="412">Disallow {20203,901} in Dynamic Wars</t>
- <t id="413">Lock {20203,1001} Relations</t>
+ <t id="412">{20203,901} の動的な戦争を許可しない</t>
+ <t id="413">{20203,1001} の関係性を固定する</t>
  <t id="500">(Diplomacy STUFF)</t>
- <t id="501">Diplomacy Menu</t>
- <t id="502">Increase Relations</t>
- <t id="503">Decrease Relations</t>
- <t id="504">Recent Events</t>
+ <t id="501">外交メニュー</t>
+ <t id="502">関係性を向上させる</t>
+ <t id="503">関係性を悪化させる</t>
+ <t id="504">直近の出来事</t>
  <t id="505">N/A</t>
  <t id="506">{1015,28}</t>
  <t id="507">{1001,2701} +5</t>
