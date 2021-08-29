@@ -187,7 +187,7 @@
  <!--Station: ' + (if $Stations.count gt 0 then $Stations.count else 0)-->
  <t id="411">ST: %1</t>
  <!-- Disallow HAT in Dynamic Wars -->
- <t id="412">{20203,901}をダイナミックな戦争から除外する</t>
+ <t id="412">{20203,901}を動的な戦争から除外する</t>
  <t id="413">{20203,1001}の関係性を固定する</t>
  <t id="500">(Diplomacy STUFF)</t>
  <t id="501">外交メニュー</t>
