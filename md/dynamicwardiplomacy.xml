@@ -241,12 +241,15 @@
 							<create_list name="$VisitorList"/>
 						</do_else>
 						<!-- TODO: allow player once this is working -->
-						<set_value name="$ExcludedFactions" exact="[faction.civilian, faction.criminal, faction.khaak, faction.player, faction.smuggler, faction.visitor, faction.xenon]"/>
+						<set_value name="$ExcludedFactions" exact="[faction.civilian, faction.criminal, faction.khaak, faction.smuggler, faction.visitor, faction.xenon]"/>
+						<set_value name="$TerranFactions" exact="[faction.terran, faction.pioneers, faction.yaki]"/>
 						<get_factions_by_tag tag="tag.claimspace" result="$FactionList"/>
 						<get_factions_by_tag tag="tag.economic" result="$EconomicList"/>
 						<get_factions_by_tag tag="tag.visitor" result="$VisitorList"/>
 						<remove_from_list name="$EconomicList" list="$FactionList" multiple="true"/>
+						<remove_from_list name="$TerranFactions" list="$FactionList" multiple="true"/>
 						<append_list_elements name="$FactionList" other="$EconomicList"/>
+						<append_list_elements name="$FactionList" other="$TerranFactions"/>
 						<remove_from_list name="$FactionList" list="$VisitorList" multiple="true"/>
 						<remove_from_list name="$FactionList" list="$ExcludedFactions" multiple="true"/>
 						<do_all exact="$FactionList.count" counter="$B" reverse="true">
