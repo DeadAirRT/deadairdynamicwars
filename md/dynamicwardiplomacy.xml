@@ -420,55 +420,55 @@
 						<set_value name="$NetWorth" exact="player.money" />
 						<do_if value="$Relation le 0">
 							<do_if value="$Relation le -1">
-								<set_value name="$Cost" exact="[500000000Cr, ($NetWorth * 15 / 100)].max" />
+								<set_value name="$Cost" exact="[50000000Cr, ($NetWorth * 15 / 1000)].max" />
 							</do_if>
 							<do_elseif value="$Relation le -0.32">
-								<set_value name="$Cost" exact="[350000000Cr, ($NetWorth * 10 / 100)].max" />
+								<set_value name="$Cost" exact="[35000000Cr, ($NetWorth * 10 / 1000)].max" />
 							</do_elseif>
 							<do_elseif value="$Relation le -0.1">
-								<set_value name="$Cost" exact="[225000000Cr, ($NetWorth * 5 / 100)].max" />
+								<set_value name="$Cost" exact="[22500000Cr, ($NetWorth * 5 / 1000)].max" />
 							</do_elseif>
 							<do_elseif value="$Relation le -0.032">
-								<set_value name="$Cost" exact="[150000000Cr, ($NetWorth * 4 / 100)].max" />
+								<set_value name="$Cost" exact="[15000000Cr, ($NetWorth * 4 / 1000)].max" />
 							</do_elseif>
 							<do_elseif value="$Relation le -0.01">
-								<set_value name="$Cost" exact="[75000000Cr, ($NetWorth * 3 / 100)].max" />
+								<set_value name="$Cost" exact="[7500000Cr, ($NetWorth * 3 / 1000)].max" />
 							</do_elseif>
 							<do_elseif value="$Relation le -0.0032">
-								<set_value name="$Cost" exact="[25000000Cr, ($NetWorth * 2 / 100)].max" />
+								<set_value name="$Cost" exact="[2500000Cr, ($NetWorth * 2 / 1000)].max" />
 							</do_elseif>
 							<do_elseif value="$Relation le 0">
-								<set_value name="$Cost" exact="[5000000Cr, ($NetWorth * 1 / 100)].max" />
+								<set_value name="$Cost" exact="[500000Cr, ($NetWorth * 1 / 1000)].max" />
 							</do_elseif>
 							<do_else>
-								<set_value name="$Cost" exact="[5000000Cr, ($NetWorth * 1 / 100)].max" />
+								<set_value name="$Cost" exact="[500000Cr, ($NetWorth * 1 / 1000)].max" />
 								<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- ERROR calculating cost -- %2 -- %3 -- %4'.[player.age,$FactionOne.knownname,$FactionTwo.knownname,$Relation]" context="false" filter="scripts"/>
 							</do_else>
 						</do_if>
 						<do_else>
 							<do_if value="$Relation ge 1">
-								<set_value name="$Cost" exact="[500000000Cr, ($NetWorth * 15 / 100)].max" />
+								<set_value name="$Cost" exact="[50000000Cr, ($NetWorth * 15 / 1000)].max" />
 							</do_if>
 							<do_elseif value="$Relation ge 0.32">
-								<set_value name="$Cost" exact="[350000000Cr, ($NetWorth * 10 / 100)].max" />
+								<set_value name="$Cost" exact="[35000000Cr, ($NetWorth * 10 / 1000)].max" />
 							</do_elseif>
 							<do_elseif value="$Relation ge 0.1">
-								<set_value name="$Cost" exact="[225000000Cr, ($NetWorth * 5 / 100)].max" />
+								<set_value name="$Cost" exact="[22500000Cr, ($NetWorth * 5 / 1000)].max" />
 							</do_elseif>
 							<do_elseif value="$Relation ge 0.032">
-								<set_value name="$Cost" exact="[150000000Cr, ($NetWorth * 4 / 100)].max" />
+								<set_value name="$Cost" exact="[15000000Cr, ($NetWorth * 4 / 1000)].max" />
 							</do_elseif>
 							<do_elseif value="$Relation ge 0.01">
-								<set_value name="$Cost" exact="[75000000Cr, ($NetWorth * 3 / 100)].max" />
+								<set_value name="$Cost" exact="[7500000Cr, ($NetWorth * 3 / 1000)].max" />
 							</do_elseif>
 							<do_elseif value="$Relation ge 0.0032">
-								<set_value name="$Cost" exact="[25000000Cr, ($NetWorth * 2 / 100)].max" />
+								<set_value name="$Cost" exact="[2500000Cr, ($NetWorth * 2 / 1000)].max" />
 							</do_elseif>
 							<do_elseif value="$Relation ge 0">
-								<set_value name="$Cost" exact="[5000000Cr, ($NetWorth * 1 / 100)].max" />
+								<set_value name="$Cost" exact="[500000Cr, ($NetWorth * 1 / 1000)].max" />
 							</do_elseif>
 							<do_else>
-								<set_value name="$Cost" exact="[5000000Cr, ($NetWorth * 1 / 100)].max" />
+								<set_value name="$Cost" exact="[5000000Cr, ($NetWorth * 1 / 1000)].max" />
 								<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- ERROR calculating cost -- %2 -- %3 -- %4'.[player.age,$FactionOne.knownname,$FactionTwo.knownname,$Relation]" context="false" filter="scripts"/>
 							</do_else>
 						</do_else>
