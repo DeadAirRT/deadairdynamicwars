@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <diff name="Story_Paranid" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="md.xsd">
-<add sel="//signal_cue[@cue='md.FactionLogic.BuccaneersFactionLogic']" pos="after">
+<add sel="//append_list_elements[@name='md.FactionLogic.BuccaneersFactionLogic_Manager.$PreferredHQTypes']" pos="after">
 <do_if value="md.$DADynWarBUC?">
 	<set_value name="md.$DADynWarBUC" exact="false" />
 </do_if>

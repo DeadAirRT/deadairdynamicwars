@@ -166,7 +166,35 @@
 						<event_cue_signalled/>
 					</conditions>
 					<actions>
-						<!-- TODO: Implement recent dynamic war news -->
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 1, $colSpan=2,	$halign='center', $text = {1001,24}]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 3, $colSpan=6,	$halign='center', $text = {1001,5721}]"/>
+						<!-- md.DADynWarNews.{Index} == [Player.age, Message] -->
+						<do_if value="md.$DADynWarNews.{1}?">
+							<do_all exact="md.$DADynWarNews.keys.count" counter="$index">
+								<set_value name="$Time" exact="md.$DADynWarNews.{$index}.{1}"/>
+								<set_value name="$Message" exact="md.$DADynWarNews.{$index}.{2}"/>
+								<do_if value="($Time != null) and ($Message != null)">
+									<!-- Relative Time - Message -->
+									<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
+									<!-- $col 1 + 2 -->
+									<!-- This is in seconds ago for now -->
+									<set_value name="$RelativeTime" exact="player.age - $Time"/>
+									<set_value name="$RelativeTimeFormatted" exact="$RelativeTime.formatted.{'%dd:%Hh:%Mm'}"/>
+									<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 1, $colSpan=2,	$halign='left', $text = $RelativeTimeFormatted, $wordwrap = true]"/>
+									<!-- $col 3 - 8 -->
+									<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 3, $colSpan=6, $halign='left', $text = $Message, $wordwrap = true]"/>
+									<remove_value name="$Time"/>
+									<remove_value name="$Message"/>
+									<remove_value name="$RelativeTime"/>
+									<remove_value name="$RelativeTimeFormatted"/>
+								</do_if>
+							</do_all>
+						</do_if>
+						<do_else>
+							<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 1, $colSpan=8,	$halign='center', $text = {1099,16}]"/>
+						</do_else>
 					</actions>
 				</cue>
 				<cue name="IncreaseRelationsOption" instantiate="true">
@@ -181,6 +209,10 @@
 						<include_actions ref="Lib_CalculateUiValueRepChange"/>
 						<!-- Returns $NewAbsoluteRepValue and $AbsoluteRepValueChange -->
 						<reward_player money="$IncreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo} * -1"/>
+						<do_if value="($IncreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo} == 0) and (@md.$DADynWarFavors.{$SelectedFactionOne} gt 0) and ($SelectedFactionOne != faction.player)">
+							<set_value name="md.$DADynWarFavors.{$SelectedFactionOne}" exact="[md.$DADynWarFavors.{$SelectedFactionOne} - 1,0].max"/>
+							<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Used Favor -- %2 -- Favors: %3 -- %4'.[player.age,$SelectedFactionOne.knownname,md.$DADynWarFavors.{$SelectedFactionOne},$IncreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo}]" context="false" filter="scripts"/>
+						</do_if>
 						<set_faction_relation faction="$SelectedFactionOne" otherfaction="$SelectedFactionTwo" value="([$NewAbsoluteRepValue, 1].min)" />
 						<set_faction_relation faction="$SelectedFactionTwo" otherfaction="$SelectedFactionOne" value="([$NewAbsoluteRepValue, 1].min)" />
 						<signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
@@ -198,6 +230,11 @@
 						<include_actions ref="Lib_CalculateUiValueRepChange"/>
 						<!-- Returns $NewAbsoluteRepValue and $AbsoluteRepValueChange -->
 						<reward_player money="$DecreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo} * -1"/>
+						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- ($DecreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo} * -1): %2 -- @md.$DADynWarFavors.{$SelectedFactionOne}: %3 -- $DecreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo}: %4 -- @md.$DADynWarFavors.{$SelectedFactionOne} gt 0: %5'.[player.age,($DecreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo} * -1),@md.$DADynWarFavors.{$SelectedFactionOne},$DecreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo},@md.$DADynWarFavors.{$SelectedFactionOne} gt 0]" context="false" filter="scripts"/>
+						<do_if value="($DecreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo} == 0) and (@md.$DADynWarFavors.{$SelectedFactionOne} gt 0) and ($SelectedFactionOne != faction.player) and ($SelectedFactionTwo != faction.player)">
+							<set_value name="md.$DADynWarFavors.{$SelectedFactionOne}" exact="[md.$DADynWarFavors.{$SelectedFactionOne} - 1,0].max"/>
+							<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Used Favor -- %2 -- Favors: %3 -- %4'.[player.age,$SelectedFactionOne.knownname,md.$DADynWarFavors.{$SelectedFactionOne},$DecreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo}]" context="false" filter="scripts"/>
+						</do_if>
 						<set_faction_relation faction="$SelectedFactionOne" otherfaction="$SelectedFactionTwo" value="([$NewAbsoluteRepValue, -1].max)" />
 						<set_faction_relation faction="$SelectedFactionTwo" otherfaction="$SelectedFactionOne" value="([$NewAbsoluteRepValue, -1].max)" />
 						<signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
@@ -363,19 +400,19 @@
 							<do_if value="$IncreaseRelationsCostTable.{$FactionOne}? and $IncreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}?">
 								<!-- Update our entry -->
 								<include_actions ref="Lib_Calculate_Cost"/>
-								<set_value name="$IncreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}" exact="$Cost" />
+								<set_value name="$IncreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}" exact="if (@md.$DADynWarFavors.{$FactionOne} gt 0) then 0Cr else $Cost" />
 								<set_value name="$CostFound" exact="true" />
 							</do_if>
 							<do_elseif value="$IncreaseRelationsCostTable.{$FactionOne}? and (not $IncreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}?)">
 								<!-- We have the top level table, but not the specific entry -->
 								<include_actions ref="Lib_Calculate_Cost"/>
-								<set_value name="$IncreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}" exact="$Cost" />
+								<set_value name="$IncreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}" exact="if (@md.$DADynWarFavors.{$FactionOne} gt 0) then 0Cr else $Cost" />
 								<set_value name="$CostFound" exact="true" />
 							</do_elseif>
 							<do_else>
 								<!-- We have nothing sadface -->
 								<include_actions ref="Lib_Calculate_Cost"/>
-								<set_value name="$IncreaseRelationsCostTable.{$FactionOne}" exact="table[{$FactionTwo}=$Cost]" />
+								<set_value name="$IncreaseRelationsCostTable.{$FactionOne}" exact="table[{$FactionTwo}=(if (@md.$DADynWarFavors.{$FactionOne} gt 0) then 0Cr else $Cost)]" />
 								<set_value name="$CostFound" exact="true" />
 							</do_else>
 						</do_if>
@@ -389,26 +426,33 @@
 						<do_if value="not $DecreaseRelationsCostTable?">
 							<set_value name="$DecreaseRelationsCostTable" exact="table[]" />
 						</do_if>
+						
 						<do_if value="$FactionOne and $FactionTwo">
+							<set_value name="$PlayerChange" exact="false"/>
+							<do_if value="($FactionOne == faction.player) or ($FactionTwo == faction.player)">
+								<set_value name="$PlayerChange" exact="true"/>
+							</do_if>
+							
 							<do_if value="$DecreaseRelationsCostTable.{$FactionOne}? and $DecreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}?">
 								<!-- Update our entry -->
 								<include_actions ref="Lib_Calculate_Cost"/>
-								<set_value name="$DecreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}" exact="$Cost" />
+								<set_value name="$DecreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}" exact="if ($PlayerChange) then 0Cr else (if (@md.$DADynWarFavors.{$FactionOne} gt 0) then 0Cr else $Cost)" />
 								<set_value name="$CostFound" exact="true" />
 							</do_if>
 							<do_elseif value="$DecreaseRelationsCostTable.{$FactionOne}? and (not $DecreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}?)">
 								<!-- We have the top level table, but not the specific entry -->
 								<include_actions ref="Lib_Calculate_Cost"/>
-								<set_value name="$DecreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}" exact="$Cost" />
+								<set_value name="$DecreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}" exact="if ($PlayerChange) then 0Cr else (if (@md.$DADynWarFavors.{$FactionOne} gt 0) then 0Cr else $Cost)" />
 								<set_value name="$CostFound" exact="true" />
 							</do_elseif>
 							<do_else>
 								<!-- We have nothing sadface -->
 								<include_actions ref="Lib_Calculate_Cost"/>
-								<set_value name="$DecreaseRelationsCostTable.{$FactionOne}" exact="table[{$FactionTwo}=$Cost]" />
+								<set_value name="$DecreaseRelationsCostTable.{$FactionOne}" exact="table[{$FactionTwo}=(if ($PlayerChange) then 0Cr else (if (@md.$DADynWarFavors.{$FactionOne} gt 0) then 0Cr else $Cost))]" />
 								<set_value name="$CostFound" exact="true" />
 							</do_else>
 						</do_if>
+						<remove_value name="$PlayerChange"/>
 					</actions>
 				</library>
 				<library name="Lib_Calculate_Cost">

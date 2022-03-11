@@ -49,6 +49,7 @@
 				<cue name="DynamicWarTimer" instantiate="true" checkinterval="30min" checktime="player.age + 5min">
 					<actions>
 						<signal_cue_instantly cue="DynamicWarEventSelector" />
+						<signal_cue_instantly cue="DynamicWarDataCollector" />
 					</actions>
 				</cue>
 				<!-- This is where debug goes
@@ -626,6 +627,7 @@
 								<write_to_logbook category="news" title="$Message" text="$FlavorText" highlighted="true" />
 							</do_elseif>
 						</do_elseif>
+						<include_actions ref="DynamicWarNewsTracking" />
 						<remove_value name="$FactionOne" />
 						<remove_value name="$FactionTwo" />
 						<remove_value name="$FactionOneName" />
@@ -937,6 +939,108 @@
 						</do_if>
 					</actions>
 				</library>
+				<library name="DynamicWarNewsTracking">
+					<actions>
+						<!-- set up the table if not already set up -->
+						<do_if value="(not md.$DADynWarNews?)">
+							<set_value name="md.$DADynWarNews" exact="table[]"/>
+						</do_if>
+						<!-- FactionOne, FactionTwo, FactionOneName, FactionTwoName,Message, and FlavorText available above -->
+						<!-- TODO: Track sector ownership changes -->
+						<do_if value="$FactionOne? and $FactionTwo? and $Message? and $FlavorText?">
+							<!-- set up the first value -->
+							<!-- md.DADynWarNews.{Index} == [Player.age, Message] -->
+							<do_if value="(not md.$DADynWarNews.{1}?)">
+								<set_value name="md.$DADynWarNews.{1}" exact="[player.age,$Message]"/>
+							</do_if>
+							<do_else>
+								<!-- md.DADynWarNews.{Index} == [Player.age, Message] -->
+								<do_all exact="md.$DADynWarNews.keys.count" counter="$indexcounter" reverse="true">
+									<!-- Move all entries to index+1 so newest is first -->
+									<do_if value="($indexcounter + 1) gt 20">
+										<!-- If index + 1 gt 20 then drop -->
+									</do_if>
+									<do_else>
+										<set_value name="md.$DADynWarNews.{$indexcounter + 1}" exact="md.$DADynWarNews.{$indexcounter}"/>
+									</do_else>
+								</do_all>
+								<!-- Put the new entry as index 1 -->
+								<set_value name="md.$DADynWarNews.{1}" exact="[player.age,$Message]"/>
+							</do_else>
+						</do_if>
+						<do_else>
+							<debug_text text="'MOD: DeadAirDynamicWar -- %1 -- Missing News item: $FactionOne %2, $FactionTwo %3, $Message %4, $FlavorText %5'.[player.age,$FactionOne.name,$FactionTwo.name,$Message,$FlavorText]" 
+							context="false" filter="scripts" chance="if @$DynamicWarDebugChance then ($DynamicWarDebugChance * 100) else 0"/>
+						</do_else>
+						<!-- This will be displayed in diplomacy screen recent news -->
+					</actions>
+				</library>
+				<cue name="DynamicWarDataCollector" instantiate="true">
+					<conditions>
+						<event_cue_signalled/>
+					</conditions>
+					<actions>
+						<!-- Check player friendly factions -->
+						<do_if value="(not md.$DADynWarFavors?)">
+							<set_value name="md.$DADynWarFavors" exact="table[]"/>
+						</do_if>
+						<set_value name="$FactionList" exact="[]"/>
+						<set_value name="$EconomicList" exact="[]"/>
+						<set_value name="$VisitorList" exact="[]"/>
+						<set_value name="$ExcludedFactions" exact="[faction.civilian, faction.criminal, faction.khaak, faction.smuggler, faction.visitor, faction.xenon]"/>
+						<set_value name="$TerranFactions" exact="[faction.terran, faction.pioneers, faction.yaki]"/>
+						<get_factions_by_tag tag="tag.claimspace" result="$FactionList"/>
+						<get_factions_by_tag tag="tag.economic" result="$EconomicList"/>
+						<get_factions_by_tag tag="tag.visitor" result="$VisitorList"/>
+						<remove_from_list name="$EconomicList" list="$FactionList" multiple="true"/>
+						<remove_from_list name="$TerranFactions" list="$FactionList" multiple="true"/>
+						<append_list_elements name="$FactionList" other="$EconomicList"/>
+						<append_list_elements name="$FactionList" other="$TerranFactions"/>
+						<remove_from_list name="$FactionList" list="$VisitorList" multiple="true"/>
+						<remove_from_list name="$FactionList" list="$ExcludedFactions" multiple="true"/>
+						<do_all exact="$FactionList.count" counter="$B" reverse="true">
+							<do_if value="($FactionList.{$B} == null) or ($FactionList.{$B}.isactive != true)">
+								<remove_value name="$FactionList.{$B}" />
+							</do_if>
+						</do_all>
+						<sort_list list="$FactionList" sortbyvalue="loop.element.knownname"/>
+						<!-- Add +1 favor if above threshold up to 3 favors per -->
+						<do_for_each name="$FavorFaction" in="$FactionList">
+							<do_if value="md.$DADynWarFavors.{$FavorFaction}?">
+								<!-- Update our entry -->
+								<do_if value="$FavorFaction.relationto.{faction.player} gt 0.1">
+									<set_value name="md.$DADynWarFavors.{$FavorFaction}" exact="[md.$DADynWarFavors.{$FavorFaction} + 1,3].min"/>
+								</do_if>
+							</do_if>
+							<do_elseif value="md.$DADynWarFavors.{$FavorFaction}? and (@md.$DADynWarFavors.{$FavorFaction} == null)">
+								<!-- We have the top level table, but not the specific entry -->
+								<do_if value="$FavorFaction.relationto.{faction.player} gt 0.1">
+									<set_value name="md.$DADynWarFavors.{$FavorFaction}" exact="1"/>
+								</do_if>
+								<do_else>
+									<set_value name="md.$DADynWarFavors.{$FavorFaction}" exact="0"/>
+								</do_else>
+							</do_elseif>
+							<do_else>
+								<!-- We have nothing sadface -->
+								<do_if value="$FavorFaction.relationto.{faction.player} gt 0.1">
+									<set_value name="md.$DADynWarFavors.{$FavorFaction}" exact="1"/>
+								</do_if>
+								<do_else>
+									<set_value name="md.$DADynWarFavors.{$FavorFaction}" exact="0"/>
+								</do_else>
+							</do_else>
+						</do_for_each>
+						<!-- Keep track of wars -->
+						<!-- Check for change of system ownership -->
+						<remove_value name="$FavorFaction"/>
+						<remove_value name="$FactionList"/>
+						<remove_value name="$EconomicList"/>
+						<remove_value name="$VisitorList"/>
+						<remove_value name="$ExcludedFactions"/>
+						<remove_value name="$TerranFactions"/>
+					</actions>
+				</cue>
 			</cues>
 		</cue>
 	</cues>
