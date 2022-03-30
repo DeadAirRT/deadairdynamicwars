@@ -189,8 +189,16 @@
  <!-- Disallow HAT in Dynamic Wars -->
  <t id="412">Nicht zulassen {20203,901} in Dynamic Wars</t>
  <t id="413">Sperren {20203,1001} Beziehungen</t>
+ <t id="414">Enable Dynamic Wars</t>
+ <t id="415">Best Friend Weight</t>
+ <t id="416">Large Increase Weight</t>
+ <t id="417">Small Increase Weight</t>
+ <t id="418">Small Decrease Weight</t>
+ <t id="419">Large Decrease Weight</t>
+ <t id="420">Nemesis Weight</t>
+ <t id="421">{1001,45} {1001,1406}\/{1001,2903}</t>
  <t id="500">(Diplomacy STUFF)</t>
- <t id="501">Diplomatie-Menü</t>
+ <t id="501">DA Dynamisches Kriegsmenü</t>
  <t id="502">Beziehungen verbessern</t>
  <t id="503">Beziehungen verringern</t>
  <t id="504">Die jüngsten Ereignisse</t>
@@ -198,5 +206,6 @@
  <t id="506">{1015,28}</t>
  <t id="507">{1001,2701} +5</t>
  <t id="508">{1001,2701} -5</t>
+ <t id="509">{1001,1406}\/{1001,2903}</t>
 </page>
 </language>

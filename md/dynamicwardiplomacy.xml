@@ -9,8 +9,8 @@
 				<cue name="DeadAir">
 					<actions>
 						<set_value name="DeadAir.$DynamicWarDiplomacyFaction" exact="$FactionList.{1}"/>
-						<set_value name="$IncreaseRelationsNumber" exact="5" />
-						<set_value name="$DecreaseRelationsNumber" exact="-5" />
+						<set_value name="$IncreaseRelationsNumber" exact="5"/>
+						<set_value name="$DecreaseRelationsNumber" exact="-5"/>
 						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Ready for variable storage'.[player.age]" context="false" filter="scripts"/>
 					</actions>
 				</cue>
@@ -41,6 +41,34 @@
 								$onOpen  = Recent_News_menu,
 								$private = 1,
 							]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Register_Options_Menu" param="table[
+								$id      = 'milstrengthmenu',
+								$columns = 8, 
+								$title   = {33232471,403},
+								$onOpen  = MilStrength_Menu,
+								$private = 1,
+							]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Register_Options_Menu" param="table[
+								$id      = 'econstrengthmenu',
+								$columns = 8, 
+								$title   = {33232471,404},
+								$onOpen  = EconStrength_Menu,
+								$private = 1,
+							]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Register_Options_Menu" param="table[
+								$id      = 'econdetailsmenu',
+								$columns = 12, 
+								$title   = {33232471,421},
+								$onOpen  = EconDetails_Menu,
+								$private = 1,
+							]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Register_Options_Menu" param="table[
+								$id      = 'optionsmenu',
+								$columns = 8, 
+								$title   = {1001,2600},
+								$onOpen  = Options_Menu,
+								$private = 1,
+							]"/>
 					</actions>
 				</cue>
 				<cue name="Main_Menu" instantiate="true">
@@ -51,6 +79,10 @@
 						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Submenu_Link" param="table[$text={33232471,502}, $id='increase_relations_menu']"/>
 						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Submenu_Link" param="table[$text={33232471,503}, $id='decrease_relations_menu']"/>
 						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Submenu_Link" param="table[$text={33232471,504}, $id='recent_news_menu']"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Submenu_Link" param="table[$text={33232471,403}, $id='milstrengthmenu']"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Submenu_Link" param="table[$text={33232471,404}, $id='econstrengthmenu']"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Submenu_Link" param="table[$text={33232471,421}, $id='econdetailsmenu']"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Submenu_Link" param="table[$text={1001,2600}, $id='optionsmenu']"/>
 					</actions>
 				</cue>
 				<cue name="Increase_Relations_menu" instantiate="true">
@@ -91,7 +123,7 @@
 												$onClick = IncreaseRelationsOption,
 												$onRightClick = IncreaseRelationsOption,
 												$echo = [DeadAir.$DynamicWarDiplomacyFaction, $FactionList.{$A}],
-												]" />
+												]"/>
 										</do_if>
 										<do_else>
 											<!-- $col 10 + 11 + 12 -->
@@ -145,7 +177,7 @@
 												$onClick = DecreaseRelationsOption,
 												$onRightClick = DecreaseRelationsOption,
 												$echo = [DeadAir.$DynamicWarDiplomacyFaction, $FactionList.{$A}],
-												]" />
+												]"/>
 										</do_if>
 										<do_else>
 											<!-- $col 10 + 11 + 12 -->
@@ -197,15 +229,317 @@
 						</do_else>
 					</actions>
 				</cue>
-				<cue name="IncreaseRelationsOption" instantiate="true">
+				<cue name="MilStrength_Menu" instantiate="true">
 					<conditions>
-						<event_cue_signalled />
+						<event_cue_signalled/>
 					</conditions>
 					<actions>
-						<set_value name="$SelectedFactionOne" exact="event.param.$echo.{1}" />
-						<set_value name="$SelectedFactionTwo" exact="event.param.$echo.{2}" />
+						<include_actions ref="Lib_GetFactions"/>
+						<append_list_elements name="$FactionList" other="[faction.khaak,faction.xenon]"/>
+						<do_all exact="$FactionList.count" counter="$FactionOneCounter">
+							<set_value name="$FactionOne" exact="$FactionList.{$FactionOneCounter}"/>
+							<do_if value="($FactionOne.isactive)">
+								<include_actions ref="Lib_AddFactionMilStrengthRows"/>
+							</do_if>
+						</do_all>
+					</actions>
+				</cue>
+				<cue name="EconStrength_Menu" instantiate="true">
+					<conditions>
+						<event_cue_signalled/>
+					</conditions>
+					<actions>
+						<include_actions ref="Lib_GetFactions"/>
+						<append_list_elements name="$FactionList" other="[faction.khaak,faction.xenon]"/>
+						<do_all exact="$FactionList.count" counter="$FactionOneCounter">
+							<set_value name="$FactionOne" exact="$FactionList.{$FactionOneCounter}"/>
+							<do_if value="($FactionOne.isactive)">
+								<include_actions ref="Lib_AddFactionEconStrengthRows"/>
+							</do_if>
+						</do_all>
+					</actions>
+				</cue>
+				<!-- This code was done by SirNukes, all credit given -->
+				<cue name="EconDetails_Menu" instantiate="true" namespace="this">
+					<conditions>
+						<event_cue_signalled/>
+					</conditions>
+					<actions>
+						<do_if value="DeadAir.$DynamicWarDiplomacyFaction == null">
+							<set_value name="DeadAir.$DynamicWarDiplomacyFaction" exact="$FactionList.{1}"/>
+							<signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
+						</do_if>
+						<set_value name="$wares_existing" exact="table[]"/>
+						<set_value name="$wares_wanted" exact="table[]"/>
+						<!--Get all stations and their build storage. -->
+						<set_value name="$include_buildstorage" exact="true"/>
+						<include_actions ref="Lib_Get_Stations"/>
+						<!--Main loop to gather info.-->
+						<do_for_each name="$cont" in="$stations">
+							<!--Go through resources.-->
+							<do_for_each name="$ware" in="$cont.resources.list">
+								<set_value name="$wares_existing.{$ware}" exact="$cont.cargo.{$ware}.count" operation="add"/>
+								<set_value name="$wares_wanted.{$ware}" exact="$cont.cargo.{$ware}.target" operation="add"/>
+							</do_for_each>
+							<!--Go through products.-->
+							<do_for_each name="$ware" in="$cont.products.list">
+								<set_value name="$wares_existing.{$ware}" exact="$cont.cargo.{$ware}.count" operation="add"/>
+								<set_value name="$wares_wanted.{$ware}" exact="0" operation="add"/>
+							</do_for_each>
+							<!--Tradewares are those that are not product or resource.-->
+							<do_for_each name="$ware" in="$cont.tradewares.list">
+								<set_value name="$wares_existing.{$ware}" exact="$cont.cargo.{$ware}.count" operation="add"/>
+								<set_value name="$wares_wanted.{$ware}" exact="0" operation="add"/>
+							</do_for_each>
+							<!--Supply storage has stuff like drones and such. TODO.-->
+						</do_for_each>
+						<!--Add all trade ships. -->
+						<include_actions ref="Lib_Get_Ships"/>
+						<do_for_each name="$ship" in="$ships">
+							<do_for_each name="$ware" valuename="$amount" in="$ship.cargo.table">
+								<set_value name="$wares_existing.{$ware}" exact="$amount" operation="add"/>
+								<set_value name="$wares_wanted.{$ware}" exact="0" operation="add"/>
+							</do_for_each>
+						</do_for_each>
+						<include_actions ref="Lib_Add_Faction_Dropdown"/>
+						<!--Header row.-->
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[$selectable = false]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 1, $colSpan=4, $text = {1001,45},]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 5, $colSpan=8, $text = {33232471,509},]"	/>
+						<set_value name="$thickness" exact="2"/>
+						<include_actions ref="Lib_Add_Horizontal_Line"/>
+						<!--Create the menu rows.-->
+						<do_for_each name="$ware" valuename="$wanted" in="$wares_wanted">
+							<set_value name="$exists" exact="$wares_existing.{$ware}"/>
+							<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 1, $colSpan=4, $text = $ware.name,]"/>
+							<!--Will use a status bar. Max point is the resource capacity. Current value is the total existing.
+							If existing > capacity, the bar will rescale with the max point marker moving inside.
+							'start' set to half of wanted, so if the universe has less then half the wanted amount, the bar goes red. -->
+							<!-- Colors by deadair -->
+							<do_if value="$wanted == 0">
+								<set_value name="$vcolor" exact="'Helper.color.transparent'" />
+								<set_value name="$pcolor" exact="'Helper.color.blue'" />
+								<set_value name="$ncolor" exact="'Helper.color.transparent'" />
+							</do_if>
+							<do_elseif value="$exists ge $wanted">
+								<set_value name="$vcolor" exact="'Helper.color.blue'" />
+								<set_value name="$pcolor" exact="'Helper.color.green'" />
+								<set_value name="$ncolor" exact="'Helper.color.transparent'" />
+							</do_elseif>
+							<do_elseif value="$exists lt ($wanted * 0.25)">
+								<set_value name="$vcolor" exact="'Helper.color.red'" />
+								<set_value name="$pcolor" exact="'Helper.color.transparent'" />
+								<set_value name="$ncolor" exact="'Helper.color.transparent'" />
+							</do_elseif>
+							<do_elseif value="$exists lt ($wanted * 0.5)">
+								<set_value name="$vcolor" exact="'Helper.color.darkorange'" />
+								<set_value name="$pcolor" exact="'Helper.color.transparent'" />
+								<set_value name="$ncolor" exact="'Helper.color.transparent'" />
+							</do_elseif>
+							<do_elseif value="$exists lt ($wanted * 0.75)">
+								<set_value name="$vcolor" exact="'Helper.color.orange'" />
+								<set_value name="$pcolor" exact="'Helper.color.transparent'" />
+								<set_value name="$ncolor" exact="'Helper.color.transparent'" />
+							</do_elseif>
+							<do_elseif value="$exists lt $wanted">
+								<set_value name="$vcolor" exact="'Helper.color.brightyellow'" />
+								<set_value name="$pcolor" exact="'Helper.color.transparent'" />
+								<set_value name="$ncolor" exact="'Helper.color.transparent'" />
+							</do_elseif>
+							
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_StatusBar" 
+							param="table[
+									$col			= 5, 
+									$colSpan		= 8,
+									$scaling		= true,
+									$type			= 'statusbar',
+									$start			= $wanted,
+									$current		= $exists,
+									$max			= $wanted,
+									$valueColor		= $vcolor,
+									$posChangeColor	= $pcolor,
+									$negChangeColor	= $ncolor,
+									$mouseOverText = 'existing: %s / wanted: %s'.[$exists, $wanted],
+								]"	/>
+						</do_for_each>
+					</actions>
+				</cue>
+				<cue name="Options_Menu" instantiate="true">
+					<conditions>
+						<event_cue_signalled/>
+					</conditions>
+					<actions>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col = 1,
+								$colSpan = 6,
+								$text = {33232471,414},
+							]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
+								$col = 7, 
+								$colSpan = 2,
+								$text = table[
+								  $text   =  if md.$DADynWarEnable == true then 'true' else 'false', 
+								  $color  = 'Helper.color.green',
+								  $halign = 'center',
+								],
+								$onClick = DADynWarEnable,
+								$onRightClick = DADynWarEnable,
+							]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col = 1,
+								$colSpan = 6,
+								$text = {33232471,412},
+							]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
+								$col = 7, 
+								$colSpan = 2,
+								$text = table[
+								  $text   =  if md.$DADynWarHAT == true then 'true' else 'false', 
+								  $color  = 'Helper.color.green',
+								  $halign = 'center',
+								],
+								$onClick = DADynWarHAT,
+								$onRightClick = DADynWarHAT,
+							]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col = 1,
+								$colSpan = 6,
+								$text = {33232471,413},
+							]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
+								$col = 7, 
+								$colSpan = 2,
+								$text = table[
+								  $text   =  if md.$DADynWarSCA == true then 'true' else 'false', 
+								  $color  = 'Helper.color.green',
+								  $halign = 'center',
+								],
+								$onClick = DADynWarSCA,
+								$onRightClick = DADynWarSCA,
+							]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col = 1,
+								$colSpan = 4,
+								$text = {33232471,415},
+							]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Slider" param="table[
+								$col=5,
+								$colSpan=4,
+								$onSliderCellConfirm=DADynWarBesties,
+								$min=0,
+								$minSelect=1,
+								$max=100,
+								$maxSelect=95,
+								$exceedMaxValue=false,
+								$start=if md.$DADynWarBesties? then md.$DADynWarBesties else 1,
+								$step=1,
+							]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col = 1,
+								$colSpan = 4,
+								$text = {33232471,416},
+							]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Slider" param="table[
+								$col=5,
+								$colSpan=4,
+								$onSliderCellConfirm=DADynWarBigBoost,
+								$min=0,
+								$minSelect=1,
+								$max=100,
+								$maxSelect=95,
+								$exceedMaxValue=false,
+								$start=if md.$DADynWarBigBoost? then md.$DADynWarBigBoost else 16,
+								$step=1,
+							]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col = 1,
+								$colSpan = 4,
+								$text = {33232471,417},
+							]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Slider" param="table[
+								$col=5,
+								$colSpan=4,
+								$onSliderCellConfirm=DADynWarSmallBoost,
+								$min=0,
+								$minSelect=1,
+								$max=100,
+								$maxSelect=95,
+								$exceedMaxValue=false,
+								$start=if md.$DADynWarSmallBoost? then md.$DADynWarSmallBoost else 32,
+								$step=1,
+							]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col = 1,
+								$colSpan = 4,
+								$text = {33232471,418},
+							]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Slider" param="table[
+								$col=5,
+								$colSpan=4,
+								$onSliderCellConfirm=DADynWarSmallBlow,
+								$min=0,
+								$minSelect=1,
+								$max=100,
+								$maxSelect=95,
+								$exceedMaxValue=false,
+								$start=if md.$DADynWarSmallBlow? then md.$DADynWarSmallBlow else 32,
+								$step=1,
+							]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col = 1,
+								$colSpan = 4,
+								$text = {33232471,419},
+							]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Slider" param="table[
+								$col=5,
+								$colSpan=4,
+								$onSliderCellConfirm=DADynWarBigBlow,
+								$min=0,
+								$minSelect=1,
+								$max=100,
+								$maxSelect=95,
+								$exceedMaxValue=false,
+								$start=if md.$DADynWarBigBlow? then md.$DADynWarBigBlow else 16,
+								$step=1,
+							]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col = 1,
+								$colSpan = 4,
+								$text = {33232471,420},
+							]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Slider" param="table[
+								$col=5,
+								$colSpan=4,
+								$onSliderCellConfirm=DADynWarNemesis,
+								$min=0,
+								$minSelect=1,
+								$max=100,
+								$maxSelect=95,
+								$exceedMaxValue=false,
+								$start=if md.$DADynWarNemesis? then md.$DADynWarNemesis else 3,
+								$step=1,
+							]"/>
+					</actions>
+				</cue>
+				<cue name="IncreaseRelationsOption" instantiate="true">
+					<conditions>
+						<event_cue_signalled/>
+					</conditions>
+					<actions>
+						<set_value name="$SelectedFactionOne" exact="event.param.$echo.{1}"/>
+						<set_value name="$SelectedFactionTwo" exact="event.param.$echo.{2}"/>
 						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- IncreaseRelationsOption -- %2 -- %3 -- %4'.[player.age,$SelectedFactionOne.knownname,$SelectedFactionTwo.knownname,$IncreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo}]" context="false" filter="scripts"/>
-						<set_value name="$UIRelationChange" exact="5" />
+						<set_value name="$UIRelationChange" exact="5"/>
 						<include_actions ref="Lib_CalculateUiValueRepChange"/>
 						<!-- Returns $NewAbsoluteRepValue and $AbsoluteRepValueChange -->
 						<reward_player money="$IncreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo} * -1"/>
@@ -213,20 +547,20 @@
 							<set_value name="md.$DADynWarFavors.{$SelectedFactionOne}" exact="[md.$DADynWarFavors.{$SelectedFactionOne} - 1,0].max"/>
 							<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Used Favor -- %2 -- Favors: %3 -- %4'.[player.age,$SelectedFactionOne.knownname,md.$DADynWarFavors.{$SelectedFactionOne},$IncreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo}]" context="false" filter="scripts"/>
 						</do_if>
-						<set_faction_relation faction="$SelectedFactionOne" otherfaction="$SelectedFactionTwo" value="([$NewAbsoluteRepValue, 1].min)" />
-						<set_faction_relation faction="$SelectedFactionTwo" otherfaction="$SelectedFactionOne" value="([$NewAbsoluteRepValue, 1].min)" />
+						<set_faction_relation faction="$SelectedFactionOne" otherfaction="$SelectedFactionTwo" value="([$NewAbsoluteRepValue, 1].min)"/>
+						<set_faction_relation faction="$SelectedFactionTwo" otherfaction="$SelectedFactionOne" value="([$NewAbsoluteRepValue, 1].min)"/>
 						<signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
 					</actions>
 				</cue>
 				<cue name="DecreaseRelationsOption" instantiate="true">
 					<conditions>
-						<event_cue_signalled />
+						<event_cue_signalled/>
 					</conditions>
 					<actions>
-						<set_value name="$SelectedFactionOne" exact="event.param.$echo.{1}" />
-						<set_value name="$SelectedFactionTwo" exact="event.param.$echo.{2}" />
+						<set_value name="$SelectedFactionOne" exact="event.param.$echo.{1}"/>
+						<set_value name="$SelectedFactionTwo" exact="event.param.$echo.{2}"/>
 						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- DecreaseRelationsOption -- %2 -- %3 -- %4'.[player.age,$SelectedFactionOne.knownname,$SelectedFactionTwo.knownname,$DecreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo}]" context="false" filter="scripts"/>
-						<set_value name="$UIRelationChange" exact="-5" />
+						<set_value name="$UIRelationChange" exact="-5"/>
 						<include_actions ref="Lib_CalculateUiValueRepChange"/>
 						<!-- Returns $NewAbsoluteRepValue and $AbsoluteRepValueChange -->
 						<reward_player money="$DecreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo} * -1"/>
@@ -235,8 +569,8 @@
 							<set_value name="md.$DADynWarFavors.{$SelectedFactionOne}" exact="[md.$DADynWarFavors.{$SelectedFactionOne} - 1,0].max"/>
 							<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Used Favor -- %2 -- Favors: %3 -- %4'.[player.age,$SelectedFactionOne.knownname,md.$DADynWarFavors.{$SelectedFactionOne},$DecreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo}]" context="false" filter="scripts"/>
 						</do_if>
-						<set_faction_relation faction="$SelectedFactionOne" otherfaction="$SelectedFactionTwo" value="([$NewAbsoluteRepValue, -1].max)" />
-						<set_faction_relation faction="$SelectedFactionTwo" otherfaction="$SelectedFactionOne" value="([$NewAbsoluteRepValue, -1].max)" />
+						<set_faction_relation faction="$SelectedFactionOne" otherfaction="$SelectedFactionTwo" value="([$NewAbsoluteRepValue, -1].max)"/>
+						<set_faction_relation faction="$SelectedFactionTwo" otherfaction="$SelectedFactionOne" value="([$NewAbsoluteRepValue, -1].max)"/>
 						<signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
 					</actions>
 				</cue>
@@ -255,6 +589,93 @@
 						<do_if value="$args.$echo.$refresh">
 							<signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
 						</do_if>
+					</actions>
+				</cue>
+				<cue name="DADynWarHAT" instantiate="true">
+					<conditions>
+						<event_cue_signalled/>
+					</conditions>
+					<actions>
+						<set_value name="md.$DADynWarHAT" exact="if md.$DADynWarHAT == true then false else true"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
+					</actions>
+				</cue>
+				<cue name="DADynWarSCA" instantiate="true">
+					<conditions>
+						<event_cue_signalled/>
+					</conditions>
+					<actions>
+						<set_value name="md.$DADynWarSCA" exact="if md.$DADynWarSCA == true then false else true"/>
+						<do_if value="md.$DADynWarSCA == false">
+							<set_faction_relation_locked faction="faction.scaleplate" locked="false"/>
+						</do_if>
+						<do_else>
+							<set_faction_relation_locked faction="faction.scaleplate" locked="true"/>
+						</do_else>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
+					</actions>
+				</cue>
+				<cue name="DADynWarEnable" instantiate="true">
+					<conditions>
+						<event_cue_signalled/>
+					</conditions>
+					<actions>
+						<set_value name="md.$DADynWarEnable" exact="if md.$DADynWarEnable == true then false else true"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
+					</actions>
+				</cue>
+				<cue name="DADynWarBesties" instantiate="true">
+					<conditions>
+						<event_cue_signalled/>
+					</conditions>
+					<actions>
+						<set_value name="md.$DADynWarBesties" exact="event.param.$value"/>
+						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Updated md.$DADynWarBesties to %2'.[player.age,md.$DADynWarBesties]" context="false" filter="scripts"/>
+					</actions>
+				</cue>
+				<cue name="DADynWarBigBoost" instantiate="true">
+					<conditions>
+						<event_cue_signalled/>
+					</conditions>
+					<actions>
+						<set_value name="md.$DADynWarBigBoost" exact="event.param.$value"/>
+						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Updated md.$DADynWarBigBoost to %2'.[player.age,md.$DADynWarBigBoost]" context="false" filter="scripts"/>
+					</actions>
+				</cue>
+				<cue name="DADynWarSmallBoost" instantiate="true">
+					<conditions>
+						<event_cue_signalled/>
+					</conditions>
+					<actions>
+						<set_value name="md.$DADynWarSmallBoost" exact="event.param.$value"/>
+						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Updated md.$DADynWarSmallBoost to %2'.[player.age,md.$DADynWarSmallBoost]" context="false" filter="scripts"/>
+					</actions>
+				</cue>
+				<cue name="DADynWarSmallBlow" instantiate="true">
+					<conditions>
+						<event_cue_signalled/>
+					</conditions>
+					<actions>
+						<set_value name="md.$DADynWarSmallBlow" exact="event.param.$value"/>
+						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Updated md.$DADynWarSmallBlow to %2'.[player.age,md.$DADynWarSmallBlow]" context="false" filter="scripts"/>
+					</actions>
+				</cue>
+				<cue name="DADynWarBigBlow" instantiate="true">
+					<conditions>
+						<event_cue_signalled/>
+					</conditions>
+					<actions>
+						<set_value name="md.$DADynWarBigBlow" exact="event.param.$value"/>
+						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Updated md.$DADynWarBigBlow to %2'.[player.age,md.$DADynWarBigBlow]" context="false" filter="scripts"/>
+					</actions>
+				</cue>
+				<cue name="DADynWarNemesis" instantiate="true">
+					<conditions>
+						<event_cue_signalled/>
+					</conditions>
+					<actions>
+						<set_value name="md.$DADynWarNemesis" exact="event.param.$value"/>
+						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Updated md.$DADynWarNemesis to %2'.[player.age,md.$DADynWarNemesis]" context="false" filter="scripts"/>
 					</actions>
 				</cue>
 				<library name="Lib_GetFactions">
@@ -291,7 +712,7 @@
 						<remove_from_list name="$FactionList" list="$ExcludedFactions" multiple="true"/>
 						<do_all exact="$FactionList.count" counter="$B" reverse="true">
 							<do_if value="($FactionList.{$B} == null) or ($FactionList.{$B}.isactive != true)">
-								<remove_value name="$FactionList.{$B}" />
+								<remove_value name="$FactionList.{$B}"/>
 							</do_if>
 						</do_all>
 						<sort_list list="$FactionList" sortbyvalue="loop.element.knownname"/>
@@ -335,44 +756,44 @@
 				</library>
 				<library name="Lib_FactionRelationBar">
 					<actions>
-						<do_if value="$FactionOne and $FactionTwo" >
-							<set_value name="$Current" exact="$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue + 30" />
-							<set_value name="$Relation" exact="$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue" />
-							<set_value name="$RelationColor" exact="'Helper.color.transparent'" />
+						<do_if value="$FactionOne and $FactionTwo">
+							<set_value name="$Current" exact="$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue + 30"/>
+							<set_value name="$Relation" exact="$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue"/>
+							<set_value name="$RelationColor" exact="'Helper.color.transparent'"/>
 							<do_if value="$Relation le (-20)">
-								<set_value name="$PositiveColor" exact="'Helper.color.transparent'" />
-								<set_value name="$NegativeColor" exact="'Helper.color.red'" />
+								<set_value name="$PositiveColor" exact="'Helper.color.transparent'"/>
+								<set_value name="$NegativeColor" exact="'Helper.color.red'"/>
 							</do_if>
 							<do_elseif value="$Relation le (-10) and $Relation gt (-20)">
-								<set_value name="$PositiveColor" exact="'Helper.color.transparent'" />
-								<set_value name="$NegativeColor" exact="'Helper.color.orange'" />
+								<set_value name="$PositiveColor" exact="'Helper.color.transparent'"/>
+								<set_value name="$NegativeColor" exact="'Helper.color.orange'"/>
 							</do_elseif>
 							<do_elseif value="$Relation le (-1) and $Relation gt (-10)">
-								<set_value name="$PositiveColor" exact="'Helper.color.transparent'" />
-								<set_value name="$NegativeColor" exact="'Helper.color.yellow'" />
+								<set_value name="$PositiveColor" exact="'Helper.color.transparent'"/>
+								<set_value name="$NegativeColor" exact="'Helper.color.yellow'"/>
 							</do_elseif>
 							<do_elseif value="$Relation le (1) and $Relation gt (-1)">
-								<set_value name="$PositiveColor" exact="'Helper.color.yellow'" />
-								<set_value name="$NegativeColor" exact="'Helper.color.transparent'" />
+								<set_value name="$PositiveColor" exact="'Helper.color.yellow'"/>
+								<set_value name="$NegativeColor" exact="'Helper.color.transparent'"/>
 							</do_elseif>
 							<do_elseif value="$Relation le (10) and $Relation gt (1)">
-								<set_value name="$PositiveColor" exact="'Helper.color.playergreen'" />
-								<set_value name="$NegativeColor" exact="'Helper.color.transparent'" />
+								<set_value name="$PositiveColor" exact="'Helper.color.playergreen'"/>
+								<set_value name="$NegativeColor" exact="'Helper.color.transparent'"/>
 							</do_elseif>
 							<do_elseif value="$Relation lt (20) and $Relation gt (10)">
-								<set_value name="$PositiveColor" exact="'Helper.color.lightgreen'" />
-								<set_value name="$NegativeColor" exact="'Helper.color.transparent'" />
+								<set_value name="$PositiveColor" exact="'Helper.color.lightgreen'"/>
+								<set_value name="$NegativeColor" exact="'Helper.color.transparent'"/>
 							</do_elseif>
 							<do_elseif value="$Relation ge (20)">
-								<set_value name="$PositiveColor" exact="'Helper.color.green'" />
-								<set_value name="$NegativeColor" exact="'Helper.color.transparent'" />
+								<set_value name="$PositiveColor" exact="'Helper.color.green'"/>
+								<set_value name="$NegativeColor" exact="'Helper.color.transparent'"/>
 							</do_elseif>
 							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
 								$col=4,
 								$colSpan=1,
 								$halign='center',
 								$text = $Relation,
-								]" />
+								]"/>
 							<signal_cue_instantly cue="md.Simple_Menu_API.Make_StatusBar" param="table[
 								$col			= 5,
 								$colSpan		= 3,
@@ -384,36 +805,36 @@
 								$valueColor		= $RelationColor,
 								$posChangeColor	= $PositiveColor,
 								$negChangeColor	= $NegativeColor,
-								]" />	
+								]"/>
 						</do_if>
-					</actions>				
+					</actions>
 				</library>
 				<library name="Lib_Relation_Increase_Cost">
 					<actions>
 						<!-- Uses $FactionOne and $FactionTwo -->
 						<!-- This library will create a table with [$FactionOne, $FactionTwo, $Cost] -->
-						<set_value name="$CostFound" exact="false" />
+						<set_value name="$CostFound" exact="false"/>
 						<do_if value="not $IncreaseRelationsCostTable?">
-							<set_value name="$IncreaseRelationsCostTable" exact="table[]" />
+							<set_value name="$IncreaseRelationsCostTable" exact="table[]"/>
 						</do_if>
 						<do_if value="$FactionOne and $FactionTwo">
 							<do_if value="$IncreaseRelationsCostTable.{$FactionOne}? and $IncreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}?">
 								<!-- Update our entry -->
 								<include_actions ref="Lib_Calculate_Cost"/>
-								<set_value name="$IncreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}" exact="if (@md.$DADynWarFavors.{$FactionOne} gt 0) then 0Cr else $Cost" />
-								<set_value name="$CostFound" exact="true" />
+								<set_value name="$IncreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}" exact="if (@md.$DADynWarFavors.{$FactionOne} gt 0) then 0Cr else $Cost"/>
+								<set_value name="$CostFound" exact="true"/>
 							</do_if>
 							<do_elseif value="$IncreaseRelationsCostTable.{$FactionOne}? and (not $IncreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}?)">
 								<!-- We have the top level table, but not the specific entry -->
 								<include_actions ref="Lib_Calculate_Cost"/>
-								<set_value name="$IncreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}" exact="if (@md.$DADynWarFavors.{$FactionOne} gt 0) then 0Cr else $Cost" />
-								<set_value name="$CostFound" exact="true" />
+								<set_value name="$IncreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}" exact="if (@md.$DADynWarFavors.{$FactionOne} gt 0) then 0Cr else $Cost"/>
+								<set_value name="$CostFound" exact="true"/>
 							</do_elseif>
 							<do_else>
 								<!-- We have nothing sadface -->
 								<include_actions ref="Lib_Calculate_Cost"/>
-								<set_value name="$IncreaseRelationsCostTable.{$FactionOne}" exact="table[{$FactionTwo}=(if (@md.$DADynWarFavors.{$FactionOne} gt 0) then 0Cr else $Cost)]" />
-								<set_value name="$CostFound" exact="true" />
+								<set_value name="$IncreaseRelationsCostTable.{$FactionOne}" exact="table[{$FactionTwo}=(if (@md.$DADynWarFavors.{$FactionOne} gt 0) then 0Cr else $Cost)]"/>
+								<set_value name="$CostFound" exact="true"/>
 							</do_else>
 						</do_if>
 					</actions>
@@ -422,34 +843,32 @@
 					<actions>
 						<!-- Uses $FactionOne and $FactionTwo -->
 						<!-- This library will create a table with [$FactionOne, $FactionTwo, $Cost] -->
-						<set_value name="$CostFound" exact="false" />
+						<set_value name="$CostFound" exact="false"/>
 						<do_if value="not $DecreaseRelationsCostTable?">
-							<set_value name="$DecreaseRelationsCostTable" exact="table[]" />
+							<set_value name="$DecreaseRelationsCostTable" exact="table[]"/>
 						</do_if>
-						
 						<do_if value="$FactionOne and $FactionTwo">
 							<set_value name="$PlayerChange" exact="false"/>
 							<do_if value="($FactionOne == faction.player) or ($FactionTwo == faction.player)">
 								<set_value name="$PlayerChange" exact="true"/>
 							</do_if>
-							
 							<do_if value="$DecreaseRelationsCostTable.{$FactionOne}? and $DecreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}?">
 								<!-- Update our entry -->
 								<include_actions ref="Lib_Calculate_Cost"/>
-								<set_value name="$DecreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}" exact="if ($PlayerChange) then 0Cr else (if (@md.$DADynWarFavors.{$FactionOne} gt 0) then 0Cr else $Cost)" />
-								<set_value name="$CostFound" exact="true" />
+								<set_value name="$DecreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}" exact="if ($PlayerChange) then 0Cr else (if (@md.$DADynWarFavors.{$FactionOne} gt 0) then 0Cr else $Cost)"/>
+								<set_value name="$CostFound" exact="true"/>
 							</do_if>
 							<do_elseif value="$DecreaseRelationsCostTable.{$FactionOne}? and (not $DecreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}?)">
 								<!-- We have the top level table, but not the specific entry -->
 								<include_actions ref="Lib_Calculate_Cost"/>
-								<set_value name="$DecreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}" exact="if ($PlayerChange) then 0Cr else (if (@md.$DADynWarFavors.{$FactionOne} gt 0) then 0Cr else $Cost)" />
-								<set_value name="$CostFound" exact="true" />
+								<set_value name="$DecreaseRelationsCostTable.{$FactionOne}.{$FactionTwo}" exact="if ($PlayerChange) then 0Cr else (if (@md.$DADynWarFavors.{$FactionOne} gt 0) then 0Cr else $Cost)"/>
+								<set_value name="$CostFound" exact="true"/>
 							</do_elseif>
 							<do_else>
 								<!-- We have nothing sadface -->
 								<include_actions ref="Lib_Calculate_Cost"/>
-								<set_value name="$DecreaseRelationsCostTable.{$FactionOne}" exact="table[{$FactionTwo}=(if ($PlayerChange) then 0Cr else (if (@md.$DADynWarFavors.{$FactionOne} gt 0) then 0Cr else $Cost))]" />
-								<set_value name="$CostFound" exact="true" />
+								<set_value name="$DecreaseRelationsCostTable.{$FactionOne}" exact="table[{$FactionTwo}=(if ($PlayerChange) then 0Cr else (if (@md.$DADynWarFavors.{$FactionOne} gt 0) then 0Cr else $Cost))]"/>
+								<set_value name="$CostFound" exact="true"/>
 							</do_else>
 						</do_if>
 						<remove_value name="$PlayerChange"/>
@@ -459,60 +878,61 @@
 					<actions>
 						<!-- Uses $FactionOne and $FactionTwo -->
 						<!-- This library will create $Cost -->
-						<set_value name="$Cost" exact="0" />
-						<set_value name="$Relation" exact="$FactionOne.relationto.{$FactionTwo}" />
-						<set_value name="$NetWorth" exact="player.money" />
+						<set_value name="$Cost" exact="0"/>
+						<set_value name="$Relation" exact="$FactionOne.relationto.{$FactionTwo}"/>
+						<set_value name="$NetWorth" exact="player.money"/>
+						<set_value name="md.$DADynWarFavors.{faction.player}" exact="0"/>
 						<do_if value="$Relation le 0">
 							<do_if value="$Relation le -1">
-								<set_value name="$Cost" exact="[50000000Cr, ($NetWorth * 15 / 1000)].max" />
+								<set_value name="$Cost" exact="[50000000Cr, ($NetWorth * 15 / 1000)].max"/>
 							</do_if>
 							<do_elseif value="$Relation le -0.32">
-								<set_value name="$Cost" exact="[35000000Cr, ($NetWorth * 10 / 1000)].max" />
+								<set_value name="$Cost" exact="[35000000Cr, ($NetWorth * 10 / 1000)].max"/>
 							</do_elseif>
 							<do_elseif value="$Relation le -0.1">
-								<set_value name="$Cost" exact="[22500000Cr, ($NetWorth * 5 / 1000)].max" />
+								<set_value name="$Cost" exact="[22500000Cr, ($NetWorth * 5 / 1000)].max"/>
 							</do_elseif>
 							<do_elseif value="$Relation le -0.032">
-								<set_value name="$Cost" exact="[15000000Cr, ($NetWorth * 4 / 1000)].max" />
+								<set_value name="$Cost" exact="[15000000Cr, ($NetWorth * 4 / 1000)].max"/>
 							</do_elseif>
 							<do_elseif value="$Relation le -0.01">
-								<set_value name="$Cost" exact="[7500000Cr, ($NetWorth * 3 / 1000)].max" />
+								<set_value name="$Cost" exact="[7500000Cr, ($NetWorth * 3 / 1000)].max"/>
 							</do_elseif>
 							<do_elseif value="$Relation le -0.0032">
-								<set_value name="$Cost" exact="[2500000Cr, ($NetWorth * 2 / 1000)].max" />
+								<set_value name="$Cost" exact="[2500000Cr, ($NetWorth * 2 / 1000)].max"/>
 							</do_elseif>
 							<do_elseif value="$Relation le 0">
-								<set_value name="$Cost" exact="[500000Cr, ($NetWorth * 1 / 1000)].max" />
+								<set_value name="$Cost" exact="[500000Cr, ($NetWorth * 1 / 1000)].max"/>
 							</do_elseif>
 							<do_else>
-								<set_value name="$Cost" exact="[500000Cr, ($NetWorth * 1 / 1000)].max" />
+								<set_value name="$Cost" exact="[500000Cr, ($NetWorth * 1 / 1000)].max"/>
 								<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- ERROR calculating cost -- %2 -- %3 -- %4'.[player.age,$FactionOne.knownname,$FactionTwo.knownname,$Relation]" context="false" filter="scripts"/>
 							</do_else>
 						</do_if>
 						<do_else>
 							<do_if value="$Relation ge 1">
-								<set_value name="$Cost" exact="[50000000Cr, ($NetWorth * 15 / 1000)].max" />
+								<set_value name="$Cost" exact="[50000000Cr, ($NetWorth * 15 / 1000)].max"/>
 							</do_if>
 							<do_elseif value="$Relation ge 0.32">
-								<set_value name="$Cost" exact="[35000000Cr, ($NetWorth * 10 / 1000)].max" />
+								<set_value name="$Cost" exact="[35000000Cr, ($NetWorth * 10 / 1000)].max"/>
 							</do_elseif>
 							<do_elseif value="$Relation ge 0.1">
-								<set_value name="$Cost" exact="[22500000Cr, ($NetWorth * 5 / 1000)].max" />
+								<set_value name="$Cost" exact="[22500000Cr, ($NetWorth * 5 / 1000)].max"/>
 							</do_elseif>
 							<do_elseif value="$Relation ge 0.032">
-								<set_value name="$Cost" exact="[15000000Cr, ($NetWorth * 4 / 1000)].max" />
+								<set_value name="$Cost" exact="[15000000Cr, ($NetWorth * 4 / 1000)].max"/>
 							</do_elseif>
 							<do_elseif value="$Relation ge 0.01">
-								<set_value name="$Cost" exact="[7500000Cr, ($NetWorth * 3 / 1000)].max" />
+								<set_value name="$Cost" exact="[7500000Cr, ($NetWorth * 3 / 1000)].max"/>
 							</do_elseif>
 							<do_elseif value="$Relation ge 0.0032">
-								<set_value name="$Cost" exact="[2500000Cr, ($NetWorth * 2 / 1000)].max" />
+								<set_value name="$Cost" exact="[2500000Cr, ($NetWorth * 2 / 1000)].max"/>
 							</do_elseif>
 							<do_elseif value="$Relation ge 0">
-								<set_value name="$Cost" exact="[500000Cr, ($NetWorth * 1 / 1000)].max" />
+								<set_value name="$Cost" exact="[500000Cr, ($NetWorth * 1 / 1000)].max"/>
 							</do_elseif>
 							<do_else>
-								<set_value name="$Cost" exact="[5000000Cr, ($NetWorth * 1 / 1000)].max" />
+								<set_value name="$Cost" exact="[5000000Cr, ($NetWorth * 1 / 1000)].max"/>
 								<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- ERROR calculating cost -- %2 -- %3 -- %4'.[player.age,$FactionOne.knownname,$FactionTwo.knownname,$Relation]" context="false" filter="scripts"/>
 							</do_else>
 						</do_else>
@@ -524,55 +944,266 @@
 						<!-- 1.0 = 30		0.316 = 25		0.1 = 20		0.0316 = 15		0.01 = 10		0.00316 = 5 -->
 						<!-- Requires $SelectedFactionOne, $SelectedFactionTwo, and $UIRelationChange -->
 						<!-- Returns $NewAbsoluteRepValue and $AbsoluteRepValueChange -->
-					<do_if value="$UIRelationChange != 0">
-						<set_value name="$OldUIRepValue" exact="$SelectedFactionOne.relation.{$SelectedFactionOne.relationto.{$SelectedFactionTwo}}.uivalue" />
-						<set_value name="$OldAbsoluteRepValue" exact="$SelectedFactionOne.relationto.{$SelectedFactionTwo}" />
-						<do_if value="($OldUIRepValue ge 5) or ($OldUIRepValue le -5)">
-							<set_value name="$NewUIRepValue" exact="$OldUIRepValue + $UIRelationChange" />
-							<!-- =(10^(SQRT((S2+T2)^2)/10)/1000)*IF(S2+T2<0,-1,1) -->
-							<set_value name="$NewAbsoluteRepValue" exact="(10^(sqrt(($OldUIRepValue + $UIRelationChange) ^ 2)/10) / 1000) * (if ($OldUIRepValue + $UIRelationChange lt 0) then -1 else 1)" />
-							<do_if value="$NewAbsoluteRepValue lt -1">
-								<set_value name="$NewAbsoluteRepValue" exact="-1" />
+						<do_if value="$UIRelationChange != 0">
+							<set_value name="$OldUIRepValue" exact="$SelectedFactionOne.relation.{$SelectedFactionOne.relationto.{$SelectedFactionTwo}}.uivalue"/>
+							<set_value name="$OldAbsoluteRepValue" exact="$SelectedFactionOne.relationto.{$SelectedFactionTwo}"/>
+							<do_if value="($OldUIRepValue ge 5) or ($OldUIRepValue le -5)">
+								<set_value name="$NewUIRepValue" exact="$OldUIRepValue + $UIRelationChange"/>
+								<!-- =(10^(SQRT((S2+T2)^2)/10)/1000)*IF(S2+T2<0,-1,1) -->
+								<set_value name="$NewAbsoluteRepValue" exact="(10^(sqrt(($OldUIRepValue + $UIRelationChange) ^ 2)/10) / 1000) * (if ($OldUIRepValue + $UIRelationChange lt 0) then -1 else 1)"/>
+								<do_if value="$NewAbsoluteRepValue lt -1">
+									<set_value name="$NewAbsoluteRepValue" exact="-1"/>
+								</do_if>
+								<do_if value="$NewAbsoluteRepValue gt 1">
+									<set_value name="$NewAbsoluteRepValue" exact="1"/>
+								</do_if>
+								<set_value name="$AbsoluteRepValueChange" exact="$NewAbsoluteRepValue - $OldAbsoluteRepValue"/>
 							</do_if>
-							<do_if value="$NewAbsoluteRepValue gt 1">
-								<set_value name="$NewAbsoluteRepValue" exact="1" />
+							<do_elseif value="($OldUIRepValue lt 5) and ($OldUIRepValue gt -5)">
+								<set_value name="$NewUIRepValue" exact="$OldUIRepValue + $UIRelationChange"/>
+								<set_value name="$NewAbsoluteRepValue" exact="$OldAbsoluteRepValue + ($UIRelationChange * 0.00064)"/>
+								<set_value name="$AbsoluteRepValueChange" exact="$NewAbsoluteRepValue - $OldAbsoluteRepValue"/>
+							</do_elseif>
+							<!-- Force Rounding is ugly but oh well -->
+							<!-- Round near 25 -->
+							<do_if value="($NewAbsoluteRepValue le 0.3238) and ($NewAbsoluteRepValue ge 0.3161)">
+								<set_value name="$NewAbsoluteRepValue" exact="0.32"/>
+								<set_value name="$AbsoluteRepValueChange" exact="$NewAbsoluteRepValue - $OldAbsoluteRepValue"/>
 							</do_if>
-							<set_value name="$AbsoluteRepValueChange" exact="$NewAbsoluteRepValue - $OldAbsoluteRepValue" />
+							<do_elseif value="($NewAbsoluteRepValue ge -0.3238) and ($NewAbsoluteRepValue le -0.3161)">
+								<set_value name="$NewAbsoluteRepValue" exact="-0.32"/>
+								<set_value name="$AbsoluteRepValueChange" exact="$NewAbsoluteRepValue - $OldAbsoluteRepValue"/>
+							</do_elseif>
+							<!-- Round near 15 -->
+							<do_elseif value="($NewAbsoluteRepValue le 0.03238) and ($NewAbsoluteRepValue ge 0.03161)">
+								<set_value name="$NewAbsoluteRepValue" exact="0.032"/>
+								<set_value name="$AbsoluteRepValueChange" exact="$NewAbsoluteRepValue - $OldAbsoluteRepValue"/>
+							</do_elseif>
+							<do_elseif value="($NewAbsoluteRepValue ge -0.03238) and ($NewAbsoluteRepValue le -0.03161)">
+								<set_value name="$NewAbsoluteRepValue" exact="-0.032"/>
+								<set_value name="$AbsoluteRepValueChange" exact="$NewAbsoluteRepValue - $OldAbsoluteRepValue"/>
+							</do_elseif>
+							<!-- Round near 5 -->
+							<do_elseif value="($NewAbsoluteRepValue le 0.003238) and ($NewAbsoluteRepValue ge 0.003161)">
+								<set_value name="$NewAbsoluteRepValue" exact="0.0032"/>
+								<set_value name="$AbsoluteRepValueChange" exact="$NewAbsoluteRepValue - $OldAbsoluteRepValue"/>
+							</do_elseif>
+							<do_elseif value="($NewAbsoluteRepValue ge -0.003238) and ($NewAbsoluteRepValue le -0.003161)">
+								<set_value name="$NewAbsoluteRepValue" exact="-0.0032"/>
+								<set_value name="$AbsoluteRepValueChange" exact="$NewAbsoluteRepValue - $OldAbsoluteRepValue"/>
+							</do_elseif>
 						</do_if>
-						<do_elseif value="($OldUIRepValue lt 5) and ($OldUIRepValue gt -5)">
-							<set_value name="$NewUIRepValue" exact="$OldUIRepValue + $UIRelationChange" />
-							<set_value name="$NewAbsoluteRepValue" exact="$OldAbsoluteRepValue + ($UIRelationChange * 0.00064)" />
-							<set_value name="$AbsoluteRepValueChange" exact="$NewAbsoluteRepValue - $OldAbsoluteRepValue" />
-						</do_elseif>
-						<!-- Force Rounding is ugly but oh well -->
-						<!-- Round near 25 -->
-						<do_if value="($NewAbsoluteRepValue le 0.3238) and ($NewAbsoluteRepValue ge 0.3161)">
-							<set_value name="$NewAbsoluteRepValue" exact="0.32" />
-							<set_value name="$AbsoluteRepValueChange" exact="$NewAbsoluteRepValue - $OldAbsoluteRepValue" />
+					</actions>
+				</library>
+				<library name="Lib_AddFactionMilStrengthRows">
+					<actions>
+						<do_if value="$FactionOne">
+							<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+							<find_ship name="$XLShips" multiple="true" operational="true" primarypurpose="purpose.fight" class="class.ship_xl" space="player.galaxy" owner="$FactionOne" recursive="true"/>
+							<find_ship name="$XLDockedShips" multiple="true" operational="true" primarypurpose="purpose.fight" class="class.ship_xl" space="player.galaxy" owner="$FactionOne" docked="true" recursive="true"/>
+							<remove_from_list name="$XLDockedShips" list="$XLShips" multiple="true"/>
+							<append_list_elements name="$XLShips" other="$XLDockedShips"/>
+							<find_ship name="$LShips" multiple="true" operational="true" primarypurpose="purpose.fight" class="class.ship_l" space="player.galaxy" owner="$FactionOne" recursive="true"/>
+							<find_ship name="$LDockedShips" multiple="true" operational="true" primarypurpose="purpose.fight" class="class.ship_l" space="player.galaxy" owner="$FactionOne" docked="true" recursive="true"/>
+							<remove_from_list name="$LDockedShips" list="$LShips" multiple="true"/>
+							<append_list_elements name="$LShips" other="$LDockedShips"/>
+							<find_ship name="$MShips" multiple="true" operational="true" primarypurpose="purpose.fight" class="class.ship_m" space="player.galaxy" owner="$FactionOne" recursive="true"/>
+							<find_ship name="$MDockedShips" multiple="true" operational="true" primarypurpose="purpose.fight" class="class.ship_m" space="player.galaxy" owner="$FactionOne" docked="true" recursive="true"/>
+							<remove_from_list name="$MDockedShips" list="$MShips" multiple="true"/>
+							<append_list_elements name="$MShips" other="$MDockedShips"/>
+							<find_ship name="$SShips" multiple="true" operational="true" primarypurpose="purpose.fight" class="class.ship_s" space="player.galaxy" owner="$FactionOne" recursive="true"/>
+							<find_ship name="$SDockedShips" multiple="true" operational="true" primarypurpose="purpose.fight" class="class.ship_s" space="player.galaxy" owner="$FactionOne" docked="true" recursive="true"/>
+							<remove_from_list name="$SDockedShips" list="$SShips" multiple="true"/>
+							<append_list_elements name="$SShips" other="$SDockedShips"/>
+							<set_value name="$TotalShips" exact="$XLShips.count + $LShips.count + $MShips.count + $SShips.count"/>
+							<set_value name="$Text" exact="$FactionOne.knownname"/>
+							<set_value name="$Text2" exact="{33232471,405}.[(if $TotalShips gt 0 then $TotalShips else 0)]" comment="Total mil Ships"/>
+							<set_value name="$Text3" exact="{33232471,406}.[(if $XLShips.count gt 0 then $XLShips.count else 0)]" comment="Total XL mil Ships"/>
+							<set_value name="$Text4" exact="{33232471,407}.[(if $LShips.count gt 0 then $LShips.count else 0)]" comment="Total L mil Ships"/>
+							<set_value name="$Text5" exact="{33232471,408}.[(if $MShips.count gt 0 then $MShips.count else 0)]" comment="Total M mil Ships"/>
+							<set_value name="$Text6" exact="{33232471,409}.[(if $SShips.count gt 0 then $SShips.count else 0)]" comment="Total S mil Ships"/>
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=1,
+								$colSpan=2,
+								$text = $Text,
+								]"/>
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=3,
+								$colSpan=1,
+								$text = $Text2,
+								]"/>
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=4,
+								$colSpan=1,
+								$text = $Text3,
+								]"/>
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=5,
+								$colSpan=1,
+								$text = $Text4,
+								]"/>
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=6,
+								$colSpan=1,
+								$text = $Text5,
+								]"/>
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=7,
+								$colSpan=1,
+								$text = $Text6,
+								]"/>
 						</do_if>
-						<do_elseif value="($NewAbsoluteRepValue ge -0.3238) and ($NewAbsoluteRepValue le -0.3161)">
-							<set_value name="$NewAbsoluteRepValue" exact="-0.32" />
-							<set_value name="$AbsoluteRepValueChange" exact="$NewAbsoluteRepValue - $OldAbsoluteRepValue" />
-						</do_elseif>
-						<!-- Round near 15 -->
-						<do_elseif value="($NewAbsoluteRepValue le 0.03238) and ($NewAbsoluteRepValue ge 0.03161)">
-							<set_value name="$NewAbsoluteRepValue" exact="0.032" />
-							<set_value name="$AbsoluteRepValueChange" exact="$NewAbsoluteRepValue - $OldAbsoluteRepValue" />
-						</do_elseif>
-						<do_elseif value="($NewAbsoluteRepValue ge -0.03238) and ($NewAbsoluteRepValue le -0.03161)">
-							<set_value name="$NewAbsoluteRepValue" exact="-0.032" />
-							<set_value name="$AbsoluteRepValueChange" exact="$NewAbsoluteRepValue - $OldAbsoluteRepValue" />
-						</do_elseif>
-						<!-- Round near 5 -->
-						<do_elseif value="($NewAbsoluteRepValue le 0.003238) and ($NewAbsoluteRepValue ge 0.003161)">
-							<set_value name="$NewAbsoluteRepValue" exact="0.0032" />
-							<set_value name="$AbsoluteRepValueChange" exact="$NewAbsoluteRepValue - $OldAbsoluteRepValue" />
-						</do_elseif>
-						<do_elseif value="($NewAbsoluteRepValue ge -0.003238) and ($NewAbsoluteRepValue le -0.003161)">
-							<set_value name="$NewAbsoluteRepValue" exact="-0.0032" />
-							<set_value name="$AbsoluteRepValueChange" exact="$NewAbsoluteRepValue - $OldAbsoluteRepValue" />
-						</do_elseif>
-					</do_if>
+					</actions>
+				</library>
+				<library name="Lib_AddFactionEconStrengthRows">
+					<actions>
+						<do_if value="$FactionOne">
+							<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+							<!-- XL -->
+							<find_ship name="$XLTradeShips" multiple="true" operational="true" primarypurpose="purpose.trade" class="class.ship_xl" space="player.galaxy" owner="$FactionOne" recursive="true"/>
+							<find_ship name="$XLDockedTradeShips" multiple="true" operational="true" primarypurpose="purpose.trade" class="class.ship_xl" space="player.galaxy" owner="$FactionOne" docked="true" recursive="true"/>
+							<remove_from_list name="$XLDockedTradeShips" list="$XLTradeShips" multiple="true"/>
+							<append_list_elements name="$XLTradeShips" other="$XLDockedTradeShips"/>
+							<set_value name="$MouseOverText3a" exact="{1001,9010} + ':' + (if $XLTradeShips.count then $XLTradeShips.count else 0)"/>
+							<find_ship name="$XLBuildShips" multiple="true" operational="true" primarypurpose="purpose.build" class="class.ship_xl" space="player.galaxy" owner="$FactionOne" recursive="true"/>
+							<find_ship name="$XLDockedBuildShips" multiple="true" operational="true" primarypurpose="purpose.build" class="class.ship_xl" space="player.galaxy" owner="$FactionOne" docked="true" recursive="true"/>
+							<remove_from_list name="$XLDockedBuildShips" list="$XLBuildShips" multiple="true"/>
+							<append_list_elements name="$XLBuildShips" other="$XLDockedBuildShips"/>
+							<set_value name="$MouseOverText3b" exact="{1001,9012} + ':' + (if $XLBuildShips.count then $XLBuildShips.count else 0)"/>
+							<set_value name="$XLShips" exact="(if $XLTradeShips.count then $XLTradeShips.count else 0) + (if $XLBuildShips.count then $XLBuildShips.count else 0)"/>
+							<set_value name="$MouseOverText3" exact="$FactionOne.knownname + ' ' + {1001,48} + ': ' + $MouseOverText3a + ' ' + $MouseOverText3b"/>
+							<!-- L -->
+							<find_ship name="$LTradeShips" multiple="true" operational="true" primarypurpose="purpose.trade" class="class.ship_l" space="player.galaxy" owner="$FactionOne" recursive="true"/>
+							<find_ship name="$LDockedTradeShips" multiple="true" operational="true" primarypurpose="purpose.trade" class="class.ship_l" space="player.galaxy" owner="$FactionOne" docked="true" recursive="true"/>
+							<remove_from_list name="$LDockedTradeShips" list="$LTradeShips" multiple="true"/>
+							<append_list_elements name="$LTradeShips" other="$LDockedTradeShips"/>
+							<set_value name="$MouseOverText4a" exact="{1001,9010} + ':' + (if $LTradeShips.count then $LTradeShips.count else 0)"/>
+							<find_ship name="$LMineShips" multiple="true" operational="true" primarypurpose="purpose.mine" class="class.ship_l" space="player.galaxy" owner="$FactionOne" recursive="true"/>
+							<find_ship name="$LDockedMineShips" multiple="true" operational="true" primarypurpose="purpose.mine" class="class.ship_l" space="player.galaxy" owner="$FactionOne" docked="true" recursive="true"/>
+							<remove_from_list name="$LDockedMineShips" list="$LMineShips" multiple="true"/>
+							<append_list_elements name="$LMineShips" other="$LDockedMineShips"/>
+							<set_value name="$MouseOverText4b" exact="{1001,9013} + ':' + (if $LMineShips.count then $LMineShips.count else 0)"/>
+							<set_value name="$LShips" exact="(if $LTradeShips.count then $LTradeShips.count else 0) + (if $LMineShips.count then $LMineShips.count else 0)"/>
+							<set_value name="$MouseOverText4" exact="$FactionOne.knownname + ' ' + {1001,49} + ': ' + $MouseOverText4a + ' ' + $MouseOverText4b"/>
+							<!-- M -->
+							<find_ship name="$MTradeShips" multiple="true" operational="true" primarypurpose="purpose.trade" class="class.ship_m" space="player.galaxy" owner="$FactionOne" recursive="true"/>
+							<find_ship name="$MDockedTradeShips" multiple="true" operational="true" primarypurpose="purpose.trade" class="class.ship_m" space="player.galaxy" owner="$FactionOne" docked="true" recursive="true"/>
+							<remove_from_list name="$MDockedTradeShips" list="$MTradeShips" multiple="true"/>
+							<append_list_elements name="$MTradeShips" other="$MDockedTradeShips"/>
+							<set_value name="$MouseOverText5a" exact="{1001,9010} + ':' + (if $MTradeShips.count then $MTradeShips.count else 0)"/>
+							<find_ship name="$MMineShips" multiple="true" operational="true" primarypurpose="purpose.mine" class="class.ship_m" space="player.galaxy" owner="$FactionOne" recursive="true"/>
+							<find_ship name="$MDockedMineShips" multiple="true" operational="true" primarypurpose="purpose.mine" class="class.ship_m" space="player.galaxy" owner="$FactionOne" docked="true" recursive="true"/>
+							<remove_from_list name="$MDockedMineShips" list="$MMineShips" multiple="true"/>
+							<append_list_elements name="$MMineShips" other="$MDockedMineShips"/>
+							<set_value name="$MouseOverText5b" exact="{1001,9013} + ':' + (if $MMineShips.count then $MMineShips.count else 0)"/>
+							<set_value name="$MShips" exact="(if $MTradeShips.count then $MTradeShips.count else 0) + (if $MMineShips.count then $MMineShips.count else 0)"/>
+							<set_value name="$MouseOverText5" exact="$FactionOne.knownname + ' ' + {1001,50} + ': ' + $MouseOverText5a + ' ' + $MouseOverText5b"/>
+							<!-- S -->
+							<find_ship name="$STradeShips" multiple="true" operational="true" primarypurpose="purpose.trade" class="class.ship_s" space="player.galaxy" owner="$FactionOne" recursive="true"/>
+							<find_ship name="$SDockedTradeShips" multiple="true" operational="true" primarypurpose="purpose.trade" class="class.ship_s" space="player.galaxy" owner="$FactionOne" docked="true" recursive="true"/>
+							<remove_from_list name="$SDockedTradeShips" list="$STradeShips" multiple="true"/>
+							<append_list_elements name="$STradeShips" other="$SDockedTradeShips"/>
+							<set_value name="$MouseOverText6a" exact="{1001,9010} + ':' + (if $STradeShips.count then $STradeShips.count else 0)"/>
+							<find_ship name="$SMineShips" multiple="true" operational="true" primarypurpose="purpose.mine" class="class.ship_s" space="player.galaxy" owner="$FactionOne" recursive="true"/>
+							<find_ship name="$SDockedMineShips" multiple="true" operational="true" primarypurpose="purpose.mine" class="class.ship_s" space="player.galaxy" owner="$FactionOne" docked="true" recursive="true"/>
+							<remove_from_list name="$SDockedMineShips" list="$SMineShips" multiple="true"/>
+							<append_list_elements name="$SMineShips" other="$SDockedMineShips"/>
+							<set_value name="$MouseOverText6b" exact="{1001,9013} + ':' + (if $SMineShips.count then $SMineShips.count else 0)"/>
+							<set_value name="$SShips" exact="(if $STradeShips.count then $STradeShips.count else 0) + (if $SMineShips.count then $SMineShips.count else 0)"/>
+							<set_value name="$MouseOverText6" exact="$FactionOne.knownname + ' ' + {1001,51} + ': ' + $MouseOverText6a + ' ' + $MouseOverText6b"/>
+							<!-- Stations -->
+							<find_station name="$Stations" multiple="true" operational="true" space="player.galaxy" owner="$FactionOne"/>
+							<!-- Total -->
+							<set_value name="$TotalShips" exact="$XLShips + $LShips + $MShips + $SShips"/>
+							<set_value name="$Text" exact="$FactionOne.knownname"/>
+							<set_value name="$MouseOverText" exact="$FactionOne.knownname"/>
+							<set_value name="$Text2" exact="{33232471,405}.[(if $TotalShips gt 0 then $TotalShips else 0)]" comment="Total econ Ships"/>
+							<set_value name="$Text3" exact="{33232471,406}.[(if $XLShips gt 0 then $XLShips else 0)]" comment="Total XL econ Ships"/>
+							<set_value name="$Text4" exact="{33232471,407}.[(if $LShips gt 0 then $LShips else 0)]" comment="Total L econ Ships"/>
+							<set_value name="$Text5" exact="{33232471,408}.[(if $MShips gt 0 then $MShips else 0)]" comment="Total M econ Ships"/>
+							<set_value name="$Text6" exact="{33232471,409}.[(if $SShips gt 0 then $SShips else 0)]" comment="Total S econ Ships"/>
+							<set_value name="$Text7" exact="{33232471,411}.[(if $Stations.count gt 0 then $Stations.count else 0)]" comment="Total Stations"/>
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=1,
+								$colSpan=2,
+								$mouseOverText=$MouseOverText,
+								$text = $Text,
+								]"/>
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=3,
+								$colSpan=1,
+								$text = $Text2,
+								]"/>
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=4,
+								$colSpan=1,
+								$mouseOverText=$MouseOverText3,
+								$text = $Text3,
+								]"/>
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=5,
+								$colSpan=1,
+								$mouseOverText=$MouseOverText4,
+								$text = $Text4,
+								]"/>
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=6,
+								$colSpan=1,
+								$mouseOverText=$MouseOverText5,
+								$text = $Text5,
+								]"/>
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=7,
+								$colSpan=1,
+								$mouseOverText=$MouseOverText6,
+								$text = $Text6,
+								]"/>
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col=8,
+								$colSpan=1,
+								$text = $Text7,
+								]"/>
+						</do_if>
+					</actions>
+				</library>
+				<!-- This code was done by SirNukes, all credit given -->
+				<library name="Lib_Get_Stations">
+					<actions>
+						<do_if value="DeadAir.$DynamicWarDiplomacyFaction != null">
+							<find_station_by_true_owner groupname="$stations" faction="DeadAir.$DynamicWarDiplomacyFaction" space="player.galaxy" multiple="true"/>
+							<do_if value="@$include_buildstorage">
+								<!--Add build storage modules for each station; these are also containers with their own cargo/etc data.-->
+								<do_for_each name="$station" in="$stations">
+									<do_if value="$station.buildstorage? and $station.buildstorage != null">
+										<add_to_group groupname="$buildstorages" object="$station.buildstorage"/>
+									</do_if>
+								</do_for_each>
+								<add_to_group groupname="$stations" group="$buildstorages"/>
+							</do_if>
+						</do_if>
+					</actions>
+				</library>
+				<!-- This code was done by SirNukes, all credit given -->
+				<library name="Lib_Get_Ships">
+					<actions>
+						<do_if value="DeadAir.$DynamicWarDiplomacyFaction != null">
+							<find_ship_by_true_owner groupname="$ships" faction="DeadAir.$DynamicWarDiplomacyFaction" multiple="true" masstraffic="false" space="player.galaxy" functional="true"/>
+						</do_if>
+					</actions>
+				</library>
+				<!-- This code was done by SirNukes, all credit given -->
+				<library name="Lib_Add_Horizontal_Line">
+					<actions>
+						<!-- Horizontal line, ego style: make empty text widget wide, thin,and lightly colored. -->
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[$selectable = false]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" 
+							param="table[
+								$col = 1, 
+								$colSpan = event.param.$columns,
+								$height = $thickness,
+								$fontsize = 1,
+								$cellBGColor = 'Helper.color.grey',
+							]"	/>
 					</actions>
 				</library>
 			</cues>
