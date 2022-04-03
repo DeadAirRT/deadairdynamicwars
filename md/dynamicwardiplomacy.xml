@@ -305,7 +305,7 @@
 						<!--Header row.-->
 						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[$selectable = false]"/>
 						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 1, $colSpan=4, $text = {1001,45},]"/>
-						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 5, $colSpan=8, $text = {33232471,509},]"	/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 5, $colSpan=8, $text = {33232471,509},]"/>
 						<set_value name="$thickness" exact="2"/>
 						<include_actions ref="Lib_Add_Horizontal_Line"/>
 						<!--Create the menu rows.-->
@@ -318,38 +318,36 @@
 							'start' set to half of wanted, so if the universe has less then half the wanted amount, the bar goes red. -->
 							<!-- Colors by deadair -->
 							<do_if value="$wanted == 0">
-								<set_value name="$vcolor" exact="'Helper.color.transparent'" />
-								<set_value name="$pcolor" exact="'Helper.color.blue'" />
-								<set_value name="$ncolor" exact="'Helper.color.transparent'" />
+								<set_value name="$vcolor" exact="'Helper.color.transparent'"/>
+								<set_value name="$pcolor" exact="'Helper.color.blue'"/>
+								<set_value name="$ncolor" exact="'Helper.color.transparent'"/>
 							</do_if>
 							<do_elseif value="$exists ge $wanted">
-								<set_value name="$vcolor" exact="'Helper.color.blue'" />
-								<set_value name="$pcolor" exact="'Helper.color.green'" />
-								<set_value name="$ncolor" exact="'Helper.color.transparent'" />
+								<set_value name="$vcolor" exact="'Helper.color.blue'"/>
+								<set_value name="$pcolor" exact="'Helper.color.green'"/>
+								<set_value name="$ncolor" exact="'Helper.color.transparent'"/>
 							</do_elseif>
 							<do_elseif value="$exists lt ($wanted * 0.25)">
-								<set_value name="$vcolor" exact="'Helper.color.red'" />
-								<set_value name="$pcolor" exact="'Helper.color.transparent'" />
-								<set_value name="$ncolor" exact="'Helper.color.transparent'" />
+								<set_value name="$vcolor" exact="'Helper.color.red'"/>
+								<set_value name="$pcolor" exact="'Helper.color.transparent'"/>
+								<set_value name="$ncolor" exact="'Helper.color.transparent'"/>
 							</do_elseif>
 							<do_elseif value="$exists lt ($wanted * 0.5)">
-								<set_value name="$vcolor" exact="'Helper.color.darkorange'" />
-								<set_value name="$pcolor" exact="'Helper.color.transparent'" />
-								<set_value name="$ncolor" exact="'Helper.color.transparent'" />
+								<set_value name="$vcolor" exact="'Helper.color.darkorange'"/>
+								<set_value name="$pcolor" exact="'Helper.color.transparent'"/>
+								<set_value name="$ncolor" exact="'Helper.color.transparent'"/>
 							</do_elseif>
 							<do_elseif value="$exists lt ($wanted * 0.75)">
-								<set_value name="$vcolor" exact="'Helper.color.orange'" />
-								<set_value name="$pcolor" exact="'Helper.color.transparent'" />
-								<set_value name="$ncolor" exact="'Helper.color.transparent'" />
+								<set_value name="$vcolor" exact="'Helper.color.orange'"/>
+								<set_value name="$pcolor" exact="'Helper.color.transparent'"/>
+								<set_value name="$ncolor" exact="'Helper.color.transparent'"/>
 							</do_elseif>
 							<do_elseif value="$exists lt $wanted">
-								<set_value name="$vcolor" exact="'Helper.color.brightyellow'" />
-								<set_value name="$pcolor" exact="'Helper.color.transparent'" />
-								<set_value name="$ncolor" exact="'Helper.color.transparent'" />
+								<set_value name="$vcolor" exact="'Helper.color.brightyellow'"/>
+								<set_value name="$pcolor" exact="'Helper.color.transparent'"/>
+								<set_value name="$ncolor" exact="'Helper.color.transparent'"/>
 							</do_elseif>
-							
-							<signal_cue_instantly cue="md.Simple_Menu_API.Make_StatusBar" 
-							param="table[
+							<signal_cue_instantly cue="md.Simple_Menu_API.Make_StatusBar" param="table[
 									$col			= 5, 
 									$colSpan		= 8,
 									$scaling		= true,
@@ -361,7 +359,7 @@
 									$posChangeColor	= $pcolor,
 									$negChangeColor	= $ncolor,
 									$mouseOverText = 'existing: %s / wanted: %s'.[$exists, $wanted],
-								]"	/>
+								]"/>
 						</do_for_each>
 					</actions>
 				</cue>
@@ -432,9 +430,9 @@
 								$colSpan=4,
 								$onSliderCellConfirm=DADynWarBesties,
 								$min=0,
-								$minSelect=1,
+								$minSelect=0,
 								$max=100,
-								$maxSelect=95,
+								$maxSelect=100,
 								$exceedMaxValue=false,
 								$start=if md.$DADynWarBesties? then md.$DADynWarBesties else 1,
 								$step=1,
@@ -450,9 +448,9 @@
 								$colSpan=4,
 								$onSliderCellConfirm=DADynWarBigBoost,
 								$min=0,
-								$minSelect=1,
+								$minSelect=0,
 								$max=100,
-								$maxSelect=95,
+								$maxSelect=100,
 								$exceedMaxValue=false,
 								$start=if md.$DADynWarBigBoost? then md.$DADynWarBigBoost else 16,
 								$step=1,
@@ -468,9 +466,9 @@
 								$colSpan=4,
 								$onSliderCellConfirm=DADynWarSmallBoost,
 								$min=0,
-								$minSelect=1,
+								$minSelect=0,
 								$max=100,
-								$maxSelect=95,
+								$maxSelect=100,
 								$exceedMaxValue=false,
 								$start=if md.$DADynWarSmallBoost? then md.$DADynWarSmallBoost else 32,
 								$step=1,
@@ -486,9 +484,9 @@
 								$colSpan=4,
 								$onSliderCellConfirm=DADynWarSmallBlow,
 								$min=0,
-								$minSelect=1,
+								$minSelect=0,
 								$max=100,
-								$maxSelect=95,
+								$maxSelect=100,
 								$exceedMaxValue=false,
 								$start=if md.$DADynWarSmallBlow? then md.$DADynWarSmallBlow else 32,
 								$step=1,
@@ -504,9 +502,9 @@
 								$colSpan=4,
 								$onSliderCellConfirm=DADynWarBigBlow,
 								$min=0,
-								$minSelect=1,
+								$minSelect=0,
 								$max=100,
-								$maxSelect=95,
+								$maxSelect=100,
 								$exceedMaxValue=false,
 								$start=if md.$DADynWarBigBlow? then md.$DADynWarBigBlow else 16,
 								$step=1,
@@ -522,11 +520,29 @@
 								$colSpan=4,
 								$onSliderCellConfirm=DADynWarNemesis,
 								$min=0,
-								$minSelect=1,
+								$minSelect=0,
 								$max=100,
-								$maxSelect=95,
+								$maxSelect=100,
 								$exceedMaxValue=false,
 								$start=if md.$DADynWarNemesis? then md.$DADynWarNemesis else 3,
+								$step=1,
+							]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col = 1,
+								$colSpan = 4,
+								$text = {33232471,422},
+							]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Slider" param="table[
+								$col=5,
+								$colSpan=4,
+								$onSliderCellConfirm=DADynWarNothing,
+								$min=0,
+								$minSelect=0,
+								$max=100,
+								$maxSelect=100,
+								$exceedMaxValue=false,
+								$start=if md.$DADynWarNothing? then md.$DADynWarNothing else 0,
 								$step=1,
 							]"/>
 					</actions>
@@ -676,6 +692,15 @@
 					<actions>
 						<set_value name="md.$DADynWarNemesis" exact="event.param.$value"/>
 						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Updated md.$DADynWarNemesis to %2'.[player.age,md.$DADynWarNemesis]" context="false" filter="scripts"/>
+					</actions>
+				</cue>
+				<cue name="DADynWarNothing" instantiate="true">
+					<conditions>
+						<event_cue_signalled/>
+					</conditions>
+					<actions>
+						<set_value name="md.$DADynWarNothing" exact="event.param.$value"/>
+						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Updated md.$DADynWarNothing to %2'.[player.age,md.$DADynWarNothing]" context="false" filter="scripts"/>
 					</actions>
 				</cue>
 				<library name="Lib_GetFactions">
@@ -1196,14 +1221,13 @@
 					<actions>
 						<!-- Horizontal line, ego style: make empty text widget wide, thin,and lightly colored. -->
 						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[$selectable = false]"/>
-						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" 
-							param="table[
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
 								$col = 1, 
 								$colSpan = event.param.$columns,
 								$height = $thickness,
 								$fontsize = 1,
 								$cellBGColor = 'Helper.color.grey',
-							]"	/>
+							]"/>
 					</actions>
 				</library>
 			</cues>
