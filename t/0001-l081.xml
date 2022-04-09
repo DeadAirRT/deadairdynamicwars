@@ -72,7 +72,6 @@
  <t id="134">%1 は %2 と全面戦争に突入しました。\(%3\)</t>
  <!--$FactionOneNames + is + 'now at all-out war with their nemesis, ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
  <t id="135">%1 は宿敵 %2 との全面戦争に突入しました。\(%3\)</t>
- 
  <t id="200">(flavor text - all factions referred to are singular)</t>
  <!--'Completion of a non-aggression pact has led to improved relations between ' + $FactionOneNames + ' and ' + $FactionTwoNames + '.'-->
  <t id="201">不可侵条約が締結され、%1 と %2 の関係が改善されました。</t>

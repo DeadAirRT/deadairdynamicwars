@@ -19,58 +19,58 @@
 						<set_value name="$ExcludedFactions" exact="[faction.civilian, faction.criminal, faction.khaak, faction.player, faction.smuggler, faction.visitor, faction.xenon]"/>
 						<!-- Find claimspace factions -->
 						<do_if value="(not $ClaimspaceList?)">
-							<create_list name="$ClaimspaceList" />
+							<create_list name="$ClaimspaceList"/>
 						</do_if>
 						<do_else>
-							<clear_list list="$ClaimspaceList" />
+							<clear_list list="$ClaimspaceList"/>
 						</do_else>
-						<get_factions_by_tag tag="tag.claimspace" result="$ClaimspaceList" />
+						<get_factions_by_tag tag="tag.claimspace" result="$ClaimspaceList"/>
 						<!-- Find peaceful factions -->
 						<do_if value="(not $PeacefulList?)">
-							<create_list name="$PeacefulList" />
+							<create_list name="$PeacefulList"/>
 						</do_if>
 						<do_else>
-							<clear_list list="$PeacefulList" />
+							<clear_list list="$PeacefulList"/>
 						</do_else>
-						<create_list name="$PeacefulList" />
-						<get_factions_by_tag tag="tag.peaceful" result="$PeacefulList" />
+						<create_list name="$PeacefulList"/>
+						<get_factions_by_tag tag="tag.peaceful" result="$PeacefulList"/>
 						<!-- Find visitor factions -->
 						<do_if value="(not $VisitorList?)">
-							<create_list name="$VisitorList" />
+							<create_list name="$VisitorList"/>
 						</do_if>
 						<do_else>
-							<clear_list list="$VisitorList" />
+							<clear_list list="$VisitorList"/>
 						</do_else>
-						<create_list name="$VisitorList" />
-						<get_factions_by_tag tag="tag.visitor" result="$VisitorList" />
+						<create_list name="$VisitorList"/>
+						<get_factions_by_tag tag="tag.visitor" result="$VisitorList"/>
 						<!-- Remove excluded, peaceful, and visitors from claimspace list -->
 						<remove_from_list name="$ClaimspaceList" list="$ExcludedFactions" multiple="true"/>
 						<remove_from_list name="$ClaimspaceList" list="$PeacefulList" multiple="true"/>
 						<remove_from_list name="$ClaimspaceList" list="$VisitorList" multiple="true"/>
 						<!-- Maximum AI:AI relations should be 0.75 due to jobs -->
 						<do_all exact="$ClaimspaceList.count" counter="$a">
-							<set_value name="$FactionOne" exact="$ClaimspaceList.{$a}" />
+							<set_value name="$FactionOne" exact="$ClaimspaceList.{$a}"/>
 							<do_all exact="$ClaimspaceList.count" counter="$b">
-								<set_value name="$FactionTwo" exact="$ClaimspaceList.{$b}" />
+								<set_value name="$FactionTwo" exact="$ClaimspaceList.{$b}"/>
 								<do_if value="($FactionOne != $FactionTwo) and ($FactionOne.relationto.{$FactionTwo} gt 0.75)">
-									<set_faction_relation faction="$FactionOne" otherfaction="$FactionTwo" value="0.75" />
-									<set_faction_relation faction="$FactionTwo" otherfaction="$FactionOne" value="0.75" />
-									<debug_text text="'MOD: DeadAirDynamicWars -- Fixed relations between %1 and %2. New relation is %3.'.[$FactionOne.name,$FactionTwo.name,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" context="false" filter="scripts" />
+									<set_faction_relation faction="$FactionOne" otherfaction="$FactionTwo" value="0.75"/>
+									<set_faction_relation faction="$FactionTwo" otherfaction="$FactionOne" value="0.75"/>
+									<debug_text text="'MOD: DeadAirDynamicWars -- Fixed relations between %1 and %2. New relation is %3.'.[$FactionOne.name,$FactionTwo.name,$FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue]" context="false" filter="scripts"/>
 								</do_if>
 							</do_all>
 						</do_all>
 						<!-- Match Ministry Relations to Teladi -->
 						<do_all exact="$ClaimspaceList.count" counter="$c">
-							<set_value name="$OtherFaction" exact="$ClaimspaceList.{$c}" />
+							<set_value name="$OtherFaction" exact="$ClaimspaceList.{$c}"/>
 							<do_if value="(faction.teladi.relationto.{$OtherFaction} != faction.ministry.relationto.{$OtherFaction}) and ($OtherFaction != faction.teladi) and ($OtherFaction != faction.ministry)">
-								<set_faction_relation faction="faction.ministry" otherfaction="$OtherFaction" value="faction.teladi.relationto.{$OtherFaction}" />
-								<set_faction_relation faction="$OtherFaction" otherfaction="faction.ministry" value="faction.teladi.relationto.{$OtherFaction}" />
-								<debug_text text="'MOD: DeadAirDynamicWars -- Fixed relations between %1 and %2. New relation is %3.'.[faction.ministry.name,$OtherFaction.name,faction.ministry.relation.{faction.ministry.relationto.{$OtherFaction}}.uivalue]" context="false" filter="scripts" />
+								<set_faction_relation faction="faction.ministry" otherfaction="$OtherFaction" value="faction.teladi.relationto.{$OtherFaction}"/>
+								<set_faction_relation faction="$OtherFaction" otherfaction="faction.ministry" value="faction.teladi.relationto.{$OtherFaction}"/>
+								<debug_text text="'MOD: DeadAirDynamicWars -- Fixed relations between %1 and %2. New relation is %3.'.[faction.ministry.name,$OtherFaction.name,faction.ministry.relation.{faction.ministry.relationto.{$OtherFaction}}.uivalue]" context="false" filter="scripts"/>
 							</do_if>
 						</do_all>
-						<remove_value name="$FactionOne" />
-						<remove_value name="$FactionTwo" />
-						<remove_value name="$OtherFaction" />
+						<remove_value name="$FactionOne"/>
+						<remove_value name="$FactionTwo"/>
+						<remove_value name="$OtherFaction"/>
 					</actions>
 				</cue>
 			</cues>
