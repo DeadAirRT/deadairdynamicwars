@@ -1,209 +1,209 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <language id="81">
-	<page id="33232471" title="DeadAir Dynamic War T Files" descr="names used in DeadAir Dynamic War mod" voice="no">
-		<t id="100">(Messages - all factions referred to are singular)</t>
-		<!--$FactionOneNames + ' has greatly improved relations with ' + $FactionTwoNames + '. They are considered friendly. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="101">%1 は %2 との関係性を大幅に深めました。両者は現在友好状態です。\(%3\)</t>
-		<!--$FactionOneNames + ' has greatly improved relations with ' + $FactionTwoNames + '. They are considered allies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="102">%1 は %2 との関係性を大幅に深めました。両者は現在同盟状態です。\(%3\)</t>
-		<!--$FactionOneNames + ' has greatly improved relations with ' + $FactionTwoNames + '. They are considered close allies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="103">%1 は %2 との関係性を大幅に深めました。両者は現在深い同盟状態です。\(%3\)</t>
-		<!--$FactionOneNames + ' has greatly improved relations with ' + $FactionTwoNames + '. They are now at peace and considered friendly. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="104">%1 は %2 との関係性を大幅に深めました。両者は現在終戦し、友好状態です。\(%3\)</t>
-		<!--$FactionOneNames + ' has greatly improved relations with ' + $FactionTwoNames + '. They are now at peace and considered allies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="105">%1 は %2 との関係性を大幅に深めました。両者は現在終戦し、同盟状態です。\(%3\)</t>
-		<!--$FactionOneNames + ' has greatly improved relations with ' + $FactionTwoNames + '. They are now at peace and considered close allies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="106">%1 は %2 との関係性を大幅に深めました。両者は現在終戦し、深い同盟状態です。\(%3\)</t>
-		<!--$FactionOneNames + ' has improved relations with ' + $FactionTwoNames + '. They are enemies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="107">%1 は %2 との関係性を深めました。両者は現在敵視状態です。\(%3\)</t>
-		<!--$FactionOneNames + ' has improved relations with ' + $FactionTwoNames + '. They are at war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="108">%1 は %2 との関係性を深めました。両者は現在戦争状態です。\(%3\)</t>
-		<!--$FactionOneNames + ' has improved relations with ' + $FactionTwoNames + '. They are at all-out war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="109">%1 は %2 との関係性を深めました。両者は現在全面戦争状態です。\(%3\)</t>
-		<!--$FactionOneNames + ' has slightly improved relations with ' + $FactionTwoNames + '. They are considered friendly. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="110">%1 は %2 との関係性を少し深めました。両者は現在友好状態です。\(%3\)</t>
-		<!--$FactionOneNames + ' has slighty improved relations with ' + $FactionTwoNames + '. They are considered allies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="111">%1 は %2 との関係性を少し深めました。両者は現在同盟状態です。\(%3\)</t>
-		<!--$FactionOneNames + is + 'now at peace with ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="112">%1 は %2 と終戦しました。\(%3\)</t>
-		<!--$FactionOneNames + ' has slightly improved relations with ' + $FactionTwoNames + '. They are considered enemies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="113">%1 は %2 との関係性を少し深めました。両者は現在敵視状態です。\(%3\)</t>
-		<!--$FactionOneNames + ' has slightly improved relations with ' + $FactionTwoNames + '. They are considered at war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="114">%1 は %2 との関係性を少し深めました。両者は現在戦争状態です。\(%3\)</t>
-		<!--$FactionOneNames + ' has slightly improved relations with ' + $FactionTwoNames + '. They are at all-out war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="115">%1 は %2 との関係性を少し深めました。両者は現在全面戦争状態です。\(%3\)</t>
-		<!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are considered friendly. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="116">%1 は %2 との関係性を大きく悪化させました。両者は現在友好状態です。\(%3\)</t>
-		<!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are considered allies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="117">%1 は %2 との関係性を大きく悪化させました。両者は現在同盟状態です。\(%3\)</t>
-		<!--$FactionOneNames + ' has slightly worsened relations with ' + $FactionTwoNames + '. They are considered enemies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="118">%1 は %2 との関係性を大きく悪化させました。両者は現在敵視状態です。\(%3\)</t>
-		<!--$FactionOneNames + ' has slightly worsened relations with ' + $FactionTwoNames + '. They are considered at war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="119">%1 は %2 との関係性を多少悪化させました。両者は現在戦争状態です。\(%3\)</t>
-		<!--$FactionOneNames + ' has slightly worsened relations with ' + $FactionTwoNames + '. They are at all-out war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="120">%1 は %2 との関係性を多少悪化させました。両者は現在全面戦争状態です。\(%3\)</t>
-		<!--$FactionOneNames + ' has slightly worsened relations with ' + $FactionTwoNames + '. They are at all-out war with their nemesis. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="121">%1 は %2 との関係性を多少悪化させました。両者は現在宿敵との全面戦争状態です。\(%3\)</t>
-		<!--$FactionOneNames + is + 'now enemies with ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="122">%1 は %2 の敵視を始めました。\(%3\)</t>
-		<!--$FactionOneNames + is + 'now at war with ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="123">%1 は %2 と戦争状態に突入しました。\(%3\)</t>
-		<!--$FactionOneNames + is + 'now at all-out war with ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="124">%1 は %2 と全面戦争に突入しました。\(%3\)</t>
-		<!--$FactionOneNames + is + 'now at all-out war with their nemesis, ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="125">%1 は宿敵 %2 との全面戦争に突入しました。\(%3\)</t>
-		<!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are considered friendly. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="126">%1 は %2 との関係性を大きく悪化させました。両者は現在友好状態です。\(%3\)</t>
-		<!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are considered allies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="127">%1 は %2 との関係性を大きく悪化させました。両者は現在同盟状態です。\(%3\)</t>
-		<!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are considered enemies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="128">%1 は %2 との関係性を大きく悪化させました。両者は現在敵視状態です。\(%3\)</t>
-		<!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are considered at war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="129">%1 は %2 との関係性を大きく悪化させました。両者は現在戦争状態です。\(%3\)</t>
-		<!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are at all-out war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="130">%1 は %2 との関係性を大きく悪化させました。両者は現在全面戦争状態です。\(%3\)</t>
-		<!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are at all-out war with their nemesis. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="131">%1 は %2 との関係性を大きく悪化させました。両者は現在宿敵との全面戦争状態です\(%3\)</t>
-		<!--$FactionOneNames + is + 'now enemies with ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="132">%1 は %2 の敵視を始めました。\(%3\)</t>
-		<!--$FactionOneNames + is + 'now at war with ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="133">%1 は %2 と戦争状態に突入しました。\(%3\)</t>
-		<!--$FactionOneNames + is + 'now at all-out war with ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="134">%1 は %2 と全面戦争に突入しました。\(%3\)</t>
-		<!--$FactionOneNames + is + 'now at all-out war with their nemesis, ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
-		<t id="135">%1 は宿敵 %2 との全面戦争に突入しました。\(%3\)</t>
-		<t id="200">(flavor text - all factions referred to are singular)</t>
-		<!--'Completion of a non-aggression pact has led to improved relations between ' + $FactionOneNames + ' and ' + $FactionTwoNames + '.'-->
-		<t id="201">不可侵条約が締結され、%1 と %2 の関係が改善されました。</t>
-		<!--'Completion of a joint resources expedition has led to improved relations between ' + $FactionOneNames + ' and ' + $FactionTwoNames + '.'-->
-		<t id="202">共同資源探査が完了し、%1 と %2 の関係が改善されました。</t>
-		<!--'Completion of a major trade deal between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has led to peace.'-->
-		<t id="203">%1 と %2 の間で大規模な貿易取引が完了し、和平が訪れました。</t>
-		<!--'After wide scale protests crying for peace, ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' have signed a peace treaty.'-->
-		<t id="204">平和を求める大規模な抗議行動の後、%1 と %2 は和平条約に署名しました。</t>
-		<!--'After a near disasterous fight with the Xenon. ' + $FactionTwoNames + ' sent ships to save the fleet of ' + $FactionOneNames + '. The two factions decided to settle their differences.'-->
-		<t id="205">ゼノンとの絶望的な戦闘において %2 の艦隊を救うために %1 が援軍を派遣したことをきっかけに、2つの派閥は意見の相違の解決へと動きました。</t>
-		<!--'Reduced hostilities between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has greatly improved relations.'-->
-		<t id="206">敵対行動の減少を受け、%1 と %2 は大幅にその関係性を深めました。</t>
-		<!--'Reduced espionage between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has greatly improved relations.'-->
-		<t id="207">諜報工作活動の減少を受け、%1 と %2 は大幅にその関係性を深めました。</t>
-		<!--'Increased trade between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slightly improved relations.'-->
-		<t id="208">交易の増加を受け、%1 と %2 の関係性は多少深まりました。</t>
-		<!--'Increased tourism between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slightly improved relations.'-->
-		<t id="209">観光の増加を受け、%1 と %2 の関係性は多少深まりました。</t>
-		<!--'After a public request by Jack the Stripper, famous highway architect, ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' have ended their war.'-->
-		<t id="210">有名なハイウェイ建築家、ジャック・ザ・ストリッパー氏の公的な要請を受け、%1 と %2 の戦争は終結しました。</t>
-		<!--'An armistice treaty signed by ' + $FactionOneNames + ' and ' + $FactionTwoNames + '. Prisoners have been exchanged and there is a fragile peace for now.'-->
-		<t id="211">%1 と %2 は休戦条約に署名しました。捕虜の交換が行われ、一時の平和が訪れました。</t>
-		<!--'Reduced hostilities between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slighty improved relations.'-->
-		<t id="212">敵対行動の減少を受け、%1 と %2 の関係性は多少深まりました。</t>
-		<!--Reduced espionage between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slightly improved relations.-->
-		<t id="213">諜報工作活動の減少を受け、%1 と %2 の関係性は多少深まりました。</t>
-		<!--Reduced trade between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slightly worsened relations.-->
-		<t id="214">交易の減少を受け、%1 と %2 の関係性は多少悪化しました。</t>
-		<!--Reduced tourism between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slightly worsened relations.-->
-		<t id="215">観光の減少を受け、%1 と %2 の関係性は多少悪化しました</t>
-		<!--Increased hostilities between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slightly worsened relations.-->
-		<t id="216">敵対行動の増加を受け、%1 と %2 の関係性は多少悪化しました。</t>
-		<!--Increased espionage between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slightly worsened relations.-->
-		<t id="217">諜報工作活動の増加を受け、%1 と %2 の関係性は多少悪化しました。</t>
-		<!--Citing previous border disputes, ' + $FactionOneNames + ' has declared war on ' + $FactionTwoNames + ' to protect their galactic sovereignty.-->
-		<t id="218">以前の国境議論を理由に、%1 は主権を守るためとして %2 に宣戦布告しました。</t>
-		<!--After a failed non-aggression pact, the relations between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' have deteriorated into a minor conflict.-->
-		<t id="219">不可侵条約の締結失敗を受け、%1 と %2 の関係性は小規模な紛争が勃発するほどに悪化しました。</t>
-		<!--Reduced trade between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has greatly worsened relations.-->
-		<t id="220">交易の減少を受け、%1 と %2 の関係性は大幅に悪化しました。</t>
-		<!--Reduced tourism between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has greatly worsened relations.-->
-		<t id="221">観光の減少を受け、%1 と %2 の関係性は大幅に悪化しました。</t>
-		<!--A prominent leader of ' + $FactionOneNames + ' has declared to build a wall blocking ' + $FactionTwoNames + ' and to make them pay for it. Relations have greatly worsened.-->
-		<t id="222">%1 の著名な代表が、%2 に対する壁の建築を宣言し代償を求めたことにより、両者の関係性は大幅に悪化しました。</t>
-		<!--A prominent leader of ' + $FactionOneNames + ' has called for the destruction of ' + $FactionTwoNames + ' during a state of the union address. Relations have greatly worsened.-->
-		<t id="223">%1 の著名な代表が、派閥間会合において %2 の解体を要求したことで、両者の関係性は大幅に悪化しました。</t>
-		<!--A ship carrying water to a station experiencing a critical shortage was destroyed by ' + $FactionTwoNames + ' extremeists. ' + $FactionOneNames + ' has declared war in retaliation.-->
-		<t id="224">危機的な水不足に陥っているステーションへ水を輸送していた船が %2 の過激派により破壊されたことを受け、%1 は報復のための宣戦布告を行いました。</t>
-		<!--An ambassador of ' + $FactionOneNames + ' was assasinated. Evidence points to a deep-cover agent of ' + $FactionTwoNames + ' coalition. War has erupted.-->
-		<t id="225">%1 の大使暗殺が %2 の潜入工作員の手によるものであるという証拠を受け、両者間の戦争が勃発しました。</t>
-		<!--A new captain of ' + $FactionTwoNames + ' fired upon a luxury passenger ship belonging to ' + $FactionOneNames + ' coalition, thought to be smuggling criminals. ' + $FactionOneNames + ' swiftly declared war.-->
-		<t id="226">%2 の新人艦長が、犯罪者が密航していたと見られた %1 の豪華客船へ発砲を行ったことを受け、%1 は戦争への移行を宣言しました。</t>
-		<!--A rogue faction logic AI designed by Mysterial has caused phantom fleet orders to invade ' + $FactionTwoNames + ' space. ' + $FactionOneNames + ' has immediately declared all out war.-->
-		<t id="227">ミステリアル氏によって設計された不正な派閥ロジックAIが、幻の艦隊に %2 領への侵攻命令を出し、%1 は即座に全面戦争へと突入しました。</t>
-		<t id="300">(conversation stuff)</t>
-		<!--Discuss faction relations-->
-		<t id="301">他派閥について議論したい</t>
-		<!--Improve relations with cash-->
-		<t id="302">金銭で関係性を向上させる</t>
-		<!--Inquire about relations-->
-		<t id="303">関係性について問い詰める</t>
-		<!--Set diplomacy stance for faction-->
-		<t id="304">他派閥への政治的姿勢を決める</t>
-		<!--Back-->
-		<t id="305">戻る</t>
-		<!--Previous page-->
-		<t id="306">前のページ</t>
-		<!--Next page-->
-		<t id="307">次のページ</t>
-		<!--Nemesis-->
-		<t id="308">宿敵</t>
-		<!--Kill-->
-		<t id="309">全面攻撃</t>
-		<!--KillMilitary-->
-		<t id="310">軍事攻撃</t>
-		<!--Enemy-->
-		<t id="311">敵視</t>
-		<!--Neutral-->
-		<t id="312">中立</t>
-		<!--Friend-->
-		<t id="313">友好</t>
-		<!--Member-->
-		<t id="314">同盟</t>
-		<!--Self-->
-		<t id="315">自身</t>
-		<!--%1 (Current:%2)-->
-		<t id="316">%1 \(現在:%2\)</t>
-		<t id="400">(UI STUFF)</t>
-		<!--Faction Information-->
-		<t id="401">派閥情報</t>
-		<!--Relations-->
-		<t id="402">関係性</t>
-		<!--Military Strength-->
-		<t id="403">軍事力</t>
-		<!--Economic Strength-->
-		<t id="404">経済力</t>
-		<!--Total: ' + (if $TotalShips gt 0 then $TotalShips else 0)-->
-		<t id="405">合計: %1</t>
-		<!--XL: ' + (if $XLShips.count gt 0 then $XLShips.count else 0)-->
-		<t id="406">XL: %1</t>
-		<!--L: ' + (if $LShips.count gt 0 then $LShips.count else 0)-->
-		<t id="407">L: %1</t>
-		<!--M: ' + (if $MShips.count gt 0 then $MShips.count else 0)-->
-		<t id="408">M: %1</t>
-		<!--S: ' + (if $SShips.count gt 0 then $SShips.count else 0)-->
-		<t id="409">S: %1</t>
-		<!--XL Trading and Building Ships-->
-		<t id="410">特大型交易・建築艦船</t>
-		<!--Station: ' + (if $Stations.count gt 0 then $Stations.count else 0)-->
-		<t id="411">ST: %1</t>
-		<!-- Disallow HAT in Dynamic Wars -->
-		<t id="412">{20203,901}を動的な戦争から除外する</t>
-		<t id="413">{20203,1001}の関係性を固定する</t>
-		<t id="414">Enable Dynamic Wars</t>
-		<t id="415">Best Friend Weight</t>
-		<t id="416">Large Increase Weight</t>
-		<t id="417">Small Increase Weight</t>
-		<t id="418">Small Decrease Weight</t>
-		<t id="419">Large Decrease Weight</t>
-		<t id="420">Nemesis Weight</t>
-		<t id="421">{1001,45} {1001,1406}\/{1001,2903}</t>
-		<t id="422">No Change Weight</t>
-		<t id="500">(Diplomacy STUFF)</t>
-		<t id="501">DA ダイナミックウォーズメニュー</t>
-		<t id="502">関係性の向上</t>
-		<t id="503">関係性の低下</t>
-		<t id="504">直近の出来事</t>
-		<t id="505">なし</t>
-		<t id="506">{1015,28}</t>
-		<t id="507">{1001,2701} +5</t>
-		<t id="508">{1001,2701} -5</t>
-		<t id="509">{1001,1406}\/{1001,2903}</t>
-	</page>
+<page id="33232471" title="DeadAir Dynamic War T Files" descr="names used in DeadAir Dynamic War mod" voice="no">
+ <t id="100">(Messages - all factions referred to are singular)</t>
+ <!--$FactionOneNames + ' has greatly improved relations with ' + $FactionTwoNames + '. They are considered friendly. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="101">%1 は %2 との関係性を大幅に深めました。両者は現在友好状態です。\(%3\)</t>
+ <!--$FactionOneNames + ' has greatly improved relations with ' + $FactionTwoNames + '. They are considered allies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="102">%1 は %2 との関係性を大幅に深めました。両者は現在同盟状態です。\(%3\)</t>
+ <!--$FactionOneNames + ' has greatly improved relations with ' + $FactionTwoNames + '. They are considered close allies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="103">%1 は %2 との関係性を大幅に深めました。両者は現在深い同盟状態です。\(%3\)</t>
+ <!--$FactionOneNames + ' has greatly improved relations with ' + $FactionTwoNames + '. They are now at peace and considered friendly. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="104">%1 は %2 との関係性を大幅に深めました。両者は現在終戦し、友好状態です。\(%3\)</t>
+ <!--$FactionOneNames + ' has greatly improved relations with ' + $FactionTwoNames + '. They are now at peace and considered allies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="105">%1 は %2 との関係性を大幅に深めました。両者は現在終戦し、同盟状態です。\(%3\)</t>
+ <!--$FactionOneNames + ' has greatly improved relations with ' + $FactionTwoNames + '. They are now at peace and considered close allies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="106">%1 は %2 との関係性を大幅に深めました。両者は現在終戦し、深い同盟状態です。\(%3\)</t>
+ <!--$FactionOneNames + ' has improved relations with ' + $FactionTwoNames + '. They are enemies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="107">%1 は %2 との関係性を深めました。両者は現在敵視状態です。\(%3\)</t>
+ <!--$FactionOneNames + ' has improved relations with ' + $FactionTwoNames + '. They are at war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="108">%1 は %2 との関係性を深めました。両者は現在戦争状態です。\(%3\)</t>
+ <!--$FactionOneNames + ' has improved relations with ' + $FactionTwoNames + '. They are at all-out war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="109">%1 は %2 との関係性を深めました。両者は現在全面戦争状態です。\(%3\)</t>
+ <!--$FactionOneNames + ' has slightly improved relations with ' + $FactionTwoNames + '. They are considered friendly. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="110">%1 は %2 との関係性を少し深めました。両者は現在友好状態です。\(%3\)</t>
+ <!--$FactionOneNames + ' has slighty improved relations with ' + $FactionTwoNames + '. They are considered allies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="111">%1 は %2 との関係性を少し深めました。両者は現在同盟状態です。\(%3\)</t>
+ <!--$FactionOneNames + is + 'now at peace with ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="112">%1 は %2 と終戦しました。\(%3\)</t>
+ <!--$FactionOneNames + ' has slightly improved relations with ' + $FactionTwoNames + '. They are considered enemies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="113">%1 は %2 との関係性を少し深めました。両者は現在敵視状態です。\(%3\)</t>
+ <!--$FactionOneNames + ' has slightly improved relations with ' + $FactionTwoNames + '. They are considered at war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="114">%1 は %2 との関係性を少し深めました。両者は現在戦争状態です。\(%3\)</t>
+ <!--$FactionOneNames + ' has slightly improved relations with ' + $FactionTwoNames + '. They are at all-out war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="115">%1 は %2 との関係性を少し深めました。両者は現在全面戦争状態です。\(%3\)</t>
+ <!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are considered friendly. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="116">%1 は %2 との関係性を大きく悪化させました。両者は現在友好状態です。\(%3\)</t>
+ <!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are considered allies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="117">%1 は %2 との関係性を大きく悪化させました。両者は現在同盟状態です。\(%3\)</t>
+ <!--$FactionOneNames + ' has slightly worsened relations with ' + $FactionTwoNames + '. They are considered enemies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="118">%1 は %2 との関係性を大きく悪化させました。両者は現在敵視状態です。\(%3\)</t>
+ <!--$FactionOneNames + ' has slightly worsened relations with ' + $FactionTwoNames + '. They are considered at war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="119">%1 は %2 との関係性を多少悪化させました。両者は現在戦争状態です。\(%3\)</t>
+ <!--$FactionOneNames + ' has slightly worsened relations with ' + $FactionTwoNames + '. They are at all-out war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="120">%1 は %2 との関係性を多少悪化させました。両者は現在全面戦争状態です。\(%3\)</t>
+ <!--$FactionOneNames + ' has slightly worsened relations with ' + $FactionTwoNames + '. They are at all-out war with their nemesis. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="121">%1 は %2 との関係性を多少悪化させました。両者は現在宿敵との全面戦争状態です。\(%3\)</t>
+ <!--$FactionOneNames + is + 'now enemies with ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="122">%1 は %2 の敵視を始めました。\(%3\)</t>
+ <!--$FactionOneNames + is + 'now at war with ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="123">%1 は %2 と戦争状態に突入しました。\(%3\)</t>
+ <!--$FactionOneNames + is + 'now at all-out war with ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="124">%1 は %2 と全面戦争に突入しました。\(%3\)</t>
+ <!--$FactionOneNames + is + 'now at all-out war with their nemesis, ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="125">%1 は宿敵 %2 との全面戦争に突入しました。\(%3\)</t>
+ <!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are considered friendly. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="126">%1 は %2 との関係性を大きく悪化させました。両者は現在友好状態です。\(%3\)</t>
+ <!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are considered allies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="127">%1 は %2 との関係性を大きく悪化させました。両者は現在同盟状態です。\(%3\)</t>
+ <!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are considered enemies. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="128">%1 は %2 との関係性を大きく悪化させました。両者は現在敵視状態です。\(%3\)</t>
+ <!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are considered at war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="129">%1 は %2 との関係性を大きく悪化させました。両者は現在戦争状態です。\(%3\)</t>
+ <!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are at all-out war. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="130">%1 は %2 との関係性を大きく悪化させました。両者は現在全面戦争状態です。\(%3\)</t>
+ <!--$FactionOneNames + ' has greatly worsened relations with ' + $FactionTwoNames + '. They are at all-out war with their nemesis. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="131">%1 は %2 との関係性を大きく悪化させました。両者は現在宿敵との全面戦争状態です\(%3\)</t>
+ <!--$FactionOneNames + is + 'now enemies with ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="132">%1 は %2 の敵視を始めました。\(%3\)</t>
+ <!--$FactionOneNames + is + 'now at war with ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="133">%1 は %2 と戦争状態に突入しました。\(%3\)</t>
+ <!--$FactionOneNames + is + 'now at all-out war with ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="134">%1 は %2 と全面戦争に突入しました。\(%3\)</t>
+ <!--$FactionOneNames + is + 'now at all-out war with their nemesis, ' + $FactionTwoNames + '. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
+ <t id="135">%1 は宿敵 %2 との全面戦争に突入しました。\(%3\)</t>
+ <t id="200">(flavor text - all factions referred to are singular)</t>
+ <!--'Completion of a non-aggression pact has led to improved relations between ' + $FactionOneNames + ' and ' + $FactionTwoNames + '.'-->
+ <t id="201">不可侵条約が締結され、%1 と %2 の関係が改善されました。</t>
+ <!--'Completion of a joint resources expedition has led to improved relations between ' + $FactionOneNames + ' and ' + $FactionTwoNames + '.'-->
+ <t id="202">共同資源探査が完了し、%1 と %2 の関係が改善されました。</t>
+ <!--'Completion of a major trade deal between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has led to peace.'-->
+ <t id="203">%1 と %2 の間で大規模な貿易取引が完了し、和平が訪れました。</t>
+ <!--'After wide scale protests crying for peace, ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' have signed a peace treaty.'-->
+ <t id="204">平和を求める大規模な抗議行動の後、%1 と %2 は和平条約に署名しました。</t>
+ <!--'After a near disasterous fight with the Xenon. ' + $FactionTwoNames + ' sent ships to save the fleet of ' + $FactionOneNames + '. The two factions decided to settle their differences.'-->
+ <t id="205">ゼノンとの絶望的な戦闘において %2 の艦隊を救うために %1 が援軍を派遣したことをきっかけに、2つの派閥は意見の相違の解決へと動きました。</t>
+ <!--'Reduced hostilities between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has greatly improved relations.'-->
+ <t id="206">敵対行動の減少を受け、%1 と %2 は大幅にその関係性を深めました。</t>
+ <!--'Reduced espionage between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has greatly improved relations.'-->
+ <t id="207">諜報工作活動の減少を受け、%1 と %2 は大幅にその関係性を深めました。</t>
+ <!--'Increased trade between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slightly improved relations.'-->
+ <t id="208">交易の増加を受け、%1 と %2 の関係性は多少深まりました。</t>
+ <!--'Increased tourism between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slightly improved relations.'-->
+ <t id="209">観光の増加を受け、%1 と %2 の関係性は多少深まりました。</t>
+ <!--'After a public request by Jack the Stripper, famous highway architect, ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' have ended their war.'-->
+ <t id="210">有名なハイウェイ建築家、ジャック・ザ・ストリッパー氏の公的な要請を受け、%1 と %2 の戦争は終結しました。</t>
+ <!--'An armistice treaty signed by ' + $FactionOneNames + ' and ' + $FactionTwoNames + '. Prisoners have been exchanged and there is a fragile peace for now.'-->
+ <t id="211">%1 と %2 は休戦条約に署名しました。捕虜の交換が行われ、一時の平和が訪れました。</t>
+ <!--'Reduced hostilities between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slighty improved relations.'-->
+ <t id="212">敵対行動の減少を受け、%1 と %2 の関係性は多少深まりました。</t>
+ <!--Reduced espionage between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slightly improved relations.-->
+ <t id="213">諜報工作活動の減少を受け、%1 と %2 の関係性は多少深まりました。</t>
+ <!--Reduced trade between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slightly worsened relations.-->
+ <t id="214">交易の減少を受け、%1 と %2 の関係性は多少悪化しました。</t>
+ <!--Reduced tourism between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slightly worsened relations.-->
+ <t id="215">観光の減少を受け、%1 と %2 の関係性は多少悪化しました</t>
+ <!--Increased hostilities between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slightly worsened relations.-->
+ <t id="216">敵対行動の増加を受け、%1 と %2 の関係性は多少悪化しました。</t>
+ <!--Increased espionage between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has slightly worsened relations.-->
+ <t id="217">諜報工作活動の増加を受け、%1 と %2 の関係性は多少悪化しました。</t>
+ <!--Citing previous border disputes, ' + $FactionOneNames + ' has declared war on ' + $FactionTwoNames + ' to protect their galactic sovereignty.-->
+ <t id="218">以前の国境議論を理由に、%1 は主権を守るためとして %2 に宣戦布告しました。</t>
+ <!--After a failed non-aggression pact, the relations between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' have deteriorated into a minor conflict.-->
+ <t id="219">不可侵条約の締結失敗を受け、%1 と %2 の関係性は小規模な紛争が勃発するほどに悪化しました。</t>
+ <!--Reduced trade between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has greatly worsened relations.-->
+ <t id="220">交易の減少を受け、%1 と %2 の関係性は大幅に悪化しました。</t>
+ <!--Reduced tourism between ' + $FactionOneNames + ' and ' + $FactionTwoNames + ' has greatly worsened relations.-->
+ <t id="221">観光の減少を受け、%1 と %2 の関係性は大幅に悪化しました。</t>
+ <!--A prominent leader of ' + $FactionOneNames + ' has declared to build a wall blocking ' + $FactionTwoNames + ' and to make them pay for it. Relations have greatly worsened.-->
+ <t id="222">%1 の著名な代表が、%2 に対する壁の建築を宣言し代償を求めたことにより、両者の関係性は大幅に悪化しました。</t>
+ <!--A prominent leader of ' + $FactionOneNames + ' has called for the destruction of ' + $FactionTwoNames + ' during a state of the union address. Relations have greatly worsened.-->
+ <t id="223">%1 の著名な代表が、派閥間会合において %2 の解体を要求したことで、両者の関係性は大幅に悪化しました。</t>
+ <!--A ship carrying water to a station experiencing a critical shortage was destroyed by ' + $FactionTwoNames + ' extremeists. ' + $FactionOneNames + ' has declared war in retaliation.-->
+ <t id="224">危機的な水不足に陥っているステーションへ水を輸送していた船が %2 の過激派により破壊されたことを受け、%1 は報復のための宣戦布告を行いました。</t>
+ <!--An ambassador of ' + $FactionOneNames + ' was assasinated. Evidence points to a deep-cover agent of ' + $FactionTwoNames + ' coalition. War has erupted.-->
+ <t id="225">%1 の大使暗殺が %2 の潜入工作員の手によるものであるという証拠を受け、両者間の戦争が勃発しました。</t>
+ <!--A new captain of ' + $FactionTwoNames + ' fired upon a luxury passenger ship belonging to ' + $FactionOneNames + ' coalition, thought to be smuggling criminals. ' + $FactionOneNames + ' swiftly declared war.-->
+ <t id="226">%2 の新人艦長が、犯罪者が密航していたと見られた %1 の豪華客船へ発砲を行ったことを受け、%1 は戦争への移行を宣言しました。</t>
+ <!--A rogue faction logic AI designed by Mysterial has caused phantom fleet orders to invade ' + $FactionTwoNames + ' space. ' + $FactionOneNames + ' has immediately declared all out war.-->
+ <t id="227">ミステリアル氏によって設計された不正な派閥ロジックAIが、幻の艦隊に %2 領への侵攻命令を出し、%1 は即座に全面戦争へと突入しました。</t>
+ <t id="300">(conversation stuff)</t>
+ <!--Discuss faction relations-->
+ <t id="301">他派閥について議論したい</t>
+ <!--Improve relations with cash-->
+ <t id="302">金銭で関係性を向上させる</t>
+ <!--Inquire about relations-->
+ <t id="303">関係性について問い詰める</t>
+ <!--Set diplomacy stance for faction-->
+ <t id="304">他派閥への政治的姿勢を決める</t>
+ <!--Back-->
+ <t id="305">戻る</t>
+ <!--Previous page-->
+ <t id="306">前のページ</t>
+ <!--Next page-->
+ <t id="307">次のページ</t>
+ <!--Nemesis-->
+ <t id="308">宿敵 \(-30\)</t>
+ <!--Kill-->
+ <t id="309">全面攻撃 \(-25\)</t>
+ <!--KillMilitary-->
+ <t id="310">軍事攻撃 \(-20\)</t>
+ <!--Enemy-->
+ <t id="311">敵視 \(-10\)</t>
+ <!--Neutral-->
+ <t id="312">中立 \(0\)</t>
+ <!--Friend-->
+ <t id="313">友好 \(10\)</t>
+ <!--Member-->
+ <t id="314">同盟 \(20\)</t>
+ <!--Self-->
+ <t id="315">自身 \(30\)</t>
+ <!--%1 (Current:%2)-->
+ <t id="316">%1 \(現在:%2\)</t>
+ <t id="400">(UI STUFF)</t>
+ <!--Faction Information-->
+ <t id="401">派閥情報</t>
+ <!--Relations-->
+ <t id="402">関係性</t>
+ <!--Military Strength-->
+ <t id="403">軍事力</t>
+ <!--Economic Strength-->
+ <t id="404">経済力</t>
+ <!--Total: ' + (if $TotalShips gt 0 then $TotalShips else 0)-->
+ <t id="405">合計: %1</t>
+ <!--XL: ' + (if $XLShips.count gt 0 then $XLShips.count else 0)-->
+ <t id="406">XL: %1</t>
+ <!--L: ' + (if $LShips.count gt 0 then $LShips.count else 0)-->
+ <t id="407">L: %1</t>
+ <!--M: ' + (if $MShips.count gt 0 then $MShips.count else 0)-->
+ <t id="408">M: %1</t>
+ <!--S: ' + (if $SShips.count gt 0 then $SShips.count else 0)-->
+ <t id="409">S: %1</t>
+ <!--XL Trading and Building Ships-->
+ <t id="410">特大型交易・建築艦船</t>
+ <!--Station: ' + (if $Stations.count gt 0 then $Stations.count else 0)-->
+ <t id="411">ST: %1</t>
+ <!-- Disallow HAT in Dynamic Wars -->
+ <t id="412">{20203,901}を動的な戦争から除外する</t>
+ <t id="413">{20203,1001}の関係性を固定する</t>
+ <t id="414">動的な戦争を有効にする</t>
+ <t id="415">親密化イベントの重み</t>
+ <t id="416">関係大幅向上イベントの重み</t>
+ <t id="417">関係向上イベントの重み</t>
+ <t id="418">関係悪化イベントの重み</t>
+ <t id="419">関係大幅悪化イベントの重み</t>
+ <t id="420">宿敵化イベントの重み</t>
+ <t id="421">ウェアの需給バランス</t>
+ <t id="422">関係変化なしイベントの重み</t>
+ <t id="500">(Diplomacy STUFF)</t>
+ <t id="501">動的な戦争の設定</t>
+ <t id="502">関係性の向上</t>
+ <t id="503">関係性の低下</t>
+ <t id="504">直近の出来事</t>
+ <t id="505">なし</t>
+ <t id="506">{1015,28}</t>
+ <t id="507">関係を5上げる</t>
+ <t id="508">関係を5下げる</t>
+ <t id="509">需給バランス</t>
+</page>
 </language>
