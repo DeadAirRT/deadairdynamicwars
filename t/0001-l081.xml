@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <language id="81">
-
 <page id="33232471" title="DeadAir Dynamic War T Files" descr="names used in DeadAir Dynamic War mod" voice="no">
  <t id="100">(Messages - all factions referred to are singular)</t>
  <!--$FactionOneNames + ' has greatly improved relations with ' + $FactionTwoNames + '. They are considered friendly. ' + $FactionOne.relation.{$FactionOne.relationto.{$FactionTwo}}.uivalue-->
