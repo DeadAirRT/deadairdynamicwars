@@ -12,6 +12,7 @@
 						<set_value name="$IncreaseRelationsNumber" exact="5"/>
 						<set_value name="$DecreaseRelationsNumber" exact="-5"/>
 						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Ready for variable storage'.[player.age]" context="false" filter="scripts"/>
+						<set_value name="$DynamicWarDiplomacyDebugChance" exact="false"/>
 					</actions>
 				</cue>
 				<cue name="Register_Options_Menu" instantiate="true">
@@ -76,6 +77,9 @@
 						<event_cue_signalled/>
 					</conditions>
 					<actions>
+						<do_if value="not $DynamicWarDiplomacyDebugChance?">
+							<set_value name="$DynamicWarDiplomacyDebugChance" exact="false"/>
+						</do_if>
 						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Submenu_Link" param="table[$text={33232471,502}, $id='increase_relations_menu']"/>
 						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Submenu_Link" param="table[$text={33232471,503}, $id='decrease_relations_menu']"/>
 						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Submenu_Link" param="table[$text={33232471,504}, $id='recent_news_menu']"/>
@@ -90,6 +94,7 @@
 						<event_cue_signalled/>
 					</conditions>
 					<actions>
+						<set_value name="$WhatFactions" exact="'ChangeRelations'"/>
 						<include_actions ref="Lib_Add_Faction_Dropdown"/>
 						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
 						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 1, $colSpan=3,	$halign='center', $text = {1001,43},]"/>
@@ -144,6 +149,7 @@
 						<event_cue_signalled/>
 					</conditions>
 					<actions>
+						<set_value name="$WhatFactions" exact="'ChangeRelations'"/>
 						<include_actions ref="Lib_Add_Faction_Dropdown"/>
 						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
 						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 1, $colSpan=3,	$halign='center', $text = {1001,43},]"/>
@@ -234,8 +240,8 @@
 						<event_cue_signalled/>
 					</conditions>
 					<actions>
+						<set_value name="$WhatFactions" exact="'All'"/>
 						<include_actions ref="Lib_GetFactions"/>
-						<append_list_elements name="$FactionList" other="[faction.khaak,faction.xenon]"/>
 						<do_all exact="$FactionList.count" counter="$FactionOneCounter">
 							<set_value name="$FactionOne" exact="$FactionList.{$FactionOneCounter}"/>
 							<do_if value="($FactionOne.isactive)">
@@ -249,8 +255,8 @@
 						<event_cue_signalled/>
 					</conditions>
 					<actions>
+						<set_value name="$WhatFactions" exact="'All'"/>
 						<include_actions ref="Lib_GetFactions"/>
-						<append_list_elements name="$FactionList" other="[faction.khaak,faction.xenon]"/>
 						<do_all exact="$FactionList.count" counter="$FactionOneCounter">
 							<set_value name="$FactionOne" exact="$FactionList.{$FactionOneCounter}"/>
 							<do_if value="($FactionOne.isactive)">
@@ -301,6 +307,7 @@
 								<set_value name="$wares_wanted.{$ware}" exact="0" operation="add"/>
 							</do_for_each>
 						</do_for_each>
+						<set_value name="$WhatFactions" exact="'DetailView'"/>
 						<include_actions ref="Lib_Add_Faction_Dropdown"/>
 						<!--Header row.-->
 						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[$selectable = false]"/>
@@ -368,6 +375,17 @@
 						<event_cue_signalled/>
 					</conditions>
 					<actions>
+						<do_if value="(not md.$DADynWarSCA?)">
+							<set_value name="md.$DADynWarSCA" exact="true"/>
+							<set_faction_relation_locked faction="faction.scaleplate" locked="true"/>
+						</do_if>
+						<do_if value="(not md.$DADynWarBUCLocked?)">
+							<set_value name="md.$DADynWarBUCLocked" exact="true"/>
+							<set_faction_relation_locked faction="faction.buccaneers" locked="true"/>
+						</do_if>
+						<do_if value="(not md.$DADynWarActivateFuneral?)">
+							<set_value name="md.$DADynWarActivateFuneral" exact="false"/>
+						</do_if>
 						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
 						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
 								$col = 1,
@@ -378,7 +396,7 @@
 								$col = 7, 
 								$colSpan = 2,
 								$text = table[
-								  $text   =  if md.$DADynWarEnable == true then 'true' else 'false', 
+								  $text   =  if md.$DADynWarEnable == true then {1001,4825} else {1001,8942}, 
 								  $color  = 'Helper.color.green',
 								  $halign = 'center',
 								],
@@ -395,7 +413,7 @@
 								$col = 7, 
 								$colSpan = 2,
 								$text = table[
-								  $text   =  if md.$DADynWarHAT == true then 'true' else 'false', 
+								  $text   =  if md.$DADynWarHAT == true then {1001,4825} else {1001,8942}, 
 								  $color  = 'Helper.color.green',
 								  $halign = 'center',
 								],
@@ -412,12 +430,46 @@
 								$col = 7, 
 								$colSpan = 2,
 								$text = table[
-								  $text   =  if md.$DADynWarSCA == true then 'true' else 'false', 
+								  $text   =  if md.$DADynWarSCA == true then {1001,4825} else {1001,8942}, 
 								  $color  = 'Helper.color.green',
 								  $halign = 'center',
 								],
 								$onClick = DADynWarSCA,
 								$onRightClick = DADynWarSCA,
+							]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col = 1,
+								$colSpan = 6,
+								$text = {33232471,423},
+							]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
+								$col = 7, 
+								$colSpan = 2,
+								$text = table[
+								  $text   =  if md.$DADynWarBUCLocked == true then {1001,4825} else {1001,8942}, 
+								  $color  = 'Helper.color.green',
+								  $halign = 'center',
+								],
+								$onClick = DADynWarBUCLocked,
+								$onRightClick = DADynWarBUCLocked,
+							]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+								$col = 1,
+								$colSpan = 6,
+								$text = {33232471,424},
+							]"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
+								$col = 7, 
+								$colSpan = 2,
+								$text = table[
+								  $text   =  if md.$DADynWarActivateFuneral == true then {1001,4825} else {1001,8942}, 
+								  $color  = 'Helper.color.green',
+								  $halign = 'center',
+								],
+								$onClick = DADynWarActivateFuneral,
+								$onRightClick = DADynWarActivateFuneral,
 							]"/>
 						<signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
 						<signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
@@ -554,14 +606,14 @@
 					<actions>
 						<set_value name="$SelectedFactionOne" exact="event.param.$echo.{1}"/>
 						<set_value name="$SelectedFactionTwo" exact="event.param.$echo.{2}"/>
-						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- IncreaseRelationsOption -- %2 -- %3 -- %4'.[player.age,$SelectedFactionOne.knownname,$SelectedFactionTwo.knownname,$IncreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo}]" context="false" filter="scripts"/>
+						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- IncreaseRelationsOption -- %2 -- %3 -- %4'.[player.age,$SelectedFactionOne.knownname,$SelectedFactionTwo.knownname,$IncreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo}]" context="false" filter="scripts" chance="if $DynamicWarDiplomacyDebugChance? then ($DynamicWarDiplomacyDebugChance * 100) else 0"/>
 						<set_value name="$UIRelationChange" exact="5"/>
 						<include_actions ref="Lib_CalculateUiValueRepChange"/>
 						<!-- Returns $NewAbsoluteRepValue and $AbsoluteRepValueChange -->
 						<reward_player money="$IncreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo} * -1"/>
 						<do_if value="($IncreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo} == 0) and (@md.$DADynWarFavors.{$SelectedFactionOne} gt 0) and ($SelectedFactionOne != faction.player)">
 							<set_value name="md.$DADynWarFavors.{$SelectedFactionOne}" exact="[md.$DADynWarFavors.{$SelectedFactionOne} - 1,0].max"/>
-							<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Used Favor -- %2 -- Favors: %3 -- %4'.[player.age,$SelectedFactionOne.knownname,md.$DADynWarFavors.{$SelectedFactionOne},$IncreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo}]" context="false" filter="scripts"/>
+							<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Used Favor -- %2 -- Favors: %3 -- %4'.[player.age,$SelectedFactionOne.knownname,md.$DADynWarFavors.{$SelectedFactionOne},$IncreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo}]" context="false" filter="scripts" chance="if $DynamicWarDiplomacyDebugChance? then ($DynamicWarDiplomacyDebugChance * 100) else 0"/>
 						</do_if>
 						<set_faction_relation faction="$SelectedFactionOne" otherfaction="$SelectedFactionTwo" value="([$NewAbsoluteRepValue, 1].min)"/>
 						<set_faction_relation faction="$SelectedFactionTwo" otherfaction="$SelectedFactionOne" value="([$NewAbsoluteRepValue, 1].min)"/>
@@ -575,15 +627,15 @@
 					<actions>
 						<set_value name="$SelectedFactionOne" exact="event.param.$echo.{1}"/>
 						<set_value name="$SelectedFactionTwo" exact="event.param.$echo.{2}"/>
-						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- DecreaseRelationsOption -- %2 -- %3 -- %4'.[player.age,$SelectedFactionOne.knownname,$SelectedFactionTwo.knownname,$DecreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo}]" context="false" filter="scripts"/>
+						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- DecreaseRelationsOption -- %2 -- %3 -- %4'.[player.age,$SelectedFactionOne.knownname,$SelectedFactionTwo.knownname,$DecreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo}]" context="false" filter="scripts" chance="if $DynamicWarDiplomacyDebugChance? then ($DynamicWarDiplomacyDebugChance * 100) else 0"/>
 						<set_value name="$UIRelationChange" exact="-5"/>
 						<include_actions ref="Lib_CalculateUiValueRepChange"/>
 						<!-- Returns $NewAbsoluteRepValue and $AbsoluteRepValueChange -->
 						<reward_player money="$DecreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo} * -1"/>
-						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- ($DecreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo} * -1): %2 -- @md.$DADynWarFavors.{$SelectedFactionOne}: %3 -- $DecreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo}: %4 -- @md.$DADynWarFavors.{$SelectedFactionOne} gt 0: %5'.[player.age,($DecreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo} * -1),@md.$DADynWarFavors.{$SelectedFactionOne},$DecreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo},@md.$DADynWarFavors.{$SelectedFactionOne} gt 0]" context="false" filter="scripts"/>
+						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- ($DecreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo} * -1): %2 -- @md.$DADynWarFavors.{$SelectedFactionOne}: %3 -- $DecreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo}: %4 -- @md.$DADynWarFavors.{$SelectedFactionOne} gt 0: %5'.[player.age,($DecreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo} * -1),@md.$DADynWarFavors.{$SelectedFactionOne},$DecreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo},@md.$DADynWarFavors.{$SelectedFactionOne} gt 0]" context="false" filter="scripts" chance="if $DynamicWarDiplomacyDebugChance? then ($DynamicWarDiplomacyDebugChance * 100) else 0"/>
 						<do_if value="($DecreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo} == 0) and (@md.$DADynWarFavors.{$SelectedFactionOne} gt 0) and ($SelectedFactionOne != faction.player) and ($SelectedFactionTwo != faction.player)">
 							<set_value name="md.$DADynWarFavors.{$SelectedFactionOne}" exact="[md.$DADynWarFavors.{$SelectedFactionOne} - 1,0].max"/>
-							<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Used Favor -- %2 -- Favors: %3 -- %4'.[player.age,$SelectedFactionOne.knownname,md.$DADynWarFavors.{$SelectedFactionOne},$DecreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo}]" context="false" filter="scripts"/>
+							<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Used Favor -- %2 -- Favors: %3 -- %4'.[player.age,$SelectedFactionOne.knownname,md.$DADynWarFavors.{$SelectedFactionOne},$DecreaseRelationsCostTable.{$SelectedFactionOne}.{$SelectedFactionTwo}]" context="false" filter="scripts" chance="if $DynamicWarDiplomacyDebugChance? then ($DynamicWarDiplomacyDebugChance * 100) else 0"/>
 						</do_if>
 						<set_faction_relation faction="$SelectedFactionOne" otherfaction="$SelectedFactionTwo" value="([$NewAbsoluteRepValue, -1].max)"/>
 						<set_faction_relation faction="$SelectedFactionTwo" otherfaction="$SelectedFactionOne" value="([$NewAbsoluteRepValue, -1].max)"/>
@@ -631,12 +683,47 @@
 						<signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
 					</actions>
 				</cue>
+				<cue name="DADynWarBUCLocked" instantiate="true">
+					<conditions>
+						<event_cue_signalled/>
+					</conditions>
+					<actions>
+						<set_value name="md.$DADynWarBUCLocked" exact="if md.$DADynWarBUCLocked == true then false else true"/>
+						<do_if value="md.$DADynWarBUCLocked == false">
+							<set_faction_relation_locked faction="faction.buccaneers" locked="false"/>
+						</do_if>
+						<do_else>
+							<set_faction_relation_locked faction="faction.buccaneers" locked="true"/>
+						</do_else>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
+					</actions>
+				</cue>
+				<cue name="DADynWarActivateFuneral" instantiate="true">
+					<conditions>
+						<event_cue_signalled/>
+					</conditions>
+					<actions>
+						<find_sector name="$HeartOfAcrimonySector" macro="macro.Cluster_411_Sector001_macro"/>
+						<find_gate name="$FuneralGate" accelerator="true" space="$HeartOfAcrimonySector"/>
+						<set_value name="md.$DADynWarActivateFuneral" exact="if md.$DADynWarActivateFuneral == true then false else true"/>
+						<do_if value="md.$DADynWarActivateFuneral == true">
+							<set_object_active object="$FuneralGate" activate="true"/>
+						</do_if>
+						<do_else>
+							<set_object_active object="$FuneralGate" activate="false"/>
+						</do_else>
+						<remove_value name="$HeartOfAcrimonySector"/>
+						<remove_value name="$FuneralGate"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
+					</actions>
+				</cue>
 				<cue name="DADynWarEnable" instantiate="true">
 					<conditions>
 						<event_cue_signalled/>
 					</conditions>
 					<actions>
 						<set_value name="md.$DADynWarEnable" exact="if md.$DADynWarEnable == true then false else true"/>
+						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Updated md.$DADynWarEnable to %2'.[player.age,md.$DADynWarEnable]" context="false" filter="scripts" chance="if $DynamicWarDiplomacyDebugChance? then ($DynamicWarDiplomacyDebugChance * 100) else 0"/>
 						<signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
 					</actions>
 				</cue>
@@ -646,7 +733,8 @@
 					</conditions>
 					<actions>
 						<set_value name="md.$DADynWarBesties" exact="event.param.$value"/>
-						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Updated md.$DADynWarBesties to %2'.[player.age,md.$DADynWarBesties]" context="false" filter="scripts"/>
+						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Updated md.$DADynWarBesties to %2'.[player.age,md.$DADynWarBesties]" context="false" filter="scripts" chance="if $DynamicWarDiplomacyDebugChance? then ($DynamicWarDiplomacyDebugChance * 100) else 0"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
 					</actions>
 				</cue>
 				<cue name="DADynWarBigBoost" instantiate="true">
@@ -655,7 +743,8 @@
 					</conditions>
 					<actions>
 						<set_value name="md.$DADynWarBigBoost" exact="event.param.$value"/>
-						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Updated md.$DADynWarBigBoost to %2'.[player.age,md.$DADynWarBigBoost]" context="false" filter="scripts"/>
+						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Updated md.$DADynWarBigBoost to %2'.[player.age,md.$DADynWarBigBoost]" context="false" filter="scripts" chance="if $DynamicWarDiplomacyDebugChance? then ($DynamicWarDiplomacyDebugChance * 100) else 0"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
 					</actions>
 				</cue>
 				<cue name="DADynWarSmallBoost" instantiate="true">
@@ -664,7 +753,8 @@
 					</conditions>
 					<actions>
 						<set_value name="md.$DADynWarSmallBoost" exact="event.param.$value"/>
-						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Updated md.$DADynWarSmallBoost to %2'.[player.age,md.$DADynWarSmallBoost]" context="false" filter="scripts"/>
+						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Updated md.$DADynWarSmallBoost to %2'.[player.age,md.$DADynWarSmallBoost]" context="false" filter="scripts" chance="if $DynamicWarDiplomacyDebugChance? then ($DynamicWarDiplomacyDebugChance * 100) else 0"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
 					</actions>
 				</cue>
 				<cue name="DADynWarSmallBlow" instantiate="true">
@@ -673,7 +763,8 @@
 					</conditions>
 					<actions>
 						<set_value name="md.$DADynWarSmallBlow" exact="event.param.$value"/>
-						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Updated md.$DADynWarSmallBlow to %2'.[player.age,md.$DADynWarSmallBlow]" context="false" filter="scripts"/>
+						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Updated md.$DADynWarSmallBlow to %2'.[player.age,md.$DADynWarSmallBlow]" context="false" filter="scripts" chance="if $DynamicWarDiplomacyDebugChance? then ($DynamicWarDiplomacyDebugChance * 100) else 0"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
 					</actions>
 				</cue>
 				<cue name="DADynWarBigBlow" instantiate="true">
@@ -682,7 +773,8 @@
 					</conditions>
 					<actions>
 						<set_value name="md.$DADynWarBigBlow" exact="event.param.$value"/>
-						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Updated md.$DADynWarBigBlow to %2'.[player.age,md.$DADynWarBigBlow]" context="false" filter="scripts"/>
+						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Updated md.$DADynWarBigBlow to %2'.[player.age,md.$DADynWarBigBlow]" context="false" filter="scripts" chance="if $DynamicWarDiplomacyDebugChance? then ($DynamicWarDiplomacyDebugChance * 100) else 0"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
 					</actions>
 				</cue>
 				<cue name="DADynWarNemesis" instantiate="true">
@@ -691,7 +783,8 @@
 					</conditions>
 					<actions>
 						<set_value name="md.$DADynWarNemesis" exact="event.param.$value"/>
-						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Updated md.$DADynWarNemesis to %2'.[player.age,md.$DADynWarNemesis]" context="false" filter="scripts"/>
+						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Updated md.$DADynWarNemesis to %2'.[player.age,md.$DADynWarNemesis]" context="false" filter="scripts" chance="if $DynamicWarDiplomacyDebugChance? then ($DynamicWarDiplomacyDebugChance * 100) else 0"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
 					</actions>
 				</cue>
 				<cue name="DADynWarNothing" instantiate="true">
@@ -700,7 +793,8 @@
 					</conditions>
 					<actions>
 						<set_value name="md.$DADynWarNothing" exact="event.param.$value"/>
-						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Updated md.$DADynWarNothing to %2'.[player.age,md.$DADynWarNothing]" context="false" filter="scripts"/>
+						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- Updated md.$DADynWarNothing to %2'.[player.age,md.$DADynWarNothing]" context="false" filter="scripts" chance="if $DynamicWarDiplomacyDebugChance? then ($DynamicWarDiplomacyDebugChance * 100) else 0"/>
+						<signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
 					</actions>
 				</cue>
 				<library name="Lib_GetFactions">
@@ -723,16 +817,39 @@
 						<do_else>
 							<create_list name="$VisitorList"/>
 						</do_else>
-						<!-- TODO: allow player once this is working -->
-						<set_value name="$ExcludedFactions" exact="[faction.civilian, faction.criminal, faction.khaak, faction.smuggler, faction.visitor, faction.xenon]"/>
+						<do_if value="$ExcludedFactions?">
+							<clear_list list="$ExcludedFactions"/>
+						</do_if>
+						<do_else>
+							<create_list name="$ExcludedFactions"/>
+						</do_else>
+						<!-- Going to use different filtering methods depending on function that calls -->
+						<do_if value="$WhatFactions? and $WhatFactions == 'All'">
+							<set_value name="$ExcludedFactions" exact="[faction.civilian, faction.criminal, faction.smuggler, faction.visitor]"/>
+						</do_if>
+						<do_elseif value="$WhatFactions? and $WhatFactions == 'ChangeRelations'">
+							<set_value name="$ExcludedFactions" exact="[faction.civilian, faction.criminal, faction.khaak, faction.smuggler, faction.visitor, faction.xenon]"/>
+							<append_to_list name="$ExcludedFactions" exact="faction.buccaneers" chance="if (md.$DADynWarBUCLocked? and md.$DADynWarBUCLocked == false) then 0 else 100"/>
+							<append_to_list name="$ExcludedFactions" exact="faction.scaleplate" chance="if (md.$DADynWarSCA? and md.$DADynWarSCA == false) then 0 else 100"/>
+						</do_elseif>
+						<do_elseif value="$WhatFactions? and $WhatFactions == 'DetailView'">
+							<set_value name="$ExcludedFactions" exact="[faction.civilian, faction.criminal, faction.khaak, faction.smuggler, faction.visitor, faction.fallensplit]"/>
+						</do_elseif>
+						<do_else>
+							<set_value name="$ExcludedFactions" exact="[faction.civilian, faction.criminal, faction.khaak, faction.smuggler, faction.visitor, faction.xenon, faction.fallensplit]"/>
+						</do_else>
+						<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- $WhatFactions == %2'.[player.age,$WhatFactions]" context="false" filter="scripts" chance="if $DynamicWarDiplomacyDebugChance? then ($DynamicWarDiplomacyDebugChance * 100) else 0"/>
 						<set_value name="$TerranFactions" exact="[faction.terran, faction.pioneers, faction.yaki]"/>
+						<set_value name="$SplitFactions" exact="[faction.court, faction.fallensplit, faction.freesplit, faction.split]"/>
 						<get_factions_by_tag tag="tag.claimspace" result="$FactionList"/>
 						<get_factions_by_tag tag="tag.economic" result="$EconomicList"/>
 						<get_factions_by_tag tag="tag.visitor" result="$VisitorList"/>
 						<remove_from_list name="$EconomicList" list="$FactionList" multiple="true"/>
 						<remove_from_list name="$TerranFactions" list="$FactionList" multiple="true"/>
+						<remove_from_list name="$SplitFactions" list="$FactionList" multiple="true"/>
 						<append_list_elements name="$FactionList" other="$EconomicList"/>
 						<append_list_elements name="$FactionList" other="$TerranFactions"/>
+						<append_list_elements name="$FactionList" other="$SplitFactions"/>
 						<remove_from_list name="$FactionList" list="$VisitorList" multiple="true"/>
 						<remove_from_list name="$FactionList" list="$ExcludedFactions" multiple="true"/>
 						<do_all exact="$FactionList.count" counter="$B" reverse="true">
@@ -931,7 +1048,7 @@
 							</do_elseif>
 							<do_else>
 								<set_value name="$Cost" exact="[500000Cr, ($NetWorth * 1 / 1000)].max"/>
-								<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- ERROR calculating cost -- %2 -- %3 -- %4'.[player.age,$FactionOne.knownname,$FactionTwo.knownname,$Relation]" context="false" filter="scripts"/>
+								<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- ERROR calculating cost -- %2 -- %3 -- %4'.[player.age,$FactionOne.knownname,$FactionTwo.knownname,$Relation]" context="false" filter="error" chance="if $DynamicWarDiplomacyDebugChance? then ($DynamicWarDiplomacyDebugChance * 100) else 0"/>
 							</do_else>
 						</do_if>
 						<do_else>
@@ -958,7 +1075,7 @@
 							</do_elseif>
 							<do_else>
 								<set_value name="$Cost" exact="[5000000Cr, ($NetWorth * 1 / 1000)].max"/>
-								<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- ERROR calculating cost -- %2 -- %3 -- %4'.[player.age,$FactionOne.knownname,$FactionTwo.knownname,$Relation]" context="false" filter="scripts"/>
+								<debug_text text="'MOD: DeadAirDynamicWarsDiplomacy -- %1 -- ERROR calculating cost -- %2 -- %3 -- %4'.[player.age,$FactionOne.knownname,$FactionTwo.knownname,$Relation]" context="false" filter="error" chance="if $DynamicWarDiplomacyDebugChance? then ($DynamicWarDiplomacyDebugChance * 100) else 0"/>
 							</do_else>
 						</do_else>
 					</actions>

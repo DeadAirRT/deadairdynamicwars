@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mdscript name="DynamicWar" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="md.xsd">
 	<cues>
-		<cue name="Init" version="3">
+		<cue name="Init" version="4">
 			<actions>
 				<!-- This will only run once or after any patch to reset the script -->
 				<!-- This setting controls informational debug messages -->
@@ -17,6 +17,11 @@
 				<do_if value="(not md.$DADynWarSCA?)">
 					<set_value name="md.$DADynWarSCA" exact="true"/>
 					<set_faction_relation_locked faction="faction.scaleplate" locked="true"/>
+				</do_if>
+				<!-- Allow locking and unlocking of BUC -->
+				<do_if value="(not md.$DADynWarBUCLocked?)">
+					<set_value name="md.$DADynWarBUCLocked" exact="true"/>
+					<set_faction_relation_locked faction="faction.buccaneers" locked="true"/>
 				</do_if>
 				<!-- This should contain an initial search of factions that meet the requirements (claimspace, not "peaceful", and active) -->
 				<include_actions ref="DynamicWarFindFactions"/>
@@ -44,6 +49,9 @@
 				<do_if value="(not md.$DADynWarEnable?)">
 					<set_value name="md.$DADynWarEnable" exact="true"/>
 				</do_if>
+				<do_if value="(not md.$DADynWarActivateFuneral?)">
+					<set_value name="md.$DADynWarActivateFuneral" exact="false"/>
+				</do_if>
 				<!-- TOTAL 100 -->
 				<do_if value="(not md.$DADynWarBesties?)">
 					<set_value name="md.$DADynWarBesties" exact="1"/>
@@ -67,7 +75,7 @@
 					<set_value name="md.$DADynWarNothing" exact="0"/>
 				</do_if>
 			</actions>
-			<patch sinceversion="3">
+			<patch sinceversion="4">
 				<reset_cue cue="this"/>
 			</patch>
 			<cues>

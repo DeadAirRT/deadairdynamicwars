@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mdscript name="Dynamic_War_News" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="md.xsd">
+	<cues>
+		<cue name="Init">
+			<actions>
+				<find_sector groupname="$AllSectors" multiple="true"/>
+				<find_station groupname="$Shipyards" shipyard="true" multiple="true"/>
+				<find_station groupname="$Wharfs" wharf="true" multiple="true"/>
+				<find_station groupname="$TradeStations" tradestation="true" multiple="true"/>
+			</actions>
+			<cues>
+				<cue name="RefreshSectorsStations" instantiate="true">
+					<conditions>
+						<event_universe_generated/>
+					</conditions>
+					<actions>
+						<find_sector groupname="$AllSectors" multiple="true"/>
+						<find_station groupname="$Shipyards" shipyard="true" multiple="true" append="true"/>
+						<find_station groupname="$Wharfs" wharf="true" multiple="true" append="true"/>
+						<find_station groupname="$TradeStations" tradestation="true" multiple="true" append="true"/>
+					</actions>
+				</cue>
+				<cue name="SectorChangedOwner" instantiate="true">
+					<conditions>
+						<event_object_changed_owner group="$AllSectors"/>
+					</conditions>
+					<actions>
+						<set_value name="$Sector" exact="event.object"/>
+						<set_value name="$OldOwner" exact="event.param2"/>
+						<set_value name="$NewOwner" exact="event.param"/>
+						<do_if value="$Sector?">
+							<do_if value="$OldOwner">
+								<do_if value="$NewOwner">
+									<set_value name="$Message" exact="'%1 %2 %3 %4. %5 %6: %7'.[$Sector.name,{1020,2000},{1001,7745},if $OldOwner.name != '' then $OldOwner.name else {1001,9002},{1001,9001},{1001,9040},$NewOwner.name]"/>
+									<!-- $Sector changed owner from $OldOwner. New Owner:$NewOwner-->
+								</do_if>
+								<do_else>
+									<set_value name="$Message" exact="'%1 %2 %3 %4. %5 %6: %7'.[$Sector.name,{1020,2000},{1001,7745},if $OldOwner.name != '' then $OldOwner.name else {1001,9002},{1001,9001},{1001,9040},{1001,9002}]"/>
+									<!-- $Sector changed owner from $OldOwner. New Owner: Unknown-->
+								</do_else>
+							</do_if>
+							<do_else>
+								<set_value name="$Message" exact="'%1 %2.'.[$Sector.name,{1020,2000}]"/>
+								<!-- $Sector changed owner.-->
+							</do_else>
+						</do_if>
+						<do_if value="$Message?">
+							<include_actions ref="DynamicWarNewsTracking"/>
+							<remove_value name="$Message"/>
+						</do_if>
+						<remove_value name="$Sector"/>
+						<remove_value name="$OldOwner"/>
+						<remove_value name="$NewOwner"/>
+					</actions>
+				</cue>
+				<cue name="MajorStationDestroyed" instantiate="true">
+					<conditions>
+						<check_any>
+							<event_object_destroyed group="$Shipyards"/>
+							<event_object_destroyed group="$Wharfs"/>
+							<event_object_destroyed group="$TradeStations"/>
+						</check_any>
+					</conditions>
+					<actions>
+						<set_value name="$Station" exact="event.object"/>
+						<set_value name="$Killer" exact="event.param"/>
+						<do_if value="$Station?">
+							<do_if value="$Killer">
+								<substitute_text text="$location" source="{1016,1}" comment="in sector $SECTOR$">
+									<replace string="'$SECTOR$'" with="event.object.sector.name"/>
+								</substitute_text>
+								<substitute_text text="$Message" source="{1016,31}" comment="$KILLED$ $LOCATION$ was destroyed by $KILLER$">
+									<replace string="'$KILLED$'" with="event.object.name"/>
+									<replace string="'$KILLER$'" with="event.param.name"/>
+									<replace string="'$LOCATION$'" with="$location"/>
+								</substitute_text>
+							</do_if>
+							<do_else>
+								<substitute_text text="$location" source="{1016,1}" comment="in sector $SECTOR$">
+									<replace string="'$SECTOR$'" with="event.object.sector.name"/>
+								</substitute_text>
+								<substitute_text text="$Message" source="{1016,30}" comment="$KILLED$ $LOCATION$ was destroyed">
+									<replace string="'$KILLED$'" with="event.object.name"/>
+									<replace string="'$LOCATION$'" with="$location"/>
+								</substitute_text>
+							</do_else>
+						</do_if>
+						<do_if value="$Message?">
+							<include_actions ref="DynamicWarNewsTracking"/>
+							<remove_value name="$Message"/>
+						</do_if>
+						<remove_value name="$Station"/>
+						<remove_value name="$Killer"/>
+					</actions>
+				</cue>
+				<library name="DynamicWarNewsTracking">
+					<actions>
+						<!-- set up the table if not already set up -->
+						<do_if value="(not md.$DADynWarNews?)">
+							<set_value name="md.$DADynWarNews" exact="table[]"/>
+						</do_if>
+						<!-- FactionOne, FactionTwo, FactionOneName, FactionTwoName,Message, and FlavorText available above -->
+						<!-- TODO: Track sector ownership changes -->
+						<do_if value="$Message?">
+							<!-- set up the first value -->
+							<!-- md.DADynWarNews.{Index} == [Player.age, Message] -->
+							<do_if value="(not md.$DADynWarNews.{1}?)">
+								<set_value name="md.$DADynWarNews.{1}" exact="[player.age,$Message]"/>
+							</do_if>
+							<do_else>
+								<!-- md.DADynWarNews.{Index} == [Player.age, Message] -->
+								<do_all exact="md.$DADynWarNews.keys.count" counter="$indexcounter" reverse="true">
+									<!-- Move all entries to index+1 so newest is first -->
+									<do_if value="($indexcounter + 1) gt 20">
+										<!-- If index + 1 gt 20 then drop -->
+									</do_if>
+									<do_else>
+										<set_value name="md.$DADynWarNews.{$indexcounter + 1}" exact="md.$DADynWarNews.{$indexcounter}"/>
+									</do_else>
+								</do_all>
+								<!-- Put the new entry as index 1 -->
+								<set_value name="md.$DADynWarNews.{1}" exact="[player.age,$Message]"/>
+							</do_else>
+						</do_if>
+						<!-- This will be displayed in diplomacy screen recent news -->
+					</actions>
+				</library>
+			</cues>
+		</cue>
+	</cues>
+</mdscript>
