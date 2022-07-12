@@ -197,6 +197,7 @@
 		<t id="422">不改变关系</t>
 		<t id="423">Lock {20203,2401} Relations</t>
 		<t id="424">(Activate){1004,53} (Funeral Accelerator){20103,1301}</t>
+		<t id="425">{1001,3} {1001,1400}</t><!--Station Storage-->
 		<t id="500">(Diplomacy STUFF)</t>
 		<t id="501">DA 动态战争菜单</t>
 		<t id="502">增加关系</t>
@@ -207,5 +208,7 @@
 		<t id="507">{1001,2701} +5</t>
 		<t id="508">{1001,2701} -5</t>
 		<t id="509">{1001,1406}\/{1001,2903}</t>
+		<t id="510">Producer</t>
+		<t id="511">Consumer</t>
 	</page>
 </language>
