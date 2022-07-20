@@ -408,7 +408,7 @@
 								<set_value name="$res_existing.{$ware}" exact="0" operation="add"/>
 								<set_value name="$res_wanted.{$ware}" exact="0" operation="add"/>
 								<set_value name="$pro_existing.{$ware}" exact="$cont.cargo.{$ware}.count" operation="add"/>
-								<set_value name="$pro_wanted.{$ware}" exact="$cont.cargo.{$ware}.max" operation="add"/>
+								<set_value name="$pro_wanted.{$ware}" exact="$cont.cargo.{$ware}.target" operation="add"/>
 							</do_for_each>
 						</do_for_each>
 						<set_value name="$WhatFactions" exact="'DetailView'"/>
